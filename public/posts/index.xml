@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on HeimaEden</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on HeimaEden</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 11 Aug 2026 15:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero-Cost Static Blog Deployment with Cloudflare Pages and Hugo</title>
+      <link>http://localhost:1313/posts/static-site/staticblogsetupguide/</link>
+      <pubDate>Tue, 11 Aug 2026 15:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/static-site/staticblogsetupguide/</guid>
+      <description>How to deploy a blazing-fast, secure, and completely free static tech blog using GitHub and Cloudflare&amp;#39;s global edge network.</description>
+    </item>
+    <item>
+      <title>Overseas Domain Purchase and Cross-Border Payment Guide</title>
+      <link>http://localhost:1313/posts/payment/beginnerspracticalguide/</link>
+      <pubDate>Tue, 11 Aug 2026 14:30:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/payment/beginnerspracticalguide/</guid>
+      <description>A step-by-step guide for developers to buy .com domains securely using PayPal and standard UnionPay debit cards without a credit card.</description>
+    </item>
+    <item>
+      <title>My First Tech Post</title>
+      <link>http://localhost:1313/posts/my-first-tech-post/</link>
+      <pubDate>Tue, 11 Aug 2026 21:31:45 +0800</pubDate>
+      <guid>http://localhost:1313/posts/my-first-tech-post/</guid>
+      <description>&lt;h1 id=&#34;hello-world-from-heimaeden&#34;&gt;Hello World from HeimaEden!&lt;/h1&gt;
+&lt;p&gt;这是我的技术博客第一篇文章。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

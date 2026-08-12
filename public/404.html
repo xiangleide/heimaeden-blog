@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>404 Page not found | My New Hugo Project</title>
+<title>404 Page not found | HeimaEden</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -70,7 +70,7 @@
     <header class="header">
     <nav class="header-nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="My New Hugo Project (Alt + H)">My New Hugo Project</a>
+            <a href="http://localhost:1313/" accesskey="h" title="HeimaEden (Alt + H)">HeimaEden</a>
             <div class="logo-switches">
                 <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
@@ -95,91 +95,50 @@
             </div>
         </div>
         <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1313/categories/payment/" title="Payment">
+                    <span>Payment</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/categories/static-site/" title="Static Site">
+                    <span>Static Site</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/archives" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search" title="Search">
+                    <span>Search</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
 <main class="main">
 <div class="not-found">404</div>
     </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/">My New Hugo Project</a></span> · 
+    <footer class="footer">
+    <span>&copy; 2026 <a href="/">HeimaEden</a></span>
 
     
-    
+    <span class="footer-links" style="margin-left: 15px; display: inline-flex; gap: 12px;">
+        |
+        <a href="/legal/privacy-policy/">Privacy Policy</a>
+        <a href="/legal/cookie-policy/">Cookie Policy</a>
+        <a href="/legal/terms-of-service/">Terms of Service</a>
+        <a href="/legal/affiliate-disclosure/">Affiliate Disclosure</a>
+    </span>
+
     <span>
-        Powered by
-        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        · Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
         <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
     </span>
 </footer>
-<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
-        <polyline points="17 11 12 6 7 11"></polyline>
-        <polyline points="17 18 12 13 7 18"></polyline>
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var toplink = document.getElementById("top-link");
-    window.onscroll = function () {
-        const scrollThreshold = window.innerHeight;
-        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
-            toplink.classList.remove("hidden");
-        } else {
-            toplink.classList.add("hidden");
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
 </body>
 
 </html>

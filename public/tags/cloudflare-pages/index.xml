@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Cloudflare Pages on HeimaEden</title>
+    <link>http://localhost:1313/tags/cloudflare-pages/</link>
+    <description>Recent content in Cloudflare Pages on HeimaEden</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 11 Aug 2026 15:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/cloudflare-pages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero-Cost Static Blog Deployment with Cloudflare Pages and Hugo</title>
+      <link>http://localhost:1313/posts/static-site/staticblogsetupguide/</link>
+      <pubDate>Tue, 11 Aug 2026 15:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/static-site/staticblogsetupguide/</guid>
+      <description>How to deploy a blazing-fast, secure, and completely free static tech blog using GitHub and Cloudflare&amp;#39;s global edge network.</description>
+    </item>
+  </channel>
+</rss>

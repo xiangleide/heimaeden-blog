@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>PayPal on HeimaEden</title>
+    <link>http://localhost:1313/tags/paypal/</link>
+    <description>Recent content in PayPal on HeimaEden</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 11 Aug 2026 14:30:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/paypal/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Overseas Domain Purchase and Cross-Border Payment Guide</title>
+      <link>http://localhost:1313/posts/payment/beginnerspracticalguide/</link>
+      <pubDate>Tue, 11 Aug 2026 14:30:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/payment/beginnerspracticalguide/</guid>
+      <description>A step-by-step guide for developers to buy .com domains securely using PayPal and standard UnionPay debit cards without a credit card.</description>
+    </item>
+  </channel>
+</rss>
