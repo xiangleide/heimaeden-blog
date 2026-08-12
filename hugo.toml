@@ -8,6 +8,10 @@ theme = 'PaperMod'
 category = 'categories'
 tag = 'tags'
 
+# 🛑 关键配置：强行开启全站生成 JSON 索引文件，激活 PaperMod 的本地极速搜索功能
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+
 [params]
 mainSections = ["posts", "legal"] # 👈 告诉主页，这些目录下的内容都要在主页流中展示
 
