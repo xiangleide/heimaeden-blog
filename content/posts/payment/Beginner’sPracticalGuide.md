@@ -1,7 +1,7 @@
 +++
 title = "Overseas Domain Purchase and Cross-Border Payment Guide"
 description = "A step-by-step guide for developers to buy .com domains securely using PayPal and standard UnionPay debit cards without a credit card."
-date = 2026-08-11T14:30:00Z
+date = 2026-08-10T14:30:00Z
 draft = false
 tags = ["Domain", "PayPal", "Spaceship"]
 categories = ["Payment"]

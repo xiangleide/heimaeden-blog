@@ -8,6 +8,9 @@ theme = 'PaperMod'
 category = 'categories'
 tag = 'tags'
 
+[params]
+mainSections = ["posts", "legal"] # 👈 告诉主页，这些目录下的内容都要在主页流中展示
+
 # 👇 页面导航栏模板配置（修正版：显式区分 name 和 url，破除二义性）
 [[menu.main]]
 identifier = "payment-menu"         # 显式定义唯一的 ID，防止二义性冲突
@@ -24,13 +27,13 @@ weight = 20
 [[menu.main]]
 identifier = "archives-menu"
 name = "Archives"
-url = "archives"       # 👈 改为相对路径 "archives"，不加前后的斜杠
+url = "/archives/"       # 👈 改为相对路径 "archives"，不加前后的斜杠
 weight = 30
 
 [[menu.main]]
 identifier = "search-menu"
 name = "Search"
-url = "search"         # 👈 改为相对路径 "search"
+url = "/search/"         # 👈 改为相对路径 "search"
 weight = 40
 
 # 👇 自定义页脚合规菜单（专为 HeimaEden 打造）

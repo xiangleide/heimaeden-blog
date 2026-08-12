@@ -1,7 +1,7 @@
 +++
 title = "Zero-Cost Static Blog Deployment with Cloudflare Pages and Hugo"
 description = "How to deploy a blazing-fast, secure, and completely free static tech blog using GitHub and Cloudflare's global edge network."
-date = 2026-08-11T15:00:00Z
+date = 2026-08-10T15:00:00Z
 draft = false
 tags = ["Hugo", "Cloudflare Pages", "Static Site"]
 categories = ["Static-Site"]
