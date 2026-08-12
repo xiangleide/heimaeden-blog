@@ -1,5 +1,6 @@
 baseURL = 'https://heimaeden.com'
 locale = 'en-us'
+hasCJKLanguage = false
 title = 'HeimaEden'
 theme = 'PaperMod'
 
@@ -17,6 +18,7 @@ mainSections = ["posts", "legal"] # 👈 告诉主页，这些目录下的内容
 # 👇 强行开启黑夜/白天模式切换功能
 defaultTheme = "auto"         # "auto" 代表自动根据老外用户的系统皮肤切换，同时允许手动点亮
 ShowThemeToggle = true        # 👈 必须确保这一行是 true，开启右上角图标的点击 JS 响应
+ShowBreadCrumbs = false   # 👈 强行关闭显示物理路径面包屑
 
 # 👇 页面导航栏模板配置（修正版：显式区分 name 和 url，破除二义性）
 [[menu.main]]

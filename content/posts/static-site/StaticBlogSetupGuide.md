@@ -58,7 +58,7 @@ disableShare = false
    git init
    ```
 3. **下载行业顶级极客主题（PaperMod）**：由于 Git 命令行在国内克隆子模块极易超时断开，我直接采用“手工下载法”绕过：
-    * 在浏览器里输入并直达下载网址：`https://github.com`
+    * 在浏览器里输入并直达下载网址：[PaperMod ZIP 下载链接](https://github.com)
     * 下载后解压得到 `hugo-PaperMod-master` 文件夹，将其**重命名为 `PaperMod`**。
     * 将整个 `PaperMod` 文件夹直接拖进我项目的 `themes` 目录下。确保路径结构为 `/heimaeden-blog/themes/PaperMod/theme.toml`。
 4. **修改全局配置**：用编辑器打开项目根目录下的 `hugo.toml`，在最下方新增一行：`theme = "PaperMod"`。
