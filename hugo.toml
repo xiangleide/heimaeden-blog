@@ -1,4 +1,4 @@
-baseURL = 'https://heimaeden.com'
+baseURL = 'https://heimaeden.com'   # 👈 确保末尾带有标准斜杠
 locale = 'en-us'
 hasCJKLanguage = false
 title = 'HeimaEden'
@@ -9,30 +9,36 @@ theme = 'PaperMod'
 category = 'categories'
 tag = 'tags'
 
-# 🛑 关键配置：强行开启全站生成 JSON 索引文件，激活 PaperMod 的本地极速搜索功能
+# 强行开启全站生成 JSON 索引文件，激活 PaperMod 的纯前端极速搜索功能
 [outputs]
 home = ["HTML", "RSS", "JSON"]
 
+# ==========================================================================
+# 全局自定义参数配置 (PaperMod Theme Params)
+# ==========================================================================
 [params]
-mainSections = ["posts"] # 👈 告诉主页，这些目录下的内容都要在主页流中展示
-# 👇 强行开启黑夜/白天模式切换功能
-defaultTheme = "auto"         # "auto" 代表自动根据老外用户的系统皮肤切换，同时允许手动点亮
-ShowThemeToggle = true        # 👈 必须确保这一行是 true，开启右上角图标的点击 JS 响应
-ShowBreadCrumbs = false   # 👈 强行关闭显示物理路径面包屑
+mainSections = ["posts"]
 
-ShowShareButtons = true        # 开启文章末尾精美的社交分享图标
-ShowCodeCopyButtons = true     # 代码块右上角一键复制按钮
-ShowReadingTime = true         # 友好展示阅读时间
+# 👇 ✨ 终极绝杀：修正大小写！严格对齐 PaperMod 原生夜间模式 JS 切换机制
+defaultTheme = "auto"
+showThemeToggle = true          # 👈 必须是小写的 s 和 t！强行复活右上角按钮点击事件
 
-# 👇 页面导航栏模板配置（修正版：显式区分 name 和 url，破除二义性）
+showReadingTime = true          # 友好展示真实阅读时间
+showShareButtons = true         # 开启文章末尾精美的社交分享图标
+showCodeCopyButtons = true      # 代码块右上角一键复制按钮
+showBreadCrumbs = false         # 强行关闭显示物理路径面包屑，防止暴露本地隐私
+
+# ==========================================================================
+# 顶部主导航菜单配置 (Main Navbar Menus)
+# ==========================================================================
 [[menu.main]]
-identifier = "payment-menu"         # 显式定义唯一的 ID，防止二义性冲突
+identifier = "payment-menu"
 name = "Payment"
 url = "/categories/payment/"
 weight = 10
 
 [[menu.main]]
-identifier = "static-site-menu"     # 显式定义唯一的 ID
+identifier = "static-site-menu"
 name = "Static Site"
 url = "/categories/static-site/"
 weight = 20
@@ -40,13 +46,13 @@ weight = 20
 [[menu.main]]
 identifier = "archives-menu"
 name = "Archives"
-url = "/archives/"       # 👈 改为相对路径 "archives"，不加前后的斜杠
+url = "archives"                # 👈 彻底移除前后斜杠，完美对齐本地特殊模板页面
 weight = 30
 
 [[menu.main]]
 identifier = "search-menu"
 name = "Search"
-url = "/search/"         # 👈 改为相对路径 "search"
+url = "search"                  # 👈 彻底移除前后斜杠，完美对齐本地免服务器极速搜索
 weight = 40
 
 [[menu.main]]
@@ -61,8 +67,9 @@ name = "Contact"
 url = "/contact/"
 weight = 46
 
-# 👇 自定义页脚合规菜单（专为 HeimaEden 打造）
-# 👇 自定义页脚合规菜单（完美对齐 legal 目录路径）
+# ==========================================================================
+# 页脚合规法务菜单配置 (Footer Menus)
+# ==========================================================================
 [params.footer_menu]
 enable = true
 [[params.footer_menu.items]]
@@ -77,6 +84,3 @@ url = "/legal/terms-of-service/"
 [[params.footer_menu.items]]
 name = "Affiliate Disclosure"
 url = "/legal/affiliate-disclosure/"
-
-
-
