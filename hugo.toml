@@ -23,6 +23,9 @@ mainSections = ["posts"]
 defaultTheme = "auto"
 showThemeToggle = true          # 👈 必须是小写的 s 和 t！强行复活右上角按钮点击事件
 
+assets.disableHLJS = false       # 👈 必须是 false！强行激活高亮 JS 锚点
+minify = false                   # 部署初期先关闭代码压缩，防止 CSS 被误切断
+assets.favicon = ""              # 保持默认
 showReadingTime = true          # 友好展示真实阅读时间
 showShareButtons = true         # 开启文章末尾精美的社交分享图标
 showCodeCopyButtons = true      # 代码块右上角一键复制按钮
