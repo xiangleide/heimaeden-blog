@@ -1,86 +1,95 @@
-baseURL = 'https://heimaeden.com'   # 👈 确保末尾带有标准斜杠
+baseURL = 'https://heimaeden.com'   # 确保末尾带有标准斜杠
 locale = 'en-us'
 hasCJKLanguage = false
 title = 'HeimaEden'
 theme = 'PaperMod'
 
-minify = false                   # 部署初期先关闭代码压缩，防止 CSS 被误切断
+# 🟢 全局顶级配置：显式关闭云端的强力混淆压缩，防止换肤 JS 引擎被误切断
+minify = false                  
 
 # 开启标签和分类功能
 [taxonomies]
-category = 'categories'
-tag = 'tags'
+    category = 'categories'
+    tag = 'tags'
 
 # 强行开启全站生成 JSON 索引文件，激活 PaperMod 的纯前端极速搜索功能
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+    home = ["HTML", "RSS", "JSON"]
+
+# ==========================================================================
+# 🟢 主题高级组件参数配置 (PaperMod Assets Specification)
+# ==========================================================================
+[params.assets]
+    disableHLJS = false             # 强行激活高亮 JS 锚点
+    disableSRI = true               # ✨ 终极绝杀：以独立表格式强行关闭 SRI 安全哈希校验，释放换肤 JS 脚本！
+    favicon = ""
 
 # ==========================================================================
 # 全局自定义参数配置 (PaperMod Theme Params)
 # ==========================================================================
 [params]
-mainSections = ["posts"]
-defaultTheme = "auto"
-showThemeToggle = true          # 👈 必须是小写的 s 和 t！强行复活右上角按钮点击事件
-assets.disableSRI = true
-showReadingTime = true          # 友好展示真实阅读时间
-showShareButtons = true         # 开启文章末尾精美的社交分享图标
-showCodeCopyButtons = true      # 代码块右上角一键复制按钮
-showBreadCrumbs = false         # 强行关闭显示物理路径面包屑，防止暴露本地隐私
+    mainSections = ["posts"]
+    defaultTheme = "auto"
+    showThemeToggle = true          # 全小写，强行激活右上角按钮点击响应
+    
+    showReadingTime = true          # 友好展示真实阅读时间
+    showShareButtons = true         # 开启文章末尾精美的社交分享图标
+    showCodeCopyButtons = true      # 代码块右上角一键复制按钮
+    showBreadCrumbs = false         # 强行关闭显示物理路径面包屑，防止暴露本地隐私
 
 # ==========================================================================
 # 顶部主导航菜单配置 (Main Navbar Menus)
 # ==========================================================================
 [[menu.main]]
-identifier = "payment-menu"
-name = "Payment"
-url = "/categories/payment/"
-weight = 10
+    identifier = "payment-menu"
+    name = "Payment"
+    url = "/categories/payment/"
+    weight = 10
 
 [[menu.main]]
-identifier = "static-site-menu"
-name = "Static Site"
-url = "/categories/static-site/"
-weight = 20
+    identifier = "static-site-menu"
+    name = "Static Site"
+    url = "/categories/static-site/"
+    weight = 20
 
 [[menu.main]]
-identifier = "archives-menu"
-name = "Archives"
-url = "archives"                # 👈 彻底移除前后斜杠，完美对齐本地特殊模板页面
-weight = 30
+    identifier = "archives-menu"
+    name = "Archives"
+    url = "archives"                # 彻底移除前后斜杠，完美对齐本地特殊模板页面
+    weight = 30
 
 [[menu.main]]
-identifier = "search-menu"
-name = "Search"
-url = "search"                  # 👈 彻底移除前后斜杠，完美对齐本地免服务器极速搜索
-weight = 40
+    identifier = "search-menu"
+    name = "Search"
+    url = "search"                  # 彻底移除前后斜杠，完美对齐本地免服务器极速搜索
+    weight = 40
 
 [[menu.main]]
-identifier = "about-menu"
-name = "About"
-url = "/about/"
-weight = 45
+    identifier = "about-menu"
+    name = "About"
+    url = "/about/"
+    weight = 45
 
 [[menu.main]]
-identifier = "contact-menu"
-name = "Contact"
-url = "/contact/"
-weight = 46
+    identifier = "contact-menu"
+    name = "Contact"
+    url = "/contact/"
+    weight = 46
 
 # ==========================================================================
 # 页脚合规法务菜单配置 (Footer Menus)
 # ==========================================================================
 [params.footer_menu]
-enable = true
-[[params.footer_menu.items]]
-name = "Privacy Policy"
-url = "/legal/privacy-policy/"
-[[params.footer_menu.items]]
-name = "Cookie Policy"
-url = "/legal/cookie-policy/"
-[[params.footer_menu.items]]
-name = "Terms of Service"
-url = "/legal/terms-of-service/"
-[[params.footer_menu.items]]
-name = "Affiliate Disclosure"
-url = "/legal/affiliate-disclosure/"
+    enable = true
+    [[params.footer_menu.items]]
+        name = "Privacy Policy"
+        url = "/legal/privacy-policy/"
+    [[params.footer_menu.items]]
+        name = "Cookie Policy"
+        url = "/legal/cookie-policy/"
+    [[params.footer_menu.items]]
+        name = "Terms of Service"
+        url = "/legal/terms-of-service/"
+    [[params.footer_menu.items]]
+        name = "Affiliate Disclosure"
+        url = "/legal/affiliate-disclosure/"
