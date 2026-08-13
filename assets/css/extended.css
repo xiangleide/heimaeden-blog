@@ -1,0 +1,63 @@
+/* ==========================================================================
+   HeimaEden (黑马伊甸园) 专属极客视觉美学重置
+   ========================================================================== */
+
+:root {
+    /* ☀️ 白天模式：从死白改为高档的高级冷灰，加入极光绿点缀 */
+    --theme: rgb(246, 248, 250);
+    --entry: rgb(255, 255, 255);
+    --primary: rgb(36, 41, 47);          /* GitHub 同款极客黑 */
+    --secondary: rgb(87, 96, 106);       /* 优雅高级灰 */
+    --tertiary: rgb(240, 242, 245);
+    --content: rgb(36, 41, 47);
+    --code-bg: rgb(246, 248, 250);
+    --radius: 12px;                      /* 全站卡片改用更现代的 12px 柔和圆角 */
+    --primary-color: #10b981;            /* 🟩 极客绿点缀色：用于链接和核心按钮 */
+}
+
+html[data-theme="dark"] {
+    /* 🌙 黑夜模式：VS Code/Cursor 同款深色调，完美对齐 PaperMod 原生 JS 切换 */
+    --theme: #0d1117;                    /* GitHub Dark 同款底色 */
+    --entry: #161b22;                    /* 卡片深色稍微提亮，形成极其舒适的悬浮感 */
+    --primary: #c9d1d9;
+    --secondary: #8b949e;
+    --tertiary: #21262d;
+    --content: #e6edf2;
+    --code-bg: #161b22;
+    --primary-color: #34d399;            /* 🟩 黑暗模式下的亮色绿 */
+}
+
+/* 🚀 极致细节微调，打破死板 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: -0.01em;             /* 紧凑字距，营造高级杂志印刷感 */
+}
+
+/* 给文章正文注入极佳的“舒适阅读行高” */
+.post-content {
+    line-height: 1.8 !important;         /* 1.8倍行高，拉开呼吸感，极度利于长文阅读 */
+    font-size: 1.1rem !important;
+}
+
+/* 鼠标悬停在文章卡片和菜单时的“极客绿”平滑渐变反馈 */
+a:hover {
+    color: var(--primary-color) !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.list {
+    background: var(--theme) !important;
+}
+
+/* 给文章卡片添加一层若隐若现的现代微阴影 */
+.post-entry {
+    border: 1px solid var(--tertiary);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 鼠标移入卡片时，微微浮起（程序员最爱的微交互动作） */
+.post-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}

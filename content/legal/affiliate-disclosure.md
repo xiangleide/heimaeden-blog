@@ -1,9 +1,4 @@
 +++
-date = '2026-08-12T20:58:35+08:00'
-draft = true
-title = 'Affiliate Disclosure'
-+++
-+++
 title = "Affiliate Disclosure & Disclaimer"
 date = 2026-08-12T00:00:00Z
 draft = false
@@ -42,4 +37,4 @@ If you do not agree with these terms, please refrain from using the technical gu
 
 ## 📬 Contact Information
 
-If you have any questions, regulatory concerns, or inquiries regarding this disclosure, please feel free to reach out via email at: **your-email@example.com** (Replace this with your real email).
+If you have any questions, regulatory concerns, or inquiries regarding this disclosure, please feel free to reach out via email at: **heimaeden@proton.me**.

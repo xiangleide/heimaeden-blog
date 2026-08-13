@@ -20,6 +20,10 @@ defaultTheme = "auto"         # "auto" 代表自动根据老外用户的系统�
 ShowThemeToggle = true        # 👈 必须确保这一行是 true，开启右上角图标的点击 JS 响应
 ShowBreadCrumbs = false   # 👈 强行关闭显示物理路径面包屑
 
+ShowShareButtons = true        # 开启文章末尾精美的社交分享图标
+ShowCodeCopyButtons = true     # 代码块右上角一键复制按钮
+ShowReadingTime = true         # 友好展示阅读时间
+
 # 👇 页面导航栏模板配置（修正版：显式区分 name 和 url，破除二义性）
 [[menu.main]]
 identifier = "payment-menu"         # 显式定义唯一的 ID，防止二义性冲突
@@ -45,23 +49,34 @@ name = "Search"
 url = "/search/"         # 👈 改为相对路径 "search"
 weight = 40
 
+[[menu.main]]
+identifier = "about-menu"
+name = "About"
+url = "/about/"
+weight = 45
+
+[[menu.main]]
+identifier = "contact-menu"
+name = "Contact"
+url = "/contact/"
+weight = 46
+
 # 👇 自定义页脚合规菜单（专为 HeimaEden 打造）
 # 👇 自定义页脚合规菜单（完美对齐 legal 目录路径）
-# 👇 自定义页脚合规菜单（终极修正：去掉最前面的斜杠，改用纯相对路径）
 [params.footer_menu]
 enable = true
 [[params.footer_menu.items]]
 name = "Privacy Policy"
-url = "legal/privacy-policy/"        # 👈 删掉最前面的斜杠
+url = "/legal/privacy-policy/"
 [[params.footer_menu.items]]
 name = "Cookie Policy"
-url = "legal/cookie-policy/"         # 👈 删掉最前面的斜杠
+url = "/legal/cookie-policy/"
 [[params.footer_menu.items]]
 name = "Terms of Service"
-url = "legal/terms-of-service/"     # 👈 删掉最前面的斜杠
+url = "/legal/terms-of-service/"
 [[params.footer_menu.items]]
 name = "Affiliate Disclosure"
-url = "legal/affiliate-disclosure/"   # 👈 删掉最前面的斜杠
+url = "/legal/affiliate-disclosure/"
 
 
 

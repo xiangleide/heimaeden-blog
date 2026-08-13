@@ -1,9 +1,4 @@
 +++
-date = '2026-08-12T21:00:04+08:00'
-draft = true
-title = 'Terms of Service'
-+++
-+++
 title = "Terms of Service"
 date = 2026-08-12T00:03:00Z
 draft = false

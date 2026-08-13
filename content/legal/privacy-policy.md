@@ -1,9 +1,4 @@
 +++
-date = '2026-08-12T21:00:04+08:00'
-draft = true
-title = 'Privacy Policy'
-+++
-+++
 title = "Privacy Policy"
 date = 2026-08-12T00:01:00Z
 draft = false
@@ -37,4 +32,4 @@ If you are a resident of the European Economic Area (EEA) or California, you hav
 * **The right to request** that we do not sell your personal information to third parties.
 
 ## 5. Contact Us
-If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at: **your-email@example.com**.
+If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at: **heimaeden@proton.me**.

@@ -1,9 +1,4 @@
 +++
-date = '2026-08-12T21:00:04+08:00'
-draft = true
-title = 'Cookie Policy'
-+++
-+++
 title = "Cookie Policy"
 date = 2026-08-12T00:02:00Z
 draft = false
