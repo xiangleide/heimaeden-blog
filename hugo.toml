@@ -14,7 +14,7 @@ tag = 'tags'
 home = ["HTML", "RSS", "JSON"]
 
 [params]
-mainSections = ["posts", "legal"] # 👈 告诉主页，这些目录下的内容都要在主页流中展示
+mainSections = ["posts"] # 👈 告诉主页，这些目录下的内容都要在主页流中展示
 # 👇 强行开启黑夜/白天模式切换功能
 defaultTheme = "auto"         # "auto" 代表自动根据老外用户的系统皮肤切换，同时允许手动点亮
 ShowThemeToggle = true        # 👈 必须确保这一行是 true，开启右上角图标的点击 JS 响应
