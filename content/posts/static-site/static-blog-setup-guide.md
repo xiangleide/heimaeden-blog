@@ -92,11 +92,13 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 ### 坑 1：误把项目创建成了 Cloudflare Workers（找不到 Pages 入口）
 * **【我踩坑时的真实界面截图】**：
 
-    * 截图一：被误导进入的 Workers 配置界面：
-      <!-- TODO: insert local screenshot at /images/cloudflare-workers-config-screen.png when captured -->
+    * 截图一：被误导进入的 Workers 配置界面（没有框架预设，只有 wrangler 字段）：
+
+      ![Cloudflare Workers configuration screen — wrangler-style fields with no framework preset dropdown](/images/cloudflare-workers-config-screen.png)
 
     * 截图二：隐藏极深的 Pages 灰色文字入口：
-      <!-- TODO: insert local screenshot at /images/cloudflare-pages-entrance-link.png when captured -->
+
+      ![Cloudflare Pages entrance link — the grey "Looking to deploy Pages? Get started" row at the bottom of the card](/images/cloudflare-pages-entrance-link.png)
 
 * **【我的踩坑经历】**：进入后台后，我下意识地点击了右上角最显眼的蓝色按钮 `Create application`。进去绑定 GitHub 后，发现配置界面里死活找不到“框架预设（Framework preset）”下拉框，只有 `Build command`（显示 None）和 `Deploy command`（显示 `npx wrangler deploy`），强行部署就会疯狂报错。
 * **【我是如何解决的】**：我发现新版 Cloudflare 把控制台做成了聚合流。点击 `Create application` 后，默认进入的是 **Workers（Serverless函数部署）** 流程，而静态博客必须走 **Pages** 流程。我点击 Back 退出来，在创建页面的卡片最下方，找到了那行极小的灰色字 `Looking to deploy Pages? Get started`（如截图二所示），点击 **Get started** 链接，这才成功切进了纯净的 Pages 流程，彻底甩掉了 `wrangler` 报错。
