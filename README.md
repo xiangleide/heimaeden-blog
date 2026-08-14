@@ -88,6 +88,8 @@
 *   **2026-08-13 状态记录**：全站技术基建大满贯封顶，首发图文踩坑干货长文已完美推上线。
 *   **2026-08-14 状态校准**：PayPal 定位 = 仅域名一次性付账；万里汇收款链路已开通 dev 账号（未选电商类型），仅差实名认证；项目启动日锚定为 2026-08-11（D3）。
 *   **2026-08-14 Bug 修复 / 黑夜白天按钮**：根因不是 SRI，也不是大小写，而是用了**无效键名 `showThemeToggle = true`**——PaperMod 三处模板只认 `disableThemeToggle`（取反）。hugo.toml 改为 `disableThemeToggle = false`，无需 JS 覆盖。同步订正发布文 `hugo-cloudflare-pages-pitfalls.md` §Trap 7 的归因，避免误导后来读者。
+*   **2026-08-14 状态收口 / D3 闭环（双旧账结清）**：本轮一次性清掉两笔工程债——(1) `layouts/partials/footer.html` 此前**整模板覆盖** PaperMod，导致黑夜/白天切换 JS handler 被吞；现已恢复 PaperMod 完整 footer（含 4 个 `<script>` 块）+ 内联法务四件套 span。(2) `static-blog-setup-guide.md` 中 2 条 HTML TODO 占位符（Workers 配置截图、Pages 入口截图）已替换为合规 `![alt](/images/...)` 语法；原 PNG 从 `content/posts/static-site/`（Hugo 路由不可服务区）迁至 `static/images/` 配 kebab-case 命名。commit `7f1b80d` 已推 origin/main，CF Pages 线上全链路验证通过；lint-post.sh 全仓 **0 errors / 0 warnings**。
+    ⚠️ **订正上述 2026-08-14 Bug 修复条**：`disableThemeToggle = false` 仅解决**配置键**这一层；真实根因链 = `[错键名 showThemeToggle] + [footer 整模板覆盖丢失 click handler]` 双层叠加，单修任一层按钮仍卡死。`hugo-cloudflare-pages-pitfalls.md` §Trap 7 暂未补这一层归因，留待 M4 阶段统一修订。
 
 ---
 

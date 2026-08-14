@@ -39,12 +39,12 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 
 ## 二、 步骤一：接管域名解析权（免费套上 Cloudflare 神盾）
 
-1. 访问 **Cloudflare 官网**（`://cloudflare.com`）注册一个免费账户。
+1. 访问 **Cloudflare 官网**（`https://cloudflare.com`）注册一个免费账户。
 2. 登录后，在控制台首页点击左侧主菜单的 **Websites（网站）** 选项卡。
 3. 点击 **Add a site**（添加站点）或 **Get Started**，输入我买好的域名 `heimaeden.com`。
 4. 页面会弹出付费方案，**直接拉到页面最底部**，勾选 **Free（免费版，\$0/mo）**，点击继续。
 5. Cloudflare 会自动扫描我原有的 DNS 记录，直接点击继续。
-6. 页面会醒目地给出两个 Cloudflare 专属的 **Nameservers（名称服务器）** 地址（例如：`://cloudflare.com` / `://cloudflare.com`），将其复制下来。
+6. 页面会醒目地给出两个 Cloudflare 专属的 **Nameservers（名称服务器）** 地址（例如：`xxx.ns.cloudflare.com` / `yyy.ns.cloudflare.com`），将其复制下来。
 7. 登录 **Spaceship 后台** ➔ 点击 Domains ➔ 找到我的域名 ➔ 点击 **Nameservers** ➔ 选择 **Custom DNS** ➔ 把这两行地址粘贴进去，删掉原有的，点击保存。
 
 ---
@@ -59,7 +59,7 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
    git init
    ```
 3. **下载行业顶级极客主题（PaperMod）**：由于 Git 命令行在国内克隆子模块极易超时断开，我直接采用“手工下载法”绕过：
-    * 在浏览器里输入并直达下载网址：[PaperMod ZIP 下载链接](https://github.com)
+    * 在浏览器里输入并直达下载网址：[PaperMod ZIP 下载链接](https://github.com/adityatelange/hugo-PaperMod/archive/refs/heads/master.zip)
     * 下载后解压得到 `hugo-PaperMod-master` 文件夹，将其**重命名为 `PaperMod`**。
     * 将整个 `PaperMod` 文件夹直接拖进我项目的 `themes` 目录下。确保路径结构为 `/heimaeden-blog/themes/PaperMod/theme.toml`。
 4. **修改全局配置**：用编辑器打开项目根目录下的 `hugo.toml`，在最下方新增一行：`theme = "PaperMod"`。
