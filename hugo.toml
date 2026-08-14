@@ -30,7 +30,7 @@ minify = false
 [params]
     mainSections = ["posts"]
     defaultTheme = "auto"
-    showThemeToggle = true          # 全小写，强行激活右上角按钮点击响应
+    disableThemeToggle = false      # PaperMod 真实键名：以"取反"控制（默认 true=关闭）。配成 false 才亮出右上角按钮
     
     showReadingTime = true          # 友好展示真实阅读时间
     showShareButtons = true         # 开启文章末尾精美的社交分享图标

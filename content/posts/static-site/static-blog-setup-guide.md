@@ -12,9 +12,10 @@ TocOpen = true
 hidemeta = false
 comments = true
 disableShare = false
+lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文禁止
 +++
 
-# Cloudflare Pages + Hugo 静态博客零成本全自动搭建教程
+## Cloudflare Pages + Hugo 静态博客零成本全自动搭建教程
 
 作为程序员，网站域名买好后，千万不要花钱去买普通的海外 VPS 服务器，更不要把时间浪费在配置 Nginx、修补 Linux 漏洞上。利用 GitHub 托管代码，配合 Cloudflare Pages 的全球边缘节点，我们可以打造一个零服务器成本、毫秒级瞬开、绝对防爆挂马的极客静态技术博客。
 
@@ -92,10 +93,10 @@ disableShare = false
 * **【我踩坑时的真实界面截图】**：
 
     * 截图一：被误导进入的 Workers 配置界面：
-      ![错误的Workers配置界面](https://incat.top)
+      <!-- TODO: insert local screenshot at /images/cloudflare-workers-config-screen.png when captured -->
 
     * 截图二：隐藏极深的 Pages 灰色文字入口：
-      ![隐蔽的Pages入口界面](https://incat.top)
+      <!-- TODO: insert local screenshot at /images/cloudflare-pages-entrance-link.png when captured -->
 
 * **【我的踩坑经历】**：进入后台后，我下意识地点击了右上角最显眼的蓝色按钮 `Create application`。进去绑定 GitHub 后，发现配置界面里死活找不到“框架预设（Framework preset）”下拉框，只有 `Build command`（显示 None）和 `Deploy command`（显示 `npx wrangler deploy`），强行部署就会疯狂报错。
 * **【我是如何解决的】**：我发现新版 Cloudflare 把控制台做成了聚合流。点击 `Create application` 后，默认进入的是 **Workers（Serverless函数部署）** 流程，而静态博客必须走 **Pages** 流程。我点击 Back 退出来，在创建页面的卡片最下方，找到了那行极小的灰色字 `Looking to deploy Pages? Get started`（如截图二所示），点击 **Get started** 链接，这才成功切进了纯净的 Pages 流程，彻底甩掉了 `wrangler` 报错。

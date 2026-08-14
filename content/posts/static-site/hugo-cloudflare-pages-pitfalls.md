@@ -142,20 +142,23 @@ When I moved my legal compliance pages (Privacy Policy, etc.) out of the `posts`
 I injected custom styles inside `extended.css` to freshen up the blog's UI cards, but clicking the sun/moon icon on the live site suddenly became completely unresponsive. 
 
 ### The Root Cause
-A double-whammy of structural CSS priorities and case-sensitivity:
+A triple-stacked failure that fuses a wrong config key with two production-build traps:
 1.  **Selector Mismatch**: Modern PaperMod does not toggle a simple class like `.dark` on the body. It relies on a specific html attribute selector: `html[data-theme="dark"]`. Raw styling applied blindly to `.dark` locks the engine's interface variables.
-2.  **Case-Sensitivity Defeat**: In `hugo.toml`, I wrote `ShowThemeToggle = true`. Because the parameter is strictly case-sensitive, it must be written as **`showThemeToggle = true`** (lowercase `s`). The typos effectively paralyzed the theme's core swap engine.
-3.  **The Minify Loop**: Leaving global minification unconfigured lets the server drop the essential inline toggle event listeners to shave off deployment bits.
+2.  **Wrong Config Key**: PaperMod's theme-toggle gating is **inverted** — its parameter is `disableThemeToggle`, *not* `showThemeToggle`. The actual condition the engine evaluates (in `header.html`, `footer.html`, and `head.html`) is `{{ if (not site.Params.disableThemeToggle) }}`. Since the key defaults to `nil` (falsy), the gating `if` evaluates false, the button never renders, and the click handler script never executes. Setting `showThemeToggle = true` (regardless of case) does **nothing** — PaperMod simply does not consult that key. This is the silent killer most retro articles gloss over.
+3.  **SRI Verification Lockdown**: Leaving `[params.assets] disableSRI = true` unconfigured lets the Content-Security-Policy integrity check drop the inline toggle event listener if its hash mismatches the deferred asset fingerprint.
 
 ### The Solution
 1.  Fix your CSS selectors to look for `html[data-theme="dark"]`.
-2.  Enforce the correct global parameters and fix the top-level keys in `hugo.toml`:
+2.  Use PaperMod's actual toggle-gating key, then reformat the assets block into a top-level table so the SRI override survives all inheritance paths:
     ```toml
     minify = false # 👈 Place at the very top level, not under [params]
 
+    [params.assets]
+        disableSRI = true   # 👈 Required: bypass SRI integrity check on the toggle script
+
     [params]
         defaultTheme = "auto"
-        showThemeToggle = true # 👈 Ensure it is all lowercase
+        disableThemeToggle = false # 👈 THIS is the real key (not showThemeToggle)
     ```
 
 ---
