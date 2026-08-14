@@ -90,6 +90,34 @@
 *   **2026-08-14 Bug 修复 / 黑夜白天按钮**：根因不是 SRI，也不是大小写，而是用了**无效键名 `showThemeToggle = true`**——PaperMod 三处模板只认 `disableThemeToggle`（取反）。hugo.toml 改为 `disableThemeToggle = false`，无需 JS 覆盖。同步订正发布文 `hugo-cloudflare-pages-pitfalls.md` §Trap 7 的归因，避免误导后来读者。
 *   **2026-08-14 状态收口 / D3 闭环（双旧账结清）**：本轮一次性清掉两笔工程债——(1) `layouts/partials/footer.html` 此前**整模板覆盖** PaperMod，导致黑夜/白天切换 JS handler 被吞；现已恢复 PaperMod 完整 footer（含 4 个 `<script>` 块）+ 内联法务四件套 span。(2) `static-blog-setup-guide.md` 中 2 条 HTML TODO 占位符（Workers 配置截图、Pages 入口截图）已替换为合规 `![alt](/images/...)` 语法；原 PNG 从 `content/posts/static-site/`（Hugo 路由不可服务区）迁至 `static/images/` 配 kebab-case 命名。commit `7f1b80d` 已推 origin/main，CF Pages 线上全链路验证通过；lint-post.sh 全仓 **0 errors / 0 warnings**。
     ⚠️ **订正上述 2026-08-14 Bug 修复条**：`disableThemeToggle = false` 仅解决**配置键**这一层；真实根因链 = `[错键名 showThemeToggle] + [footer 整模板覆盖丢失 click handler]` 双层叠加，单修任一层按钮仍卡死。`hugo-cloudflare-pages-pitfalls.md` §Trap 7 暂未补这一层归因，留待 M4 阶段统一修订。
+*   **2026-08-14 D3.5 全站 QA + 6 类 polish 闭环**：33 端点 probe → 32/34 通过 → 触发 5 类修复，全部 commit `86cef90` + `73dd3a0` 推 origin/main。
+
+    **修复明细（commit 顺序）**
+
+    *   **commit `86cef90` feat: brand assets** — 用 Python `struct`/`zlib` 手写生成 6 张品牌资产，零第三方 IP / 字体依赖。设计：slate-900 底 + emerald-400 像素 "H" 标，与全站极客绿主题统一。
+        * `static/favicon.ico` (262B, 16+32 多尺寸 ICO) / `favicon-16x16.png` (98B) / `favicon-32x32.png` (126B) / `apple-touch-icon.png` (585B, 180×180) / `safari-pinned-tab.svg` (290B)
+        * `static/images/og-default.png` (6360B, 1200×630)
+    *   **commit `73dd3a0` fix: site-wide polish** — 6 项同步打包：
+        * `layouts/404.html` 重写：原 PaperMod `.not-found` 容器带 `font-size:160px`，塞入 H1/段落/列表后整页 160px 字号溢出 viewport。新结构用 `.not-found-page` 容器 + `<h1 class="big-404">404</h1>` + 4 个胶囊按钮。
+        * `assets/css/extended/extended.css` 追加 ~70 行专属样式，`.big-404` 用 `clamp(8rem, 22vw, 16rem)` 响应式 + `--primary-color` 翡翠绿。
+        * `layouts/partials/extend_head.html` 新建：注入默认 og:image（last position，让 per-page 图片在 first-valid-wins 客户端胜出）。
+        * `hugo.toml` 加 `[params] description = "..."` (152 字符) 全站兜底 + nav urls `archives`/`search` 加尾斜杠（消除点击时的 308）。
+        * `content/{about,archives,contact,search}.md` 各加 `date = 2026-08-14T00:00:00Z`，sitemap `<lastmod>` 覆盖从 22/26 提升到 26/26。
+        * `content/legal/*.md` 4 个加显式 description ≤160 字符（原 434-612 字符 auto-summary 被 SERP 截断）。
+
+    **D3 终态**：4 个 commit 在 origin/main，本地 0 ahead、working tree 干净（仅 `public/` 构建产物未 tracked）、Hugo dev server 在跑（PID 46384, port 1313）。
+
+    **遗留工程债（不影响 D4 主线，记入 §7.2 速度债清单）**
+    * `public/` 仍未进 `.gitignore`（构建产物不该入 git）
+    * `minify` 顶级配置已 deprecated（Hugo v0.150+ 提示，需迁移到 `minify.minifyOutput`）
+    * PaperMod 上游三处 deprecation（`.Language.LanguageDirection` / `.Language.LanguageCode`），本项目无权改主题源码，需等 PR 上游合
+    * `hugo-cloudflare-pages-pitfalls.md` §Trap 7 仍未补「footer 整模板覆盖」第二层根因（订正优先级 = 低）
+
+    **D4 衔接点（按 §7.3 阶段 α — M3 收官）**
+    * 24h 冷却期：M1/M2 已 0 冷却封顶，从 M3 起强制恢复 §7.4 自检
+    * **A1** 万里汇 dev 控制台提交实名认证材料（移动端秒杀）
+    * **A2** 通过后截图保存 Routing/Account Number 至本地保密目录，加入 `[params.payout]` 段（本地 hugo.toml，不进 git）
+    * **A3** README §6 追加「M3 = 100%」状态行
 
 ---
 
