@@ -31,7 +31,10 @@ minify = false
     mainSections = ["posts"]
     defaultTheme = "auto"
     disableThemeToggle = false      # PaperMod 真实键名：以"取反"控制（默认 true=关闭）。配成 false 才亮出右上角按钮
-    
+
+    # 🟢 全站 SEO 兜底描述：所有缺 description 的页面自动 fallback 到此（含 OG 分享预览）
+    description = "HeimaEden — Hardcore tech blog for indie hackers: Jamstack, Hugo, Cloudflare, cross-border payments, and affiliate playbooks targeting Western audiences."
+
     showReadingTime = true          # 友好展示真实阅读时间
     showShareButtons = true         # 开启文章末尾精美的社交分享图标
     showCodeCopyButtons = true      # 代码块右上角一键复制按钮
@@ -55,13 +58,13 @@ minify = false
 [[menu.main]]
     identifier = "archives-menu"
     name = "Archives"
-    url = "archives"                # 彻底移除前后斜杠，完美对齐本地特殊模板页面
+    url = "/archives/"              # 补齐首尾斜杠，避免 CF Pages 308 跳转
     weight = 30
 
 [[menu.main]]
     identifier = "search-menu"
     name = "Search"
-    url = "search"                  # 彻底移除前后斜杠，完美对齐本地免服务器极速搜索
+    url = "/search/"                # 补齐首尾斜杠，避免 CF Pages 308 跳转
     weight = 40
 
 [[menu.main]]

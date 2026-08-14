@@ -2,6 +2,7 @@
 title = "Cookie Policy"
 date = 2026-08-12T00:02:00Z
 draft = false
+description = "HeimaEden Cookie Policy: which cookies we use, third-party trackers we block, and how to manage consent. Aligned with GDPR and CCPA."
 hidemeta = true
 showToc = false
 layout = "single"

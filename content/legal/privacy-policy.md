@@ -2,6 +2,7 @@
 title = "Privacy Policy"
 date = 2026-08-12T00:01:00Z
 draft = false
+description = "HeimaEden Privacy Policy: what personal data we collect, how we protect it, your GDPR/CCPA rights, and our zero-AI-training stance."
 hidemeta = true
 showToc = true
 layout = "single"

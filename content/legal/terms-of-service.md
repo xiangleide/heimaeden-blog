@@ -2,6 +2,7 @@
 title = "Terms of Service"
 date = 2026-08-12T00:03:00Z
 draft = false
+description = "HeimaEden Terms of Service: site usage rules, liability disclaimers, copyright, governing law, and how to reach us for legal notices."
 hidemeta = true
 showToc = true
 layout = "single"

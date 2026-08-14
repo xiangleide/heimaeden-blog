@@ -53,3 +53,70 @@ a:hover {
     transform: translateY(-3px) !important; /* 鼠标悬停卡片微微浮起 */
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
 }
+
+/* ==========================================================================
+   🟢 自定义 404 页面样式 (覆盖 PaperMod 原版 .not-found 容器)
+   原版 .not-found 是 absolute + font-size:160px，只为渲染单个巨大"404"而设计；
+   我们塞进 H1+段落+列表后会全部继承 160px 字号导致排版炸裂。
+   解决方案：用 .not-found-page 容器替代，作用域更可控。
+   ========================================================================== */
+.not-found-page {
+    text-align: center;
+    padding: 6rem 1rem 4rem;
+    max-width: 640px;
+    margin: 0 auto;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.big-404 {
+    /* 响应式巨型数字：移动端不溢出，桌面端震撼 */
+    font-size: clamp(8rem, 22vw, 16rem);
+    font-weight: 800;
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    color: var(--primary-color, #10b981);     /* 极客绿，与品牌一致 */
+    letter-spacing: -0.05em;
+}
+
+.not-found-subtitle {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem;
+    color: var(--primary);
+}
+
+.not-found-page > p {
+    color: var(--secondary);
+    margin: 0.25rem 0 1.5rem;
+    max-width: 480px;
+}
+
+.not-found-actions {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.not-found-actions a {
+    display: inline-block;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--primary-color, #10b981);
+    border-radius: var(--radius, 12px);
+    color: var(--primary-color, #10b981);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.not-found-actions a:hover {
+    background: var(--primary-color, #10b981);
+    color: var(--theme);
+}

@@ -2,6 +2,7 @@
 title = "Affiliate Disclosure & Disclaimer"
 date = 2026-08-12T00:00:00Z
 draft = false
+description = "HeimaEden Affiliate Disclosure: how we mark affiliate links, the FTC compliance we follow, and which programs we participate in (Hetzner, WorldFirst, etc.)."
 hidemeta = true
 showToc = false
 layout = "single"

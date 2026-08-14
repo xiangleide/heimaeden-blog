@@ -1,0 +1,13 @@
+{{- define "main" }}
+<div class="not-found-page">
+    <h1 class="big-404">404</h1>
+    <p class="not-found-subtitle">Page Not Found</p>
+    <p>The page you are looking for doesn't exist or has been moved.</p>
+    <ul class="not-found-actions">
+        <li><a href="{{ "" | absLangURL }}">Return home</a></li>
+        <li><a href="/archives/">Browse archive</a></li>
+        <li><a href="/search/">Search</a></li>
+        <li><a href="/contact/">Contact us</a></li>
+    </ul>
+</div>
+{{- end }}{{/* end main */ -}}

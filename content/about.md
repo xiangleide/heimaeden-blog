@@ -1,5 +1,6 @@
 +++
 title = "About Me"
+date = 2026-08-14T00:00:00Z
 layout = "single"
 hidemeta = true
 +++
