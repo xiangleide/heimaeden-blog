@@ -13,11 +13,11 @@
 |---|---|---|
 | ✅ 已完成 | 实名认证（身份证 + 支付宝人脸 KYC）| 2026-08-15 |
 | ✅ 已完成 | 绑定支付宝用于人民币收款 | 2026-08-15 |
-| ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」）| **2026-08-15** |
+| ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」，仅绑定 AdSense）| **2026-08-15** |
 | ⏳ Phase 2 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 | 待办 |
 | ⏳ Phase 3 | 截图保存至本地保密目录 + 写入 `hugo.toml [params.payout]`（本地版，不进 git） | 待办 |
-| ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 | 待办 |
-| ⏳ Phase 5 | Payoneer / Wise / Hetzner / DO 联盟账户绑定 | 待办 |
+| ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证 | 待办 |
+| ⏸ Phase 5 | 各联盟平台 USD 账户（**WorldFirst 一户一平台**，按需申请，30s/账户） | **延后至 M5 商业化收割阶段，按需申请** |
 
 ---
 
@@ -133,18 +133,30 @@ hugo.toml.local
 
 ---
 
-## Phase 5：其他联盟账户绑定（同模式）
+## Phase 5：各联盟平台 WorldFirst USD 账户（**延后至 M5，按需申请**）
 
-按相同模式把 WorldFirst USD 账户绑定到：
+> **实测结论（2026-08-15）**：WorldFirst 一个 USD 收款账户 = 绑定一个**指定**收款平台，不能跨平台共用。
+> - 已开通：AdSense 专用 USD 账户（Phase 1）
+> - 后续每个联盟对接时 → WorldFirst 控制台再单独申请一个 USD 账户（**约 30 秒/账户**）
+> - 战略意义：无需提前批量开通，刚需时再开，零复杂度
 
-| 联盟平台 | 后台路径 | 优先级 |
+### M5 阶段（商业化收割）执行清单（**D30+ 触发**）
+
+按相同模式逐个申请 + 绑定：
+
+| 联盟平台 | 申请时机 | 操作 |
 |---|---|---|
-| **Payoneer** | （如有，单独流程）| 🟡 备份通道 |
-| **Wise Multi-currency Account** | （需护照+地址证明）| 🟢 出境后开通 |
-| **Hetzner Affiliate** | Dashboard → Payout Method | 🟡 D30 后申请 |
-| **DigitalOcean Referral** | Referrals → Payout Settings | 🟡 D30 后申请 |
-| **Porkbun Affiliate** | Account → Payout | 🟢 域名续费时顺便 |
-| **WildCard 推广** | （如有联盟入口）| 🟢 订阅 SaaS 工具推荐 |
+| **Hetzner Affiliate** | D30 后申请联盟资格后 | WorldFirst 控制台 → 申请新 USD 账户（业务类型「联盟佣金」） |
+| **DigitalOcean Referral** | D30+ | 同上 |
+| **Porkbun Affiliate** | 域名续费时顺便 | 同上 |
+| **WildCard 推广** | 订阅 SaaS 工具推荐时 | 同上 |
+| **其他** | 按需 | 同上 |
+
+### 多账户管理建议
+
+- WorldFirst 控制台会给每个 USD 账户起名（建议格式：`USD-AdSense`、`USD-Hetzner-Aff` 便于识别）
+- 每个账户单独保存 4 字段截图到 `~/Documents/heimaeden-payout/worldfirst-<platform>-<date>/`
+- `hugo.toml` `[params.payout.<platform>]` 段按需扩展，不挤一个段里
 
 ---
 
@@ -160,39 +172,35 @@ hugo.toml.local
 
 ---
 
-## 🔄 冗余备份建议
+## 🔄 冗余备份（WorldFirst 故障时的应急通道）
 
-WorldFirst USD 账户出问题时的备胎：
+> 此前版本建议同时开通 Payoneer / Wise 作为冗余。
+> **2026-08-15 修正**：WorldFirst 单账户 30s 申请、多账户并行无额外成本 → **WorldFirst 一家足以覆盖**主需求，备份通道仅在 WorldFirst 服务整体不可用时启用。
 
-| 通道 | 优势 | 劣势 | 推荐度 |
-|---|---|---|---|
-| **Payoneer** | USD 接收账户更稳定、全球认可度高 | 提现费 ~$1.5/笔、注册审核严 | 🟢 强烈建议作为冗余 |
-| **Wise (TransferWise)** | Multi-currency Account 灵活、汇率友好 | 需护照+地址证明、有最低收款门槛 | 🟢 出境/有护照时开通 |
-| **PingPong** | 国内电商起家，对开发者友好 | 主要支持 Amazon/eBay 电商 | 🟡 仅电商场景 |
-| **PayPal** | 全球最广 | 提现到国内银行费率高、有 5 万 USD 限制 | 🔴 不推荐作主通道 |
-
-### 建议结构
-
-- **主通道**：WorldFirst（已开通）
-- **冗余备份**：Payoneer（D7-D10 同步开通）
-- **远期升级**：Wise（拿到护照后）
+| 通道 | 启用时机 |
+|---|---|
+| **WorldFirst 多账户** | 主方案；按需申请，每账户绑定 1 平台 |
+| **Payoneer** | 仅当 WorldFirst 整体服务异常时启用（如平台倒闭/账号冻结） |
+| **Wise** | 仅当出境/有护照后启用（需地址证明） |
+| **PingPong** | 不推荐（电商导向） |
+| **PayPal** | 不推荐作主通道（5 万 USD 限制、汇率差） |
 
 ---
 
-## ✅ 完成定义
+## ✅ 完成定义（M3 = 100% 收官标志）
 
-完成本 checklist 100% 的标志：
+完成 Phase 1-4 即可达 M3 = 100%（Phase 5 延后至 M5 商业化收割阶段）：
 
-1. [ ] WorldFirst USD 账户开通
-2. [ ] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/`
-3. [ ] `hugo.toml` 本地版写入 `[params.payout]` 段
-4. [ ] AdSense 绑定完成 + 测试款到账验证通过
-5. [ ] 至少 1 个联盟账户绑定成功
-6. [ ] README §1 M3 状态由 95% → **100%**
-7. [ ] README §6 追加「M3 = 100%」状态行
-8. [ ] README §7.3 阶段 α 全部勾选 A1/A2/A3
+1. [ ] WorldFirst AdSense USD 账户开通（Phase 1 ✅）
+2. [ ] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-XX/`
+3. [ ] `hugo.toml` 本地版写入 `[params.payout.adsense]` 段
+4. [ ] AdSense 绑定完成 + 测试款到账验证通过（7-14 天）
+5. [ ] README §1 M3 状态由 98% → **100%**
+6. [ ] README §6 追加「M3 = 100%」状态行
+7. [ ] README §7.3 阶段 α 全部勾选 A1/A2/A3
 
-满足上述 8 项后，**M3 收官**，可正式进入 M4 内容冲刺（§7.3 阶段 β B1-B4）。
+满足上述 7 项后，**M3 收官**，可正式进入 M4 内容冲刺（§7.3 阶段 β B1-B4）。
+Phase 5（联盟账户）按需在 M5 阶段（商业化收割）触发，不阻塞 M3 → M4 推进。
 
 ---
 

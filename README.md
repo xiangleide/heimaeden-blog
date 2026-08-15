@@ -133,6 +133,14 @@
         3. **Phase 4**：AdSense 后台绑定 USD 账户，等测试款到账（7-14 天）
     * 满足 8 项完成定义后，M3 = 100%，正式进入 §7.3 阶段 β（M4 内容冲刺）
 
+*   **2026-08-15 状态校准 / D4 第三次（WorldFirst 账户结构实测发现）**：WorldFirst 一个 USD 收款账户 = 绑定一个**指定**收款平台，不能跨平台共用；新联盟对接时需单独申请（约 30 秒/账户）。战略意义：
+    * M3 = 100% 收官门槛**降低**：Phase 5（联盟账户绑定）从「收官必备」调整为「M5 阶段按需触发」，M3 闭环只需 Phase 1-4（即 AdSense 单账户完整链路）
+    * 备份通道方案简化：WorldFirst 多账户即可覆盖主需求，Payoneer / Wise 仅在 WorldFirst 整体异常时启用
+    * 📂 **更新文档**：
+        * [`docs/think-payment.md`](../docs/think-payment.md) §一-5 新增账户结构说明
+        * [`docs/worldfirst-usd-checklist.md`](../docs/worldfirst-usd-checklist.md) Phase 5 改为 M5 延后 + 备份章节简化
+        * §7.3 D2 同步加注
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
@@ -203,7 +211,7 @@
 #### 📍 阶段 δ — 变现起跑线（D14 → D30）
 
 - [ ] **D1** Money Page 落地：《2026 远程工作者收款工具横评》——**英文联盟伙伴专版**（Wise / Payoneer / PingPong / WorldFirst 横评表格 + 联盟链接 + 用户画像分流；WorldFirst 仅作知识普及，不放联盟链接）
-- [ ] **D2** 建立 `data/affiliates.toml` 统一管理联盟关系（**仅英文联盟**：Payoneer / Wise / PingPong / Hetzner / DigitalOcean / WildCard / Porkbun；WorldFirst 与 A2Hosting 仅留 placeholder 不放链接），文章内统一 shortcode 引用
+- [ ] **D2** 建立 `data/affiliates.toml` 统一管理联盟关系（**仅英文联盟**：Payoneer / Wise / PingPong / Hetzner / DigitalOcean / WildCard / Porkbun；WorldFirst 与 A2Hosting 仅留 placeholder 不放链接），文章内统一 shortcode 引用。**WorldFirst USD 账户结构（2026-08-15 实测）**：一户绑定一平台，对接新联盟时单独申请新 USD 账户（约 30 秒/账户），无需提前批量开通
 - [ ] **D3** ITIN/EIN 申请 Checklist 入档；WorldFirst 月度对账工作流（CSV → 简单记账表）建立
 
 #### 📍 子阶段 δ-Payment — 境外收款模块启动（D20 → D40，并行于变金线主轴）
