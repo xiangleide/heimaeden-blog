@@ -12,7 +12,7 @@
 |---|---|---|
 | ⏳ Phase 1 | `hugo.toml` 加 `[sitemap]` 段 | 待办（Claude 执行） |
 | ⏳ Phase 2 | `static/robots.txt` 落地 | 待办（Claude 执行） |
-| ⏳ Phase 3 | GSC 添加站点 + HTML 文件验证 → 创建 `static/google<hash>.html` | 待办（用户执行） |
+| ✅ Phase 3 | GSC 添加站点 + HTML 文件验证 → 创建 `static/google79509ab2d40f392b.html` | **2026-08-15 完成**（CF Pages 部署后 308 clean-URL redirect → /google79509ab2d40f392b → 200 OK + 正确内容；GSC 验证爬虫跟随 308 命中，状态变绿） |
 | ⏳ Phase 4 | GSC 后台提交 sitemap | 待办（用户执行） |
 
 ---
