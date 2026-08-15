@@ -142,8 +142,15 @@
         * §7.3 D2 同步加注
 *   **2026-08-15 状态校准 / D4 第四次（Phase 2 完成 + 安全事件复盘）**：WorldFirst USD 账户 4 字段（Account Number / Routing Number / SWIFT / Bank Name）截图已保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png`。M3 进度：98% → **99%**。
     * 🚨 **安全事件复盘（必读，下次同类操作 SOP）**：用户首次将截图放在 `docs/`（git tracked 目录）→ Claude 立即识别安全风险并询问 → 用户选 A → 移到 git 外安全位置。**教训**：(1) docs/ 虽不是 Hugo 内容树，但仍是 git 工作树的一部分，敏感资产永远不进 repo。(2) checklist §3.1 明确建议路径 `~/Documents/heimaeden-payout/`，执行 SOP 必须先看 checklist，不能图方便就近放。
-    * ⏸ **Phase 3 待办（不在 git 内执行）**：在本地 `hugo.toml` 加 `[params.payout.adsense]` 段，按 checklist §3.2 模板填 4 字段 + 拼音一致的 `accountHolder` + `lastUpdated`。**手动操作，不要让 Claude 写进 repo 的 hugo.toml**。
+    * ⏸ **Phase 3 已跳过（2026-08-15 用户决策）**：原计划写 `hugo.local.toml` 段以便未来 shortcode 复用。决定跳过理由：Phase 3 非收款链路硬卡点，仅前端展示 + 模板复用价值，直接进 Phase 4 可更快触发 7-14 天测试款等待期。脚手架（.gitignore + docs 模板）保留，未来 M5 产出 ≥3 篇 Money Page 后如负担明显可重启。详见 `docs/worldfirst-usd-checklist.md` §三。
     * ⏸ **Phase 4 待办（不可压缩）**：AdSense 后台绑定 → 测试款到账（7-14 天） → M3 = 100%。
+*   **2026-08-15 状态校准 / D4 第五次（Phase 3 跳过决策）**：用户决定跳过 `hugo.local.toml` override 文件写入步骤，直接进 Phase 4。理由：Phase 3 非收款链路硬卡点，仅为未来 Money Page 模板复用价值。M3 完成定义从 7 项调为 6 项。
+    * 📂 **更新文档**：
+        * `docs/worldfirst-usd-checklist.md` 进度概览表 Phase 3 行改为「⏸ 已跳过」+ Phase 2 行补 ✅ 状态
+        * `docs/worldfirst-usd-checklist.md` 新增「⚠️ Phase 3 决策记录（2026-08-15 跳过）」节：跳过理由、代价、何时回补、脚手架状态
+        * `docs/worldfirst-usd-checklist.md` §七 完成定义：移除 Phase 3 项，7 → 6 项
+        * README §7.3 阶段 α A2 拆分为 A2a（截图 ✅）+ A2b（hugo.local.toml ⏸ 跳过）
+        * M3 进度保持 **99%**（Phase 4 未做，不升级）
 
 ---
 
@@ -193,7 +200,8 @@
 #### 📍 阶段 α — M3 收官（目标：48 小时内）
 
 - [x] **A1** 登录万里汇 dev 控制台，确认注册类型为「开发者」（已确认），提交实名认证材料 — **2026-08-15 完成**（身份证 + 支付宝人脸 KYC）
-- [x] **A2** 认证通过后，截图保存 *Routing Number* + *Account Number* 至本地保密目录，作为 `[params.payout]` 段加入 `hugo.toml`（本地版，不进 git） — **2026-08-15 进度**：USD 账户已开通 ✅；4 字段截图已保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png` ✅（**重要**：用户先误放 `docs/`，已立即移出 git，避免公网仓库泄露银行信息）；**仅剩 `hugo.toml` 本地段写入 + AdSense 后台绑定两步**
+- [x] **A2a** 截图保存 *Routing Number* + *Account Number* 至本地保密目录 — **2026-08-15 完成**（保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png`；**重要**：用户先误放 `docs/`，Claude 立即识别安全风险并移出 git，避免公网仓库泄露银行信息）
+- [⏸] **A2b** 写入 `hugo.local.toml` 段（本地版，不进 git）— **2026-08-15 跳过决策**：Phase 3 非收款链路硬卡点，仅为前端复用，详见 `docs/worldfirst-usd-checklist.md` §三跳过说明 + §七完成定义调整
 - [ ] **A3** README 第六节追加「M3 = 100%」状态行 — **⏸ 待 USD 账户开通后触发**
 - [ ] ⏸ **冷却自检**：核对「未选电商类型」是否会触发后续 Stripe / PayPal Merchant 入驻时的「类型不匹配」风险——如有，预先在支付主体备案中补登记
 

@@ -14,9 +14,9 @@
 | ✅ 已完成 | 实名认证（身份证 + 支付宝人脸 KYC）| 2026-08-15 |
 | ✅ 已完成 | 绑定支付宝用于人民币收款 | 2026-08-15 |
 | ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」，仅绑定 AdSense）| **2026-08-15** |
-| ⏳ Phase 2 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 | 待办 |
-| ⏳ Phase 3 | 截图保存至本地保密目录 + 写入 `hugo.toml [params.payout]`（本地版，不进 git） | 待办 |
-| ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证 | 待办 |
+| ✅ 已完成 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 + 截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png` | **2026-08-15** |
+| ⏸ 已跳过 | `hugo.local.toml` 写入 4 字段（**可选**，仅为未来 shortcode 复用，不阻塞收款） | **2026-08-15** |
+| ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证（7-14 天） | 待办 |
 | ⏸ Phase 5 | 各联盟平台 USD 账户（**WorldFirst 一户一平台**，按需申请，30s/账户） | **延后至 M5 商业化收割阶段，按需申请** |
 
 ---
@@ -180,6 +180,28 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 ---
 
+## ⚠️ Phase 3 决策记录（2026-08-15 跳过）
+
+**Phase 3 的原始设计**：把 4 字段写入 `hugo.local.toml` override 文件，便于未来 Money Page 文章用 `.Site.Params.Payout.Adsense.*` 复用数据。
+
+**跳过的理由**：
+- Phase 3 的真实价值是**前端展示 + 模板复用**（不改也不阻塞收款链路）
+- Phase 4（AdSense 后台绑定）才是收款通路的硬卡点
+- 直接进 Phase 4 可以更快触发 7-14 天的测试款等待期
+
+**跳过的代价**：
+- 未来 Money Page 文章展示「本博客收款走 WorldFirst USD / 合作行 BOA」类信任标识时，需要**手抄硬编码**（每篇文章贴一次）
+- 万一 WorldFirst 政策变了、合作行变更 → 需要 grep 替换 N 篇文章
+
+**何时回补 Phase 3**：
+- M5 阶段产出 ≥ 3 篇 Money Page 文章后，如果发现硬编码重复成为负担 → 重启此 Phase
+
+**脚手架已就位（无需重建）**：
+- `.gitignore` 第 11 行已加 `hugo.local.toml`（未来启用只需 `cp` + 填值）
+- §3.2 完整模板保留在文档中（删模板需同步清理本节警告）
+
+---
+
 ## ⚠️ 避坑提醒（5 条硬约束）
 
 > 与 `docs/think-payment.md` §六 一致。
@@ -209,17 +231,17 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 ## ✅ 完成定义（M3 = 100% 收官标志）
 
-完成 Phase 1-4 即可达 M3 = 100%（Phase 5 延后至 M5 商业化收割阶段）：
+完成 Phase 1-4（**Phase 3 已跳过，可选**，不计入硬要求）即可达 M3 = 100%（Phase 5 延后至 M5 商业化收割阶段）：
 
 1. [ ] WorldFirst AdSense USD 账户开通（Phase 1 ✅）
-2. [ ] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-XX/`
-3. [ ] `hugo.toml` 本地版写入 `[params.payout.adsense]` 段
+2. [ ] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/`（Phase 2 ✅）
+3. ~~[ ] `hugo.toml` 本地版写入 `[params.payout.adsense]` 段~~ — **Phase 3 已跳过（2026-08-15 用户决策）**
 4. [ ] AdSense 绑定完成 + 测试款到账验证通过（7-14 天）
-5. [ ] README §1 M3 状态由 98% → **100%**
+5. [ ] README §1 M3 状态由 99% → **100%**
 6. [ ] README §6 追加「M3 = 100%」状态行
 7. [ ] README §7.3 阶段 α 全部勾选 A1/A2/A3
 
-满足上述 7 项后，**M3 收官**，可正式进入 M4 内容冲刺（§7.3 阶段 β B1-B4）。
+满足上述 6 项后，**M3 收官**，可正式进入 M4 内容冲刺（§7.3 阶段 β B1-B4）。
 Phase 5（联盟账户）按需在 M5 阶段（商业化收割）触发，不阻塞 M3 → M4 推进。
 
 ---
