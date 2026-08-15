@@ -36,6 +36,25 @@ If you do not agree with these terms, please refrain from using the technical gu
 
 ---
 
+## 💱 Financial Activities Disclaimer
+
+The cross-border payment, money-transfer, and overseas-income guides published on this website are strictly **educational content**, based on publicly available platform documentation and my own personal experience as a developer residing in mainland China.
+
+I am **not** a financial advisor, accountant, tax consultant, or licensed legal professional. Nothing on this website should be interpreted as:
+
+- Investment, financial, or professional advice of any kind
+- A guarantee that any payment platform is "safe", "approved by regulators", or suitable for your situation
+- Tax guidance specific to your jurisdiction or immigration status
+- An invitation to bypass foreign-exchange controls, reporting requirements, or any applicable law in any country
+
+Platform policies, KYC rules, supported entity types, fee schedules, and payout minimums change frequently. Every payment-related article on this website displays a "Last updated" date — **please re-verify the details against each platform's official documentation before taking action**.
+
+Any income you earn through overseas channels (Google AdSense, affiliate programs, freelance contracts, SaaS subscriptions, or other remote work) is subject to the tax laws of your country of residence. **You are solely responsible** for declaring and remitting applicable taxes, and for complying with all foreign-exchange and reporting obligations in your jurisdiction.
+
+If you need professional advice on cross-border taxation, business registration, immigration status, or US tax form completion (such as W-8BEN or ITIN), please consult a licensed professional in your jurisdiction.
+
+---
+
 ## 📬 Contact Information
 
 If you have any questions, regulatory concerns, or inquiries regarding this disclosure, please feel free to reach out via email at: **heimaeden@proton.me**.

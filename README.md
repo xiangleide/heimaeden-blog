@@ -31,7 +31,7 @@
 *   [x] **版本与环境锁死**：在云端环境变量中注入 `HUGO_VERSION`，彻底消除由于版本滞后引发的现代主题语法编译红字报错。
 
 ### 3. 内容集群、功能页与合规法务
-*   [x] **二级目录逻辑隔离**：在本地 `content/posts/` 之下创建了 `payment/`（跨境支付）与 `static-site/`（静态建站）两个长尾内容流集群。
+*   [x] **二级目录逻辑隔离**：在本地 `content/posts/` 之下创建了 `remote-payment/`（境外收款金矿，原 `payment/` 已重命名）与 `static-site/`（静态建站）两个长尾内容流集群。
 *   [x] **全站极速搜索与归档**：成功点亮 `Search`（JSON 极速本地检索）与 `Archives`（时间轴归档）两个核心功能页，并在 `hugo.toml` 中显式配置唯一 `identifier` 破除菜单命名的二义性模糊（Ambiguous）。
 *   [x] **法务四件套彻底去 404 化**：批量产出符合 GDPR / CCPA / FTC 欧美最高标准法务文本，移动到 `legal/` 专属合规目录下，通过在 `hugo.toml` 中页脚路径补齐前置斜杠 `/`，彻底根治路径套娃跳转到 localhost 的幽灵 Bug。
 *   [x] **关于/联系我实体页点亮**：成功补充 `about.md` 和 `contact.md` 页面，并将官方邮箱锁定为纯净且彰显极客逼格的 **`heimaeden@proton.me`**。
@@ -174,7 +174,7 @@
 #### 📍 阶段 β — M4 内容冲刺（目标 D6 = 2026-08-20 前）
 
 - [ ] **B1** 完成第二 + 第三篇图文长文，与首篇同为 `Jamstack 建站避坑笔记`专栏话题
-- [ ] **B2** 发布 `payment/` 子目录下的《万里汇开发者账户实战：0 电商流水极速下卡全纪录》——这是 M4 首个 **Money Hook**（含万里汇联盟链接占位）
+- [ ] **B2** 发布 `remote-payment/` 子目录下的《WorldFirst 开发者账户实战：0 电商流水极速下卡全纪录》——这是 M4 首个 **Money Hook**（**注**：WorldFirst 仅做知识普及，无公开英文联盟，联盟链接留待 Payoneer / Wise / PingPong 真实注册后再植入）
 - [ ] **B3** `hugo.toml` 显式补 `[sitemap]` 段、`static/robots.txt`、`static/google<hash>.html` GSC 验证文件
 - [ ] **B4** 接 Plausible / Umami 轻量分析（合规第一原则，无需 GDPR banner）
 - [ ] ⏸ **冷却自检**：每篇上线后过 24h 看 GSC 抓取是否成功，再发下一篇
@@ -188,9 +188,21 @@
 
 #### 📍 阶段 δ — 变现起跑线（D14 → D30）
 
-- [ ] **D1** Money Page 落地：《2026 远程工作者收款工具横评》（万里汇 / Wise / Payoneer / PayPal 横评表格 + 联盟链接 + 用户画像分流）
-- [ ] **D2** 建立 `data/affiliates.toml` 统一管理联盟关系（万里汇、WildCard、A2Hosting、Hetzner、Porkbun 等），文章内统一 shortcode 引用
-- [ ] **D3** ITIN/EIN 申请 Checklist 入档；万里汇月度对账工作流（CSV → 简单记账表）建立
+- [ ] **D1** Money Page 落地：《2026 远程工作者收款工具横评》——**英文联盟伙伴专版**（Wise / Payoneer / PingPong / WorldFirst 横评表格 + 联盟链接 + 用户画像分流；WorldFirst 仅作知识普及，不放联盟链接）
+- [ ] **D2** 建立 `data/affiliates.toml` 统一管理联盟关系（**仅英文联盟**：Payoneer / Wise / PingPong / Hetzner / DigitalOcean / WildCard / Porkbun；WorldFirst 与 A2Hosting 仅留 placeholder 不放链接），文章内统一 shortcode 引用
+- [ ] **D3** ITIN/EIN 申请 Checklist 入档；WorldFirst 月度对账工作流（CSV → 简单记账表）建立
+
+#### 📍 子阶段 δ-Payment — 境外收款模块启动（D20 → D40，并行于变金线主轴）
+
+> 完整规划见 [`docs/think-payment.md`](docs/think-payment.md)。本节为 README 内嵌的执行锚点。
+> **关键约束**：收款集群不先发，须底盘 30-40 篇部署/排错就位后再启动。
+
+- [ ] **P1** 前 20 篇锁定部署+排错（4:4:2 比例），`remote-payment/` 集群暂不开张
+- [ ] **P2** 第 21 篇起插入收款文章，节奏：每 6-8 篇部署/排错 → 1-2 篇收款（最终占比 ≤15%）
+- [ ] **P3** 联盟植入：选型对比文章 → Payoneer / Wise / PingPong 联盟链接；排错文章 → 仅广告
+- [ ] **P4** 双向内链：AdSense / 联盟变现文章 ↔ `remote-payment/` 收款文章（互推权重）
+- [ ] **P5** 每 8-12 个月批量复核全部收款文章（KYC 规则、费率、平台名称变更）
+- [ ] ⏸ **冷却自检**：每篇收款文上线前，对照 [`docs/think-payment.md §六`](../docs/think-payment.md) 风险规避5条硬约束逐条打勾
 
 #### 📍 阶段 ε — M5 长跑（D30 → D90）
 

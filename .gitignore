@@ -1,3 +1,7 @@
 .DS_Store
 **/.DS_Store
 
+# Hugo build output (per README §7.2 known issue)
+public/
+resources/
+.hugo_build.lock
