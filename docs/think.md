@@ -12,6 +12,7 @@
 | `think-strategy.md` | 境内 AI（2026-08-14） | 综合战略纪要：赛道、变现、节奏、最终结论 |
 | `think-templates.md` | 境内 AI（2026-08-15） | 博客统一文章模板 + 30 条英文长尾关键词 |
 | `think-payment.md` | 境内 AI + Claude 整合（2026-08-15） | 境外收款模块深度展开 + 35 标题 + 风险规避 |
+| `worldfirst-usd-checklist.md` | Claude（2026-08-15） | WorldFirst USD 账户开通现场 checklist（含备份通道、避坑、完成定义）|
 
 ---
 
@@ -19,6 +20,7 @@
 
 - **2026-08-14**：首次写入综合战略 + 选题模板（合并于 think.md 单文件）
 - **2026-08-15**：新增境外收款模块；按"主题拆分"重构为 4 文件结构
+- **2026-08-15**：新增 `worldfirst-usd-checklist.md`（D4 进度同步：WorldFirst 实名认证完成 + USD 账户开通操作手册）
 
 ---
 
