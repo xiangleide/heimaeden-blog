@@ -12,7 +12,7 @@
 | :--- | :--- | :--- | :--- |
 | **M1: 生产底座闭环** | 域名抢注、跨境支付打通、Cloudflare 边缘托管流水线合龙 | **🟢 100% 达成** | 2026-08-11 |
 | **M2: 合规与视觉美化** | 隐私条款五件套上线、About/Contact页面补齐、极客美学样式重构 | **🟢 100% 达成** | 2026-08-13 |
-| **M3: 变现血脉打通** | 申请属于个人名下的合规美国虚拟银行卡（万里汇/PingPong） | **🟡 推进中 (98%)** | 2026-08-15 (今晚前) |
+| **M3: 变现血脉打通** | 申请属于个人名下的合规美国虚拟银行卡（万里汇/PingPong） | **🟡 推进中 (99%)** | 2026-08-15 (今晚前) |
 | **M4: 内容营销起航** | 专栏首发 3 篇硬核干货与高客单价 Money Page 商业测评文发布 | **🟡 推进中 (30%)** | 2026-08-20 前 |
 | **M5: 商业化收割** | 申请 Google AdSense 保底广告，冲刺月 PV 突破变现临界点 | **🔴 挂起 (待时机)** | 预计运营 1-3 个月后 |
 
@@ -140,6 +140,10 @@
         * [`docs/think-payment.md`](../docs/think-payment.md) §一-5 新增账户结构说明
         * [`docs/worldfirst-usd-checklist.md`](../docs/worldfirst-usd-checklist.md) Phase 5 改为 M5 延后 + 备份章节简化
         * §7.3 D2 同步加注
+*   **2026-08-15 状态校准 / D4 第四次（Phase 2 完成 + 安全事件复盘）**：WorldFirst USD 账户 4 字段（Account Number / Routing Number / SWIFT / Bank Name）截图已保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png`。M3 进度：98% → **99%**。
+    * 🚨 **安全事件复盘（必读，下次同类操作 SOP）**：用户首次将截图放在 `docs/`（git tracked 目录）→ Claude 立即识别安全风险并询问 → 用户选 A → 移到 git 外安全位置。**教训**：(1) docs/ 虽不是 Hugo 内容树，但仍是 git 工作树的一部分，敏感资产永远不进 repo。(2) checklist §3.1 明确建议路径 `~/Documents/heimaeden-payout/`，执行 SOP 必须先看 checklist，不能图方便就近放。
+    * ⏸ **Phase 3 待办（不在 git 内执行）**：在本地 `hugo.toml` 加 `[params.payout.adsense]` 段，按 checklist §3.2 模板填 4 字段 + 拼音一致的 `accountHolder` + `lastUpdated`。**手动操作，不要让 Claude 写进 repo 的 hugo.toml**。
+    * ⏸ **Phase 4 待办（不可压缩）**：AdSense 后台绑定 → 测试款到账（7-14 天） → M3 = 100%。
 
 ---
 
@@ -152,7 +156,7 @@
 | 项 | 上一轮误判 | 校准后真相 | 后续影响 |
 | :--- | :--- | :--- | :--- |
 | **PayPal 通道定位** | 误判为主收款链路 | **仅用于 Spaceship 域名一次性付账**，非收款通道 | 移除所有「停掉 PayPal」类建议，结算通道风险归零 |
-| **万里汇账户状态** | 推进中 90% | 「**开发者**」账号已注册完成（**注册时未勾选电商类型**），仅差**实名认证** | 2026-08-15 二次校准：实名认证 + 支付宝 KYC + USD 账户申请成功（业务类型「数字内容创作」）；**4 字段（Account/Routing/SWIFT/Bank）尚未复制截图保存** | M3 仅需补 4 字段截图 + AdSense 绑定即可扫尾 |
+| **万里汇账户状态** | 推进中 90% | 「**开发者**」账号已注册完成（**注册时未勾选电商类型**），仅差**实名认证** | 2026-08-15 三次校准：(1) 实名认证 + 支付宝 KYC 完成 ✅；(2) USD Global Account 开通（业务类型「数字内容创作」，仅绑 AdSense）✅；(3) **4 字段截图已保存至 git 外** ✅。**仅剩 hugo.toml 本地段 + AdSense 后台绑定两步即 M3 = 100%** | D4 第四次校准已记入 §6 |
 | **项目启动日 / 今日基准** | 未明示 | 启动日 = **2026-08-11**；本文成稿时 = **D3**（2026-08-14） | 全文时间锚点统一为 `D=N ↔ 2026-08-11 + N` |
 
 ### 📊 7.2 72 小时速度复盘（Velocity Audit）
@@ -189,7 +193,7 @@
 #### 📍 阶段 α — M3 收官（目标：48 小时内）
 
 - [x] **A1** 登录万里汇 dev 控制台，确认注册类型为「开发者」（已确认），提交实名认证材料 — **2026-08-15 完成**（身份证 + 支付宝人脸 KYC）
-- [ ] **A2** 认证通过后，截图保存 *Routing Number* + *Account Number* 至本地保密目录，作为 `[params.payout]` 段加入 `hugo.toml`（本地版，不进 git） — **2026-08-15 二次进展**：USD 账户已申请成功（业务类型「数字内容创作」）；**4 字段尚未截图复制**，待办
+- [x] **A2** 认证通过后，截图保存 *Routing Number* + *Account Number* 至本地保密目录，作为 `[params.payout]` 段加入 `hugo.toml`（本地版，不进 git） — **2026-08-15 进度**：USD 账户已开通 ✅；4 字段截图已保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png` ✅（**重要**：用户先误放 `docs/`，已立即移出 git，避免公网仓库泄露银行信息）；**仅剩 `hugo.toml` 本地段写入 + AdSense 后台绑定两步**
 - [ ] **A3** README 第六节追加「M3 = 100%」状态行 — **⏸ 待 USD 账户开通后触发**
 - [ ] ⏸ **冷却自检**：核对「未选电商类型」是否会触发后续 Stripe / PayPal Merchant 入驻时的「类型不匹配」风险——如有，预先在支付主体备案中补登记
 
