@@ -13,7 +13,7 @@
 |---|---|---|
 | ✅ 已完成 | 实名认证（身份证 + 支付宝人脸 KYC）| 2026-08-15 |
 | ✅ 已完成 | 绑定支付宝用于人民币收款 | 2026-08-15 |
-| ⏳ Phase 1 | WorldFirst 控制台申请 USD 收款账户 | 待办 |
+| ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」）| **2026-08-15** |
 | ⏳ Phase 2 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 | 待办 |
 | ⏳ Phase 3 | 截图保存至本地保密目录 + 写入 `hugo.toml [params.payout]`（本地版，不进 git） | 待办 |
 | ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 | 待办 |
