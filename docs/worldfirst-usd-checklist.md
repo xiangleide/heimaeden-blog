@@ -16,7 +16,7 @@
 | ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」，仅绑定 AdSense）| **2026-08-15** |
 | ✅ 已完成 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 + 截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png` | **2026-08-15** |
 | ⏸ 已跳过 | `hugo.local.toml` 写入 4 字段（**可选**，仅为未来 shortcode 复用，不阻塞收款） | **2026-08-15** |
-| ⏳ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证（7-14 天） | 待办 |
+| ⏸ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证 | **推迟到 M5 阶段**（需先满足 AdSense 审核通过 + 累计收益 ≥ $100） |
 | ⏸ Phase 5 | 各联盟平台 USD 账户（**WorldFirst 一户一平台**，按需申请，30s/账户） | **延后至 M5 商业化收割阶段，按需申请** |
 
 ---
@@ -229,20 +229,22 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 ---
 
-## ✅ 完成定义（M3 = 100% 收官标志）
+## ✅ 完成定义（M3 = 100% 收官标志）— **激进型边界（2026-08-15 重新校准）**
 
-完成 Phase 1-4（**Phase 3 已跳过，可选**，不计入硬要求）即可达 M3 = 100%（Phase 5 延后至 M5 商业化收割阶段）：
+> **背景**：2026-08-15 用户指出关键事实——现在还没接入广告与营销联盟 → AdSense 测试款机制无法触发 → 把"AdSense 绑定 + 测试款到账"作为 M3 收官门槛会让 M3 永远卡在 99%。
+>
+> **新边界（激进型方案 A）**：M3 = 100% **仅需 WorldFirst USD 账户开通 + 4 字段截图保存** 即可。AdSense 绑定 + 测试款到账 → 推迟至 M5 阶段（商业化收割），需先满足：(a) AdSense 申请审核通过；(b) 累计收益 ≥ $100 支付阈值；(c) 真实流量基础。
 
-1. [ ] WorldFirst AdSense USD 账户开通（Phase 1 ✅）
-2. [ ] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/`（Phase 2 ✅）
-3. ~~[ ] `hugo.toml` 本地版写入 `[params.payout.adsense]` 段~~ — **Phase 3 已跳过（2026-08-15 用户决策）**
-4. [ ] AdSense 绑定完成 + 测试款到账验证通过（7-14 天）
-5. [ ] README §1 M3 状态由 99% → **100%**
-6. [ ] README §6 追加「M3 = 100%」状态行
-7. [ ] README §7.3 阶段 α 全部勾选 A1/A2/A3
+满足以下 **2 项** 即达 M3 = 100%：
 
-满足上述 6 项后，**M3 收官**，可正式进入 M4 内容冲刺（§7.3 阶段 β B1-B4）。
-Phase 5（联盟账户）按需在 M5 阶段（商业化收割）触发，不阻塞 M3 → M4 推进。
+1. [x] WorldFirst AdSense USD 账户开通（Phase 1 ✅，2026-08-15）
+2. [x] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/`（Phase 2 ✅，2026-08-15）
+
+**M3 收官状态**：✅ **已达成 2026-08-15**（详见 README §1 + §7.3 阶段 α 全部勾选）。
+
+**Phase 3（hugo.local.toml 写入）**：⏸ 跳过（见上文「Phase 3 决策记录」节）。
+**Phase 4（AdSense 绑定 + 测试款）**：⏸ 推迟到 M5 阶段（见上文进度概览表 + README §7.3 阶段 δ D4）。
+**Phase 5（联盟 USD 账户）**：⏸ 按需在 M5 阶段触发（不阻塞 M3 → M4 推进）。
 
 ---
 
