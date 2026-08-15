@@ -84,26 +84,46 @@ WorldFirst 主控台 → 「收款账户」或「多币种账户」→ 「申请
 - 包含账户开通时间戳
 - 不要发到云相册（防止泄露）
 
-### 3.2 写入 hugo.toml（**仅本地版**，不进 git）
+### 3.2 写入 hugo.local.toml override 文件（**不进 git**）
+
+**为什么用 override 文件？**
+Hugo `--config` 只识别 `.toml/.yaml/.json` 后缀，所以 override 文件必须是合法后缀。
+我们命名 `hugo.local.toml`（中间带 `.local.` 表示私有，结尾 `.toml` 让 Hugo 接受）。
+主配置 `hugo.toml` 保持原样，零修改，敏感字段全部在 override 文件里。
+
+**操作步骤**：
+
+1. 在 repo 根创建 `hugo.local.toml`（**不要 commit**，已在 `.gitignore`）
+
+2. 复制以下完整模板，填入 Phase 2 拿到的 4 字段真实值：
 
 ```toml
-# hugo.toml [params.payout] 段 — 仅本地，不 commit
-[params.payout]
-provider = "WorldFirst"
-accountHolder = "XIANG LEIDE"  # 按 AdSense 拼音实际填
-accountNumber = "XXXXXXX"
-routingNumber = "XXXXXXX"
-swift = "BOFAUS3N"  # 按 Phase 2 实际填
-bankName = "Bank of America, N.A."
-lastUpdated = "2026-08-XX"
+# hugo.local.toml — PRIVATE override, NEVER commit
+# Usage: hugo --config hugo.toml,hugo.local.toml
+
+[params.payout.adsense]
+provider       = "WorldFirst"
+accountHolder  = "XIANG LEIDE"  # MUST match AdSense payout name exactly (pinyin)
+accountNumber  = "123456789012"  # 9-12 digits, no spaces, no dashes
+routingNumber  = "021000021"     # 9-digit ABA / Routing Number
+swift          = "BOFAUS3N"      # 11-char BIC (8 letters + 3 alphanumerics)
+bankName       = "Bank of America, N.A."  # WorldFirst partner bank
+lastUpdated    = "2026-08-15"    # YYYY-MM-DD, update every refresh
 ```
 
-🔒 加入 `.gitignore`（如果还没有）：
+3. 验证 Hugo 能加载双 config：
+
+```bash
+hugo --config hugo.toml,hugo.local.toml --gc
 ```
-# .gitignore 本地加一行
-hugo.toml.local
+
+应输出 `Total in <N> ms`，无 `failed to load config` 错误。
+
+4. 本地预览命令（替代裸 `hugo server`）：
+
+```bash
+hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 ```
-或者用本地 override 文件（推荐）。
 
 ---
 

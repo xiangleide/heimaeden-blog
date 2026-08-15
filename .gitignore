@@ -5,3 +5,7 @@
 public/
 resources/
 .hugo_build.lock
+
+# Private payout config override (per docs/worldfirst-usd-checklist.md §3.2)
+# Contains WorldFirst USD account 4 fields — NEVER commit.
+hugo.local.toml
