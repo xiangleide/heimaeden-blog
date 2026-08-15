@@ -16,6 +16,12 @@ minify = false
 [outputs]
     home = ["HTML", "RSS", "JSON"]
 
+# 🟢 全站 Sitemap 配置（阶段 β B0）：显式声明让 GSC/搜索引擎零歧义发现站点地图
+[sitemap]
+    changefreq = "weekly"           # 独立博客更新节奏，避免触发 GSC 频繁抓取警报
+    priority = 0.5                  # Hugo 默认值；首页/About 页面可在 front matter 单篇覆盖
+    filename = "sitemap.xml"        # 默认值，显式写出避免主题模板冲突
+
 # ==========================================================================
 # 🟢 主题高级组件参数配置 (PaperMod Assets Specification)
 # ==========================================================================
