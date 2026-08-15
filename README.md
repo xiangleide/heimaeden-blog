@@ -167,6 +167,10 @@
         * README §7.1 关键事实校准表新增 M3 边界误判行
         * README §7.3 阶段 α：全部勾选 + A3 标记 ✅；阶段 β B3 升级为 B0 前置必做；阶段 δ 新增 D4 AdSense 申请提交
     * ⚠️ **历史回顾过期声明**：上文 D4 第一次/第二次/第三次叙述里的「M3 = 100% 收官标准」「关键缺口」「Phase 4 不可压缩」等措辞已过期。**以本条（D4 第六次）为唯一准绳**：M3 = 100% 仅需 Phase 1 + Phase 2。历史叙述保留作为决策轨迹，不作修改。
+*   **2026-08-15 状态校准 / D4 第七次（阶段 β B0 收官 + push 边界重划）**：
+    * ⭐ **B0 = 100%**（阶段 β 前置必做完成）：sitemap config + robots.txt + GSC 验证（CF Pages 308 clean-URL 重定向 → Googlebot 跟随 → 验证通过）+ sitemap.xml 提交全部完成。
+    * 🚧 **push 边界重划**：用户在 D4 第七次校准对话中明确质疑「未经确认就 git push」。**新边界即刻生效**：所有 `git push` 必须经用户显式 ack 后执行；本地 `git commit` 可直接做（本地可 amend/reset）。本次 commit（`docs/seo-setup-checklist.md` Phase 4 ✅ + README §7.3 B0 勾选 + 本次校准条目）将停在本地，**等待用户 ack push**。
+    * 🔓 **下一步解锁**：B1（写第二/第三篇图文长文）+ B2（WorldFirst 实战 Money Hook）不再被 B0 阻塞。
 
 ---
 
@@ -228,7 +232,7 @@
 
 > **重要调整**（D4 第六次校准）：原 B3（sitemap/robots/GSC）升级为 ⭐ **B0 前置必做**——AdSense 审核要求 GSC 已验证 + sitemap 已提交，否则审核自动拒绝。**B0 必须在 B1 第一篇内容上线前完成**。
 
-- [ ] ⭐ **B0**（前置必做）`hugo.toml` 显式补 `[sitemap]` 段、`static/robots.txt`、`static/google<hash>.html` GSC 验证文件 + 提交 GSC 验证 + 提交 sitemap
+- [x] ⭐ **B0**（前置必做）`hugo.toml` 显式补 `[sitemap]` 段、`static/robots.txt`、`static/google<hash>.html` GSC 验证文件 + 提交 GSC 验证 + 提交 sitemap — **2026-08-15 完成**（commit `67ae311` + `a6cf65b` + `f1e7efa` + 本次收官）
 - [ ] **B1** 完成第二 + 第三篇图文长文，与首篇同为 `Jamstack 建站避坑笔记`专栏话题
 - [ ] **B2** 发布 `remote-payment/` 子目录下的《WorldFirst 开发者账户实战：0 电商流水极速下卡全纪录》——这是 M4 首个 **Money Hook**（**注**：WorldFirst 仅做知识普及，无公开英文联盟，联盟链接留待 Payoneer / Wise / PingPong 真实注册后再植入）
 - [ ] **B3** 接 Plausible / Umami 轻量分析（合规第一原则，无需 GDPR banner）
