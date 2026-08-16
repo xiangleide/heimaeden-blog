@@ -7,12 +7,16 @@ tags = ["Domain", "PayPal", "Spaceship"]
 categories = ["Remote-Payment"]
 
 # 👇 PaperMod 专属友好展示模板开关
-showToc = true         # 自动在右侧/顶部生成文章目录（超级利于操作型文章导航）
+ShowToc = true         # 自动在右侧/顶部生成文章目录（超级利于操作型文章导航）
 TocOpen = true         # 默认展开目录
 hidemeta = false       # 显示文章发布日期、阅读时间、字数等元数据
 comments = true        # 开启评论区展示
 disableShare = false   # 开启社交媒体分享按钮
 lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文禁止
+
+[cover]
+    image = "remote-payment/beginners-practical-guide/cover.jpg"
+    alt = "Hand holding a credit card while typing on a laptop keyboard, depicting an online cross-border payment scenario."
 +++
 
 ## 境外域名购买与跨境支付新手实操指南
@@ -62,13 +66,17 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 4. 点击 **「关联卡或银行卡」**。
 5. **核心避坑点**：在绑定选项里，**不要选关联卡**，拉到下方点击 **「关联银行账户 (Link a bank account)」**。
 6. 在银行列表里搜索并选择我的发卡行（如“中国银行”），输入刚才复制的卡号和手机号。
-7. **通过银联快捷支付网关**接收并输入短信验证码，成功将卡片以“银行账户快捷代扣”形式绑死。
+7. **通过银联快捷支付网关**接收并输入短信验证码，成功将卡片以”银行账户快捷代扣”形式绑死。
+
+> ⚠️ **反面教材**：如果你误选了「关联卡」（而不是「关联银行账户」），下一步就会撞上这个对话框——**银联借记卡没有 CVV，「卡安全代码（CVV）」字段会持续红框 + 「查看CVV」警示，根本无法提交**。我当时就是撞了这条死路才切回「关联银行账户」的。下图是误选路径的现场：
+
+![PayPal 关联卡对话框 — 银联借记卡在 CVV 字段被卡死，CVV 红框 + 查看 CVV 警示](/images/remote-payment/beginners-practical-guide/paypal-link-card-cvv-stuck.png)
 
 ### 步骤 3：返回 Spaceship 完成最终支付
 1. 在无痕浏览器中返回 Spaceship 购物车，点击 Checkout（结算）。
 2. 在支付方式（Payment Method）中，明确勾选 **PayPal**。
 3. 页面弹出了 PayPal 登录小窗口，登录后直接勾选我刚才绑定的中国银行账户。
-4. **触发安全码验证玄学**：在点击最后支付时，PayPal 系统突然弹窗提示需要验证卡片信息，**强制要求我输入一个 3 位的 CSC 安全码**。由于我的卡是普通人民币储蓄卡，背面根本没有这个码，**我索性在框里随便输入了三个数字（例如 123），点击提交，没想到系统竟然直接验证通过了！**，我认为这是bug，要求输入CSC安全码的时候应该校验卡片类型，既然允许绑定银联卡借记卡（没有安全码），就不应强制要求输入CSC。
+4. **触发安全码验证玄学**：在点击最后支付时，PayPal 系统突然弹窗提示需要验证卡片信息，弹窗内容与步骤2中截图类似，**强制要求我输入一个 3 位的 CSC 安全码**。由于我的卡是普通人民币储蓄卡，背面根本没有这个码，**我索性在框里随便输入了三个数字（例如 123），点击提交，没想到系统竟然直接验证通过了！**，我认为这是bug，要求输入CSC安全码的时候应该校验卡片类型，既然允许绑定银联卡借记卡（没有安全码），就不应强制要求输入CSC。
 5. 伴随着工行的扣款短信（扣除等额人民币），我的域名成功秒速拿下！
 
 ---
@@ -95,11 +103,12 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
      - **Privacy 子页**：Spaceship 对 `.com` 默认赠送 ICANN 隐私保护，所以状态字段多半已经是 `On` / `Active`。如果显示 `Off`，手动开启。
      - **Transfer 子页**：确保处于锁定状态（具体开关名称以你看到的为准，可能是 `Transfer Lock` 或 `Domain Lock`）。否则任何人拿到你的邮箱验证码就能把域名转走。
 
-   > ⚠️ 上面两个子页里的具体开关名，我没有下钻截图（首次域名购买流程用不到进入子页的操作），仅基于 Spaceship 官方文档的常见命名给出参考名。如果你截图看到了真实开关名，建议把这条注释替换成实测的名称，避免后续读者按图找不到按钮。
+   > ⚠️ 上面两个子页里的具体开关名，我没有下钻截图（首次域名购买流程用不到进入子页的操作），仅基于 Spaceship 官方文档的常见命名给出参考名。
 
-> 📸 截图见上方：可见 `Auto-renew On` 状态、`Privacy` 和 `Transfer` 子菜单入口；续费金额已用 `redact-image.sh` 打码。
+<!-- 📸 截图位 #4: spaceship-domain-overview.png (域名 + 价格已 redact-image.sh 打码, On toggle 保留) -->
+![Spaceship Domain Manager — Auto-renew On toggle with Privacy and Transfer sub-menu entries visible](/images/remote-payment/beginners-practical-guide/spaceship-domain-overview.png)
 
-<!-- 📸 截图位 #4 — 在此处插入截图 -->
+📸 **上图说明**：可见 `Auto-renew On` 状态、`Privacy` 和 `Transfer` 子菜单入口。
 
 ### 步骤 5：PayPal 中国区账户安全设置（防风控 + 防盗刷）
 
@@ -113,7 +122,7 @@ PayPal 中国区账户开通后，直接大额消费极易触发风控。下面 
 
 ---
 
-## 五、 PayPal 账户常见限制原因（公开资料整理）
+## 四、 PayPal 账户常见限制原因（公开资料整理）
 
 本节为 PayPal 官方帮助文档的公开资料整理，仅用于事前了解风险，**非作者亲历**。请勿将其当作完整或权威的合规依据——以 PayPal 最新帮助页为准：
 
@@ -122,15 +131,15 @@ PayPal 中国区账户开通后，直接大额消费极易触发风控。下面 
 - 限制原因清单：[Why is my PayPal account restricted?](https://www.paypal.com/us/cshelp/article/help165)
 - 常见问答：[What can I do if my PayPal account is limited — FAQ](https://www.paypal.com/us/smarthelp/article/what-can-i-do-if-my-paypal-account-is-limited-faq4047)
 
-### 5.1 账户被限制（Limited / Restricted）
+### 4.1 账户被限制（Limited / Restricted）
 
 按 PayPal 官方文档，账户可能被限制的常见原因包括：新账户短期内异常活动、账户信息缺失或需复核、信用/风控规则命中、以及合规要求触发的复审。被限制后，PayPal 通常会在账户首页顶部展示黄色横幅提示，并要求提交相应材料（身份证件、地址证明、消费凭证等，**具体清单以账户内弹窗为准**）。
 
-### 5.2 提现到银行卡失败
+### 4.2 提现到银行卡失败
 
 PayPal 官方明确：**账户姓名与银行卡开户姓名不一致会导致提现（转账）失败**。规避方法就是保证两者一致（含生僻字、空格）。如果姓名不一致，处理路径是先去银行侧确认/变更，或在 PayPal 侧提交更名申请（具体审核时长以 PayPal 反馈为准，官方未公开承诺）。
 
-### 5.3 永久限制与"代付"
+### 4.3 永久限制与"代付"
 
 按 PayPal 的[账户类型政策](https://www.paypal.com/us/cshelp/article/help164)，账户可能被永久限制（包括余额无法提现）。社区与第三方资料中常被列为高风险触发的行为包括：短期内 IP 频繁切换、单笔金额远高于账户历史消费水平、替他人代收代付等。这些属于**传闻级风险信号**，请勿将其当作 PayPal 的官方禁令牌——是否触发、严重程度如何，最终由 PayPal 风控系统判定。
 

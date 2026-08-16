@@ -7,12 +7,16 @@ tags = ["Hugo", "Cloudflare Pages", "Static Site"]
 categories = ["Static-Site"]
 
 # 👇 PaperMod 专属友好展示模板开关
-showToc = true
+ShowToc = true
 TocOpen = true
 hidemeta = false
 comments = true
 disableShare = false
 lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文禁止
+
+[cover]
+    image = "static-site/static-blog-setup-guide/cover.jpg"
+    alt = "Developer at a dual-monitor workstation writing code in dark theme, representing the hands-on static blog setup process."
 +++
 
 ## Cloudflare Pages + Hugo 静态博客零成本全自动搭建教程
@@ -118,12 +122,8 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 
 ---
 
-<!-- 📸 截图位 #1
-     位置: §6.1 step 1 后
-     内容: 浏览器访问 https://你的域名.com/sitemap.xml 看到完整 XML 输出
-     文件: /images/static-site/static-blog-setup-guide/sitemap-xml-browser.png
-     脱敏: 真实域名 → example.com（必做）
-     建议尺寸: 1200×800 浏览器全屏截 -->
+<!-- 📸 截图位 #1: sitemap-xml-browser.png (域名已 redact-image.sh 打码) -->
+![sitemap.xml 浏览器输出 — 所有已发布文章的 URL 列表](/images/static-site/static-blog-setup-guide/sitemap-xml-browser.png)
 
 ## 六、 首次部署后必做的 3 件事
 
@@ -155,12 +155,8 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
      ```
    * 在 Hugo 项目根目录的 `static/` 下新建 `googlexxxxxx.html`（Google 给的具体文件名），把 `content="xxxxxxxx"` 那串字符单独复制进去保存。
 
-<!-- 📸 截图位 #2
-     位置: §6.2 step 3 HTML tag 后
-     内容: static/googlexxxxxx.html 文件内容截图（用编辑器打开）
-     文件: /images/static-site/static-blog-setup-guide/gsc-verification-html-file.png
-     脱敏: ⚠️ content="xxxxxxxx" 字符串必打码（任何人拿到这串能冒认你的站点所有权）
-     建议尺寸: 800×400 代码编辑器窗口截 -->
+<!-- 📸 截图位 #2: gsc-verification-html-file.png (GSC 令牌已 redact-image.sh 打码) -->
+![GSC 验证 HTML 文件 — 站点根路径下的 googleXXXXX.html 验证文件](/images/static-site/static-blog-setup-guide/gsc-verification-html-file.png)
 
 4. 提交后 Cloudflare Pages 会在下一次构建时把它发布到根路径，Google 自动验证通过。
 5. 验证通过后，左侧菜单 **Sitemaps** ➔ 输入 `sitemap.xml` ➔ 提交。
@@ -171,14 +167,8 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 2. 默认状态是 **Flexible**，**这是错的**：浏览器到 Cloudflare 是 HTTPS，但 Cloudflare 到源站（你的 Pages）是 HTTP，中间人可篡改。
 3. 改成 **Full (strict)**：Cloudflare 会校验源站证书真实性，整条链路端到端加密。
 
-<!-- 📸 截图位 #3 — 在此处插入截图 -->
-<!--
-     截图位 #3
-     位置: §6.3 step 3 后
-     内容: Cloudflare SSL/TLS 页面显示 "Full (strict)" 已选中
-     文件: /images/static-site/static-blog-setup-guide/cloudflare-ssl-full-strict.png
-     脱敏: 域名脱敏
-     建议尺寸: 1200×600 SSL 配置区域截 -->
+<!-- 📸 截图位 #3: cloudflare-ssl-full-strict.png (域名 + 账户已 redact-image.sh 打码) -->
+![Cloudflare SSL/TLS 模式 = Full (strict) — 端到端加密已生效](/images/static-site/static-blog-setup-guide/cloudflare-ssl-full-strict.png)
 
 4. Cloudflare Pages 自带有效证书，无需你手动上传。
 
