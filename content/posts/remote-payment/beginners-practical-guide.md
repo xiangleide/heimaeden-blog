@@ -4,7 +4,7 @@ description = "A step-by-step guide for developers to buy .com domains securely 
 date = 2026-08-10T14:30:00Z
 draft = false
 tags = ["Domain", "PayPal", "Spaceship"]
-categories = ["Payment"]
+categories = ["Remote-Payment"]
 
 # 👇 PaperMod 专属友好展示模板开关
 showToc = true         # 自动在右侧/顶部生成文章目录（超级利于操作型文章导航）
