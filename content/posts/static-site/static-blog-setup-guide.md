@@ -6,111 +6,116 @@ draft = false
 tags = ["Hugo", "Cloudflare Pages", "Static Site"]
 categories = ["Static-Site"]
 
-# 👇 PaperMod 专属友好展示模板开关
+# 👇 PaperMod display toggles
 ShowToc = true
 TocOpen = true
 hidemeta = false
 comments = true
 disableShare = false
-lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文禁止
 
 [cover]
     image = "static-site/static-blog-setup-guide/cover.jpg"
     alt = "Developer at a dual-monitor workstation writing code in dark theme, representing the hands-on static blog setup process."
 +++
 
-## Cloudflare Pages + Hugo 静态博客零成本全自动搭建教程
+## Zero-Cost, Fully Automated Static Blog Setup with Cloudflare Pages + Hugo
 
-作为程序员，网站域名买好后，千万不要花钱去买普通的海外 VPS 服务器，更不要把时间浪费在配置 Nginx、修补 Linux 漏洞上。利用 GitHub 托管代码，配合 Cloudflare Pages 的全球边缘节点，我们可以打造一个零服务器成本、毫秒级瞬开、绝对防爆挂马的极客静态技术博客。
+As a developer, once you've locked down your domain name, **don't** burn money on a generic overseas VPS — and don't sink hours into configuring Nginx or patching Linux CVEs. Pair GitHub for source hosting with Cloudflare Pages' global edge network, and you can ship a serverless, millisecond-load, malware-proof geek static tech blog at zero cost.
 
 ---
 
-## 一、 静态建站方案的优缺点对比
+## 1. Static vs Dynamic: A Quick Comparison
 
-在做决定前，我深入对比了静态博客与传统 WordPress 动态站的优劣。作为技术人员，静态路线无疑是降维打击：
+Before committing, I weighed static blogs head-to-head against the traditional WordPress stack. For a technical audience, static is a decisive win:
 
-### 静态博客 VS 动态博客（WordPress）
+### Static Blog vs Dynamic Blog (WordPress)
 
-| 比较维度 | 静态博客路线（我选的主赛道） | 动态博客路线（普通 WordPress） |
+| Dimension | Static Blog (my pick) | Dynamic Blog (typical WordPress) |
 | :--- | :--- | :--- |
-| **服务器成本** | 💰 **\$0 / 完全免费** | 💵 \$5 - \$20 / 每月固定支出 |
-| **全球访问速度** | 🚀 **极快**（文章直接缓存在全球数百个 CDN 边缘节点，瞬开） | 🐢 **较慢**（受限于服务器机房位置及带宽，需配置复杂缓存） |
-| **安全性** | 🔒 **绝对安全**（无数据库、无后台执行代码，黑客无从下手） | ⚠️ **高风险**（插件漏洞极多，容易被黑客挂马、注入灰色广告） |
-| **维护成本** | ☕ **零运维**（不需要修补 Linux 漏洞，不需要管 SSL 证书） | 🛠️ **极高**（需定期备份、更新插件，防止被黑客挂马） |
-| **我的核心缺点** | 修改排版和深度定制主题需要动少许代码，不适合非程序员。 | 随着文章变多，网站会变得臃肿、数据库查询变慢。 |
+| **Server cost** | 💰 **\$0 — fully free** | 💵 \$5–\$20 / month fixed |
+| **Global access speed** | 🚀 **Blazing** (posts cached at hundreds of CDN edge POPs worldwide — instant open) | 🐢 **Slower** (constrained by origin DC location and bandwidth; needs elaborate cache tuning) |
+| **Security** | 🔒 **Bulletproof** (no database, no server-side code execution — nothing for attackers to exploit) | ⚠️ **Exposed** (plugin vulnerabilities are rampant; easy to get defaced or hit with grey-hat ad injection) |
+| **Maintenance** | ☕ **Zero ops** (no Linux patching, no SSL certificate renewal) | 🛠️ **Heavy** (regular backups, plugin updates, constant malware vigilance) |
+| **My one caveat** | Tweaking layout or going deep on theme customisation requires touching code — not for non-developers. | As content grows the site becomes bloated and database queries slow down. |
 
 ---
 
-## 二、 步骤一：接管域名解析权（免费套上 Cloudflare 神盾）
+## 2. Step 1: Take Over DNS Resolution (Free Cloudflare Shield)
 
-1. 访问 **Cloudflare 官网**（`https://cloudflare.com`）注册一个免费账户。
-2. 登录后，在控制台首页点击左侧主菜单的 **Websites（网站）** 选项卡。
-3. 点击 **Add a site**（添加站点）或 **Get Started**，输入我买好的域名 `heimaeden.com`。
-4. 页面会弹出付费方案，**直接拉到页面最底部**，勾选 **Free（免费版，\$0/mo）**，点击继续。
-5. Cloudflare 会自动扫描我原有的 DNS 记录，直接点击继续。
-6. 页面会醒目地给出两个 Cloudflare 专属的 **Nameservers（名称服务器）** 地址（例如：`xxx.ns.cloudflare.com` / `yyy.ns.cloudflare.com`），将其复制下来。
-7. 登录 **Spaceship 后台** ➔ 点击 Domains ➔ 找到我的域名 ➔ 点击 **Nameservers** ➔ 选择 **Custom DNS** ➔ 把这两行地址粘贴进去，删掉原有的，点击保存。
+1. Go to the **Cloudflare website** (`https://cloudflare.com`) and sign up for a free account.
+2. After logging in, on the dashboard home click **Websites** in the left-hand main menu.
+3. Click **Add a site** (or **Get Started**), then enter your domain (e.g. `heimaeden.com`).
+4. The plan picker will pop up — **scroll all the way to the bottom** and select the **Free** plan (\$0/mo), then continue.
+5. Cloudflare will auto-scan your existing DNS records — just click continue.
+6. The page will prominently show two Cloudflare-assigned **Nameservers** (e.g. `xxx.ns.cloudflare.com` / `yyy.ns.cloudflare.com`). Copy both.
+7. Log into your **Spaceship dashboard** ➔ click **Domains** ➔ find your domain ➔ click **Nameservers** ➔ choose **Custom DNS** ➔ paste those two addresses in, delete the old ones, and save.
 
 ---
 
-## 三、 步骤二：本地初始化 Hugo 静态博客与代码托管
+## 3. Step 2: Initialise Hugo Locally + Push to GitHub
 
-1. **本地安装 Hugo**：打开终端，Mac 用户执行 `brew install hugo`，Windows 用户执行 `scoop install hugo`。
-2. **创建项目骨架**：在终端里找一个干净的目录下执行：
+1. **Install Hugo locally**: open a terminal. macOS users run `brew install hugo`; Windows users run `scoop install hugo`.
+2. **Scaffold the project**: from a clean directory, run:
+
    ```bash
    hugo new site heimaeden-blog --format toml
    cd heimaeden-blog
    git init
    ```
-3. **下载行业顶级极客主题（PaperMod）**：由于 Git 命令行在国内克隆子模块极易超时断开，我直接采用“手工下载法”绕过：
-    * 在浏览器里输入并直达下载网址：[PaperMod ZIP 下载链接](https://github.com/adityatelange/hugo-PaperMod/archive/refs/heads/master.zip)
-    * 下载后解压得到 `hugo-PaperMod-master` 文件夹，将其**重命名为 `PaperMod`**。
-    * 将整个 `PaperMod` 文件夹直接拖进我项目的 `themes` 目录下。确保路径结构为 `/heimaeden-blog/themes/PaperMod/theme.toml`。
-4. **修改全局配置**：用编辑器打开项目根目录下的 `hugo.toml`，在最下方新增一行：`theme = "PaperMod"`。
-5. **新建第一篇文章**：在终端运行：
+3. **Download the de-facto geek theme (PaperMod)**: cloning the Git submodules from inside China tends to time out, so I sidestep that with a manual download:
+   * Paste this direct URL into your browser: [PaperMod ZIP download](https://github.com/adityatelange/hugo-PaperMod/archive/refs/heads/master.zip)
+   * Extract the ZIP; you'll get a `hugo-PaperMod-master` folder — **rename it to `PaperMod`**.
+   * Drag the entire `PaperMod` folder into your project's `themes/` directory. Confirm the layout is `heimaeden-blog/themes/PaperMod/theme.toml`.
+4. **Update the global config**: open `hugo.toml` at the project root and append `theme = "PaperMod"` at the bottom.
+5. **Create your first post**: in the terminal:
+
    ```bash
    hugo new posts/my-first-tech-post.md
    ```
-   用编辑器打开该文件，将其头部的 `draft = true` 改为 `draft = false`。
-6. **推送到 GitHub**：在 GitHub 上创建一个叫 `heimaeden-blog` 的新仓库，并在本地终端执行标准的 Git 提交流程，将代码完整推送到 GitHub。
+
+   Open the new file and flip `draft = true` to `draft = false` in the front matter.
+6. **Push to GitHub**: create a new repo named `heimaeden-blog` on GitHub, then run the standard git commit/push flow to ship your local code.
 
 ---
 
-## 四、 步骤三：在 Cloudflare Pages 上一键无缝上线
+## 4. Step 3: One-Click Deploy on Cloudflare Pages
 
-1. 登录 Cloudflare 后台，点击左侧菜单栏的 **Compute (Workers & Pages)**。
-2. **极重要操作**：不要直接点右上角的蓝色大按钮！我第一次在这里迷路了。请看下方的【创建应用后的灰色字入口截图】，在白色卡片正下方找到那行灰色的极小字：👉 **`Looking to deploy Pages? Get started`**，点击最后的蓝色链接 **Get started**。
-3. 页面跳转后，点击 **Connect to Git**（连接到 Git），授权并选择我 GitHub 里的 `heimaeden-blog` 仓库。
-4. **配置编译参数（Build settings）**：
-    * **Framework preset（框架预设）**：在下拉菜单里精准选择 **Hugo**。
-    * **Build command（构建命令）**：选择 Hugo 后，系统会自动将输入框修正为最纯净的 **`hugo`**（不带任何 npx 前缀）。
-5. **添加环境变量（防止线上版本过低报错）**：展开下方的 Environment variables，点击添加：
-    * 变量名（Variable name）填：`HUGO_VERSION`
-    * 值（Value）填：`0.120.0`
-6. 点击最下方的 **Save and Deploy**（保存并部署）。等待 1 分钟左右，绿色进度条走完，点击自定义域名（Custom domains）绑定我的主域名 `heimaeden.com`，全站正式上线！
+1. Log in to the Cloudflare dashboard and click **Compute (Workers & Pages)** in the left sidebar.
+2. **Critical step**: don't click the big blue button in the top-right corner! I got lost here the first time. Look at the screenshot below — at the very bottom of the white card you'll find a tiny grey line: 👉 **`Looking to deploy Pages? Get started`**. Click the blue **Get started** link.
+3. After the page jumps, click **Connect to Git** and authorise + select your `heimaeden-blog` repo from GitHub.
+4. **Configure build settings**:
+   * **Framework preset**: in the dropdown, precisely select **Hugo**.
+   * **Build command**: once you pick Hugo, the field auto-corrects to plain **`hugo`** (no `npx` prefix).
+5. **Add an environment variable** (to avoid build failures from an outdated Hugo version): expand Environment variables and click add:
+   * Variable name: `HUGO_VERSION`
+   * Value: `0.120.0`
+6. Click **Save and Deploy** at the bottom. Wait about a minute for the green progress bar to finish, then click **Custom domains** to attach your apex `heimaeden.com`. You're live!
 
 ---
 
-## 五、 我在静态建站阶段踩到的重磅大坑
+## 5. The Heavyweight Pitfalls I Hit While Building
 
-### 坑 1：误把项目创建成了 Cloudflare Workers（找不到 Pages 入口）
-* **【我踩坑时的真实界面截图】**：
+### Pitfall 1: Accidentally Creating a Cloudflare Workers Project (Can't Find Pages)
 
-    * 截图一：被误导进入的 Workers 配置界面（没有框架预设，只有 wrangler 字段）：
+* **Real screenshots from the moment I got stuck**:
 
-      ![Cloudflare Workers configuration screen — wrangler-style fields with no framework preset dropdown](/images/static-site/cloudflare-workers-config-screen.png)
+  * Screenshot 1 — the Workers configuration screen I was misdirected into (no framework preset, only wrangler fields):
 
-    * 截图二：隐藏极深的 Pages 灰色文字入口：
+    ![Cloudflare Workers configuration screen — wrangler-style fields with no framework preset dropdown](/images/static-site/cloudflare-workers-config-screen.png)
 
-      ![Cloudflare Pages entrance link — the grey "Looking to deploy Pages? Get started" row at the bottom of the card](/images/static-site/cloudflare-pages-entrance-link.png)
+  * Screenshot 2 — the deeply hidden grey-text entrance to Pages:
 
-* **【我的踩坑经历】**：进入后台后，我下意识地点击了右上角最显眼的蓝色按钮 `Create application`。进去绑定 GitHub 后，发现配置界面里死活找不到“框架预设（Framework preset）”下拉框，只有 `Build command`（显示 None）和 `Deploy command`（显示 `npx wrangler deploy`），强行部署就会疯狂报错。
-* **【我是如何解决的】**：我发现新版 Cloudflare 把控制台做成了聚合流。点击 `Create application` 后，默认进入的是 **Workers（Serverless函数部署）** 流程，而静态博客必须走 **Pages** 流程。我点击 Back 退出来，在创建页面的卡片最下方，找到了那行极小的灰色字 `Looking to deploy Pages? Get started`（如截图二所示），点击 **Get started** 链接，这才成功切进了纯净的 Pages 流程，彻底甩掉了 `wrangler` 报错。
+    ![Cloudflare Pages entrance link — the grey "Looking to deploy Pages? Get started" row at the bottom of the card](/images/static-site/cloudflare-pages-entrance-link.png)
 
-### 坑 2：线上编译红字报错 `unmarshal failed: toml: expected character =`
-* **【我的踩坑经历】**：当我第一次点击部署时，Cloudflare Pages 的部署日志里弹出了刺眼的红字报错，提示在解析 `/content/posts/my-first-tech-post.md` 的第 3 行时 TOML 解析失败。
-* **【原因拆解】**：这是因为我的全局配置文件是 `hugo.toml`（TOML 格式），所以文章头部的元数据区域（Front Matter）也必须严格遵循 TOML 语法。我当时不小心把本地新建文章的头部写成了 YAML 格式（使用了冒号 `:` 赋值，如 `draft: false`），导致线上的 Hugo 编译器直接崩溃。
-* **【我是如何解决的】**：我回到本地打开该 Markdown 文件，将头部用 `+++` 包裹，并将属性之间全部修改为标准的等号 `=` 赋值：
+* **What happened**: I reflexively clicked the most prominent blue button in the top-right — `Create application`. After binding GitHub, I realised the configuration screen had no Framework preset dropdown — only `Build command` (showing None) and `Deploy command` (showing `npx wrangler deploy`). Forcing a deploy produced an endless stream of errors.
+* **How I fixed it**: I discovered that the new Cloudflare console is an aggregated flow. After clicking `Create application`, you default into the **Workers (serverless functions)** flow — but a static blog must go through the **Pages** flow. I clicked Back, scrolled to the bottom of the create-page card, and spotted that tiny grey line `Looking to deploy Pages? Get started` (see Screenshot 2). Clicking **Get started** finally switched me into the clean Pages flow and banished the `wrangler` errors for good.
+
+### Pitfall 2: Build Fails with the Red `unmarshal failed: toml: expected character =`
+
+* **What happened**: my first deploy came back with a red error in the Cloudflare Pages log — a TOML parsing failure at line 3 of `/content/posts/my-first-tech-post.md`.
+* **Root cause**: my global config file is `hugo.toml` (TOML format), so the front matter of every post must follow TOML syntax too. I had accidentally written the new post's front matter in YAML (with `:` assignments, e.g. `draft: false`), which crashed the online Hugo compiler.
+* **How I fixed it**: I opened the Markdown file locally, wrapped the front matter in `+++`, and converted every assignment to the standard `=` form:
+
   ```toml
   +++
   title = "My First Tech Post"
@@ -118,60 +123,65 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
   draft = false
   +++
   ```
-  保存后重新 `git push`，Cloudflare 瞬间秒级编译成功，我的 `heimaeden.com` 正式点亮全球！
+
+  After saving and `git push`, Cloudflare compiled successfully in seconds and `heimaeden.com` lit up worldwide!
 
 ---
 
 <!-- 📸 截图位 #1: sitemap-xml-browser.png (域名已 redact-image.sh 打码) -->
-![sitemap.xml 浏览器输出 — 所有已发布文章的 URL 列表](/images/static-site/static-blog-setup-guide/sitemap-xml-browser.png)
+![sitemap.xml in browser — URL list of every published post](/images/static-site/static-blog-setup-guide/sitemap-xml-browser.png)
 
-## 六、 首次部署后必做的 3 件事
+## 6. Three Things to Do Right After First Deploy
 
-部署成功只是起点。下面这 3 件事漏掉任意一项，你的博客都会被搜索引擎当成「孤岛网页」永远找不到。
+First deploy is just the starting line. Skip any one of these three and your blog will be treated as an "orphan page" by search engines — they'll never find it.
 
-### 6.1 提交 sitemap.xml（让搜索引擎知道你有页面）
+### 6.1 Submit sitemap.xml (Tell Search Engines You Have Pages)
 
-1. **确认 sitemap 已生成**：Hugo 在每次构建时会自动生成 `/sitemap.xml`，部署后浏览器访问 `https://你的域名.com/sitemap.xml` 应能看到完整的 XML 内容（列出所有已发布的文章 URL）。
+1. **Confirm the sitemap exists**: Hugo auto-generates `/sitemap.xml` on every build. After deployment, browse to `https://your-domain.com/sitemap.xml` and you should see the full XML listing every published post URL.
 
 <!-- 📸 截图位 #1 — 在此处插入截图 -->
 
-2. **如果看不到**：检查 `hugo.toml` 中是否被误关：
+2. **If it's missing**: check whether `hugo.toml` accidentally disabled it:
+
    ```toml
    [sitemap]
        changefreq = "weekly"
        priority = 0.5
        filename = "sitemap.xml"
    ```
-   任何被注释掉或缺失的字段都会让 Hugo 默认跳过 sitemap 生成。
 
-### 6.2 在 Google Search Console 提交域名
+   Any commented-out or missing field makes Hugo skip sitemap generation by default.
 
-1. 访问 [Google Search Console](https://search.google.com/search-console/) 并用 Google 账户登录。
-2. 点击左上角 **Add property**（添加资源），选择 **URL prefix**（网址前缀），输入你的完整域名（含 `https://`）。
-3. 验证方式选 **HTML tag**（推荐，因为零运维）：
-   * Google 会给出一段 `<meta>` 标签，形如：
+### 6.2 Submit Your Domain to Google Search Console
+
+1. Visit [Google Search Console](https://search.google.com/search-console/) and sign in with your Google account.
+2. Click **Add property** in the top-left, choose **URL prefix**, and paste your full domain (including `https://`).
+3. Pick **HTML tag** for verification (recommended — zero ops):
+   * Google will give you a `<meta>` tag like:
+
      ```html
      <meta name="google-site-verification" content="xxxxxxxx" />
      ```
-   * 在 Hugo 项目根目录的 `static/` 下新建 `googlexxxxxx.html`（Google 给的具体文件名），把 `content="xxxxxxxx"` 那串字符单独复制进去保存。
+
+   * In your Hugo project, create `googlexxxxxx.html` under `static/` (use the exact filename Google gives) and put just the `content="xxxxxxxx"` string into it.
 
 <!-- 📸 截图位 #2: gsc-verification-html-file.png (GSC 令牌已 redact-image.sh 打码) -->
-![GSC 验证 HTML 文件 — 站点根路径下的 googleXXXXX.html 验证文件](/images/static-site/static-blog-setup-guide/gsc-verification-html-file.png)
+![Google Search Console verification HTML file served from the site root](/images/static-site/static-blog-setup-guide/gsc-verification-html-file.png)
 
-4. 提交后 Cloudflare Pages 会在下一次构建时把它发布到根路径，Google 自动验证通过。
-5. 验证通过后，左侧菜单 **Sitemaps** ➔ 输入 `sitemap.xml` ➔ 提交。
+4. After submission, Cloudflare Pages will publish the file to the root path on the next build and Google auto-verifies.
+5. Once verified, in the left menu go to **Sitemaps** ➔ type `sitemap.xml` ➔ submit.
 
-### 6.3 把 Cloudflare SSL/TLS 模式设为 Full（strict）
+### 6.3 Set Cloudflare SSL/TLS Mode to Full (strict)
 
-1. 回到 Cloudflare 后台，左侧菜单选你的域名 ➔ **SSL/TLS**。
-2. 默认状态是 **Flexible**，**这是错的**：浏览器到 Cloudflare 是 HTTPS，但 Cloudflare 到源站（你的 Pages）是 HTTP，中间人可篡改。
-3. 改成 **Full (strict)**：Cloudflare 会校验源站证书真实性，整条链路端到端加密。
+1. Back in the Cloudflare dashboard, select your domain in the left menu ➔ **SSL/TLS**.
+2. The default is **Flexible** — **this is wrong**: the browser ↔ Cloudflare leg is HTTPS, but the Cloudflare ↔ origin (your Pages) leg is HTTP. A man-in-the-middle could tamper with it.
+3. Switch to **Full (strict)**: Cloudflare validates the origin certificate, and the entire chain becomes end-to-end encrypted.
 
 <!-- 📸 截图位 #3: cloudflare-ssl-full-strict.png (域名 + 账户已 redact-image.sh 打码) -->
-![Cloudflare SSL/TLS 模式 = Full (strict) — 端到端加密已生效](/images/static-site/static-blog-setup-guide/cloudflare-ssl-full-strict.png)
+![Cloudflare SSL/TLS set to Full (strict) — end-to-end encryption enabled](/images/static-site/static-blog-setup-guide/cloudflare-ssl-full-strict.png)
 
-4. Cloudflare Pages 自带有效证书，无需你手动上传。
+4. Cloudflare Pages ships with a valid certificate out of the box — no manual upload needed.
 
 ---
 
-✅ 完成后，你的博客就有了「sitemap + GSC 收录 + 端到端 HTTPS」三件套，搜索引擎 1-2 周内会开始自然抓取。
+✅ Once that's done your blog has the "sitemap + GSC indexing + end-to-end HTTPS" trio, and search engines will start crawling naturally within 1–2 weeks.

@@ -6,78 +6,80 @@ draft = false
 tags = ["Domain", "PayPal", "Spaceship"]
 categories = ["Remote-Payment"]
 
-# 👇 PaperMod 专属友好展示模板开关
-ShowToc = true         # 自动在右侧/顶部生成文章目录（超级利于操作型文章导航）
-TocOpen = true         # 默认展开目录
-hidemeta = false       # 显示文章发布日期、阅读时间、字数等元数据
-comments = true        # 开启评论区展示
-disableShare = false   # 开启社交媒体分享按钮
-lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文禁止
+# 👇 PaperMod display toggles
+ShowToc = true         # auto-generate TOC in right sidebar / top — great for how-to articles
+TocOpen = true         # expand TOC by default
+hidemeta = false       # show publish date, reading time, word count
+comments = true        # enable comments section
+disableShare = false   # enable social share buttons
 
 [cover]
     image = "remote-payment/beginners-practical-guide/cover.jpg"
     alt = "Hand holding a credit card while typing on a laptop keyboard, depicting an online cross-border payment scenario."
 +++
 
-## 境外域名购买与跨境支付新手实操指南
+## Beginner's Practical Guide to Buying an Overseas Domain and Making Cross-Border Payments
 
-做境外网站，域名是我们的核心资产。作为一名新手，在第一次购买境外域名时，我发现里面的暗坑远比想象中多。本篇教程由我亲身实操沉淀而来，带你避开国内域名商的监控风险，在海外顶级批发商处顺利拿下 `.com` 域名，并彻底解决无外币信用卡的跨境支付难题。
+If you're building an overseas-facing site, the domain is your core asset. As a first-timer buying my first overseas domain, I found the hidden pitfalls far more numerous than I'd imagined. This walk-through is the distilled result of my own hands-on process — it helps you steer clear of mainland-registrar surveillance risks, walk away with a `.com` at a top overseas wholesale registrar, and completely solve the cross-border payment problem when you don't have a foreign-issued credit card.
 
 ---
 
-## 一、 域名注册商选择
+## 1. Choosing a Domain Registrar
 
-在海外买域名，核心原则是**无首年低价套路、续费不涨价、免费赠送 WHOIS 隐私保护**，且必须与服务器服务商彻底解耦。以下是我在起步时对比过的海外顶级域名注册商：
+The golden rules for buying a domain overseas are: **no first-year teaser pricing, no surprise renewal hikes, free WHOIS privacy**, and full decoupling from your hosting provider. Here are the top overseas registrars I compared when starting out:
 
-### 海外顶级域名注册商对比
+### Overseas Top-Tier Registrar Comparison
 
-| 注册商名称 | 核心优点 | 核心缺点 | 我的推荐指数 |
+| Registrar | Core Strength | Core Weakness | My Rating |
 | :--- | :--- | :--- | :--- |
-| **Spaceship** | 行业性价比黑马，`.com` 常年 \$7-\$9，后台界面极简现代，解析极快。 | 新晋品牌，部分国内借记卡直连容易触发反诈回调。 | ⭐⭐⭐⭐⭐ (我的首选) |
-| **Cloudflare** | 业界公认的“批发价”注册商，零利润运营，续费永远不涨价。 | 修改 DNS 记录必须绑定其自家的生态。 | ⭐⭐⭐⭐ |
-| **Namecheap** | 海外老牌行业巨头，管理后台极其稳定安全，24小时客服响应极快。 | 价格比 Spaceship 略贵。 | ⭐⭐⭐⭐ |
+| **Spaceship** | Industry value-for-money dark horse — `.com` runs \$7–\$9 year-round, with a clean modern dashboard and lightning-fast DNS propagation. | A relatively new brand; some mainland debit cards hitting it directly can trigger anti-fraud callbacks. | ⭐⭐⭐⭐⭐ (my top pick) |
+| **Cloudflare** | The industry's de-facto "wholesale price" registrar — zero-margin operation, renewals never go up. | Editing DNS records locks you into the Cloudflare ecosystem. | ⭐⭐⭐⭐ |
+| **Namecheap** | An overseas veteran giant — rock-solid, secure dashboard and 24-hour lightning customer support. | Pricier than Spaceship. | ⭐⭐⭐⭐ |
 
 ---
 
-## 二、 Spaceship 域名选购与防黑查漏步骤
+## 2. Spaceship Search & Anti-Tracking Walk-Through
 
-为了防止某些不规范平台的“影子监控”（频繁检索某个冷门域名后被系统暗中抢注抬价），我严格执行了**无痕无污染查询**：
+To avoid "shadow tracking" by less scrupulous platforms (where repeated searches for a niche domain quietly tip the system off to register it and jack the price), I followed a strict **clean-room search** protocol:
 
-1. **开启无痕模式**：打开电脑浏览器，按下 `Ctrl + Shift + N`（Mac 系统为 `Cmd + Shift + N`）进入谷歌浏览器的**无痕/隐身窗口**。
-2. **访问官网**：在地址栏直接输入 `://spaceship.com` 进入首页。
-3. **域名检索**：在首页大搜索框中输入我心仪的英文域名组合（例如：`heimaeden.com`），点击搜索。
-4. **加入购物车**：页面显示 **Available**（可用），价格在 \$8-\$10/年左右，我果断点击 **Add to cart**（加入购物车）。
-5. **核对账单**：点击右上角购物车进入结算页面，核对域名年限（选择 1 Year），确认系统免费赠送了 **Domain Privacy**（隐私保护），其余增值服务一律不选，保持账单纯净。
+1. **Open an incognito window**: open your desktop browser and hit `Ctrl + Shift + N` (or `Cmd + Shift + N` on macOS) to enter Chrome's **Incognito** mode.
+2. **Hit the official site**: type `://spaceship.com` straight into the address bar to land on the home page.
+3. **Search the domain**: paste the English domain combo you like (e.g. `heimaeden.com`) into the big search box on the home page and hit Search.
+4. **Add to cart**: the page shows **Available**, with the price in the \$8–\$10/year range — click **Add to cart** without hesitation.
+5. **Review the bill**: click the cart icon in the top-right to reach the billing page, confirm the term (1 Year), make sure the system is gifting you **Domain Privacy** for free, deselect every value-added add-on, and keep the bill clean.
 
 ---
 
-## 三、 跨境支付实操步骤（针对无外币信用卡选手）
+## 3. Cross-Border Payment Walk-Through (For Anyone Without a Foreign Credit Card)
 
-我手头当时没有带 Visa 或 Mastercard 标志的外币信用卡，只有普通的国内银联借记卡（储蓄卡），且实体卡还不在身边。以下是我摸索出通过 **PayPal 通道** 100% 成功扣款的绝招，**即使不知道真实安全码也完全可以操作**：
+At the time I had no Visa- or Mastercard-branded foreign credit card — just a regular mainland UnionPay debit (savings) card, and the physical card wasn't even with me. Below is the 100%-success recipe I worked out using the **PayPal route** — it works **even if you don't know your real security code**:
 
-### 步骤 1：5秒获取国内卡号
-1. 打开我的手机银行 App（我用的是中国银行/工商银行），登录账户。
-2. 进入「我的账户」，点击对应的卡片，点击「卡号显示/复制」（或小眼睛图标），**复制出完整的19位卡号**。
+### Step 1: Grab Your Domestic Card Number in 5 Seconds
 
-### 步骤 2：注册并绑定中国区 PayPal 账户
-1. 在浏览器中打开 **PayPal 中国官网**（`://paypal.com`），点击右上角注册。
-2. 选择「个人账户」，输入我当前的中国手机号接收验证码，并填写我的真实姓名与身份证号（这是国家合规要求，完全安全）。
-3. 注册成功并登录，点击顶部菜单栏的 **「钱包 (Wallet)」**。
-4. 点击 **「关联卡或银行卡」**。
-5. **核心避坑点**：在绑定选项里，**不要选关联卡**，拉到下方点击 **「关联银行账户 (Link a bank account)」**。
-6. 在银行列表里搜索并选择我的发卡行（如“中国银行”），输入刚才复制的卡号和手机号。
-7. **通过银联快捷支付网关**接收并输入短信验证码，成功将卡片以”银行账户快捷代扣”形式绑死。
+1. Open your mobile banking app (I used Bank of China / ICBC) and sign in.
+2. Go to "My Accounts", tap the card, tap "Show/Copy Card Number" (or the little eye icon), and **copy the full 19-digit card number**.
 
-> ⚠️ **反面教材**：如果你误选了「关联卡」（而不是「关联银行账户」），下一步就会撞上这个对话框——**银联借记卡没有 CVV，「卡安全代码（CVV）」字段会持续红框 + 「查看CVV」警示，根本无法提交**。我当时就是撞了这条死路才切回「关联银行账户」的。下图是误选路径的现场：
+### Step 2: Register and Link a China-Region PayPal Account
 
-![PayPal 关联卡对话框 — 银联借记卡在 CVV 字段被卡死，CVV 红框 + 查看 CVV 警示](/images/remote-payment/beginners-practical-guide/paypal-link-card-cvv-stuck.png)
+1. In your browser, go to **PayPal China** (`://paypal.com`) and click Sign Up in the top-right.
+2. Pick the **Personal account**, enter your current mainland mobile number to receive a verification code, and fill in your real name and national ID number (this is a national compliance requirement and is fully safe).
+3. After successful registration and login, click **Wallet** in the top menu bar.
+4. Click **Link a card or bank account**.
+5. **Critical pitfall to avoid**: in the linking options, **don't pick "Link a card"** — scroll down and click **"Link a bank account"**.
+6. Search the bank list and select your card-issuing bank (e.g. "Bank of China"), then enter the card number you copied earlier and your mobile number.
+7. Use the **UnionPay quick-pay gateway** to receive and enter the SMS code, and the card is locked in as a "direct-debit bank account".
 
-### 步骤 3：返回 Spaceship 完成最终支付
-1. 在无痕浏览器中返回 Spaceship 购物车，点击 Checkout（结算）。
-2. 在支付方式（Payment Method）中，明确勾选 **PayPal**。
-3. 页面弹出了 PayPal 登录小窗口，登录后直接勾选我刚才绑定的中国银行账户。
-4. **触发安全码验证玄学**：在点击最后支付时，PayPal 系统突然弹窗提示需要验证卡片信息，弹窗内容与步骤2中截图类似，**强制要求我输入一个 3 位的 CSC 安全码**。由于我的卡是普通人民币储蓄卡，背面根本没有这个码，**我索性在框里随便输入了三个数字（例如 123），点击提交，没想到系统竟然直接验证通过了！**，我认为这是bug，要求输入CSC安全码的时候应该校验卡片类型，既然允许绑定银联卡借记卡（没有安全码），就不应强制要求输入CSC。
-5. 伴随着工行的扣款短信（扣除等额人民币），我的域名成功秒速拿下！
+> ⚠️ **Counter-example**: if you accidentally pick "Link a card" (instead of "Link a bank account"), the very next dialog will trap you — **UnionPay debit cards have no CVV, the "Card Security Code (CVV)" field stays red-bordered with a "View CVV" warning, and the form simply won't submit**. I hit exactly this dead end before switching back to "Link a bank account". Here's what the wrong-path dialog looks like:
+
+![PayPal Link Card dialog — UnionPay debit card blocked at the CVV field with red box and "View CVV" warning](/images/remote-payment/beginners-practical-guide/paypal-link-card-cvv-stuck.png)
+
+### Step 3: Head Back to Spaceship to Finish the Payment
+
+1. In your incognito browser, return to the Spaceship cart and click **Checkout**.
+2. In **Payment Method**, explicitly pick **PayPal**.
+3. The PayPal sign-in pop-up appears — sign in and directly tick the Bank of China account you just linked.
+4. **The voodoo of CSC verification**: on the final payment click, PayPal suddenly pops a dialog asking you to verify card info — the popup looks similar to the screenshot in Step 2 — and **forces me to enter a 3-digit CSC security code**. Since my card is an ordinary RMB savings card with no such code on the back, **I just typed any three digits (e.g. 123), hit submit, and unbelievably the system let it through!** I consider this a bug: when CSC is required the system should check the card type, and if it allows a UnionPay debit card (which has no security code), it shouldn't force CSC entry.
+5. An ICBC debit SMS arrived (deducting the equivalent in RMB) and my domain was locked in within seconds!
 
 ---
 
@@ -88,61 +90,61 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
      脱敏: ⚠️ 真实域名 → example.com（必做）；续费金额已用 redact-image.sh 打码
      建议尺寸: 1920×1080 优先保留完整右侧详情面板 -->
 
-### 步骤 4：Spaceship 后台关键设置（防丢域名的最后一道锁）
+### Step 4: Key Spaceship Post-Purchase Settings (The Last Lock Against Losing Your Domain)
 
-域名买下来后，立即在 Spaceship 后台核对几个关键状态。**Spaceship 的 UI 经常调整，下面描述基于我下单后立即进入 Domain Manager 的实测界面**——具体开关名称与你看到的可能略有出入，以你账号内的实际呈现为准。
+Right after buying the domain, hop into Spaceship and verify a few critical states. **Spaceship's UI changes frequently — the description below is based on the Domain Manager interface I saw immediately after checkout** — exact toggle names may differ slightly from what you see; treat your account's actual UI as the source of truth.
 
-进入 Spaceship 后台 → 左侧菜单的 **Domain Manager**，会看到你的域名列表：
+Go to the Spaceship dashboard → **Domain Manager** in the left menu; you'll see your domain list:
 
-1. **列表层就能直接确认自动续费状态**。域名行右侧有 `Auto-renew` 列，显示 `On` / `Off` 状态。如果已经是 `On`，列表里看一眼就行，无需再点进去。
+1. **Confirm auto-renew status straight from the list**. The row's right-hand side has an `Auto-renew` column showing `On` / `Off`. If it's already `On`, just glance at the list — no need to click in.
 
-2. **点击域名 → 右侧滑出域名详情面板**：
-   - **顶部 Renewal 卡片**：显示续费到期日（如 `Aug 11, 2027`）和 `Extend subscription` 按钮。
-   - **Auto-renew 卡片**：含一个直观的开关（`On` / `Off`）。**务必保持 `On`**。如果你不想自动续费，至少**在手机日历里提前 30 天**设置续费提醒。`.com` 过期后还有 30 天宽限期可正常续，过了就进入赎回期（redemption period），赎回费可高达 $100 以上。
-   - **下方多个折叠子菜单**：`Nameservers & DNS` / `Domain Contacts` / `Privacy` / `Transfer` / `URL redirect` / `Email forwarding` 等。**重点核对两个**——点击进入 `Privacy` 和 `Transfer` 页面，查看里面的实际状态：
-     - **Privacy 子页**：Spaceship 对 `.com` 默认赠送 ICANN 隐私保护，所以状态字段多半已经是 `On` / `Active`。如果显示 `Off`，手动开启。
-     - **Transfer 子页**：确保处于锁定状态（具体开关名称以你看到的为准，可能是 `Transfer Lock` 或 `Domain Lock`）。否则任何人拿到你的邮箱验证码就能把域名转走。
+2. **Click the domain → the detail panel slides out on the right**:
+   - **Top Renewal card**: shows the renewal expiry date (e.g. `Aug 11, 2027`) and an `Extend subscription` button.
+   - **Auto-renew card**: contains an intuitive toggle (`On` / `Off`). **Keep it `On`.** If you'd rather not auto-renew, at minimum **set a renewal reminder 30 days ahead on your phone calendar**. After a `.com` expires you still have a 30-day grace period to renew normally; miss that and it enters the redemption period, with redemption fees easily exceeding \$100.
+   - **Several collapsible sub-menus below**: `Nameservers & DNS` / `Domain Contacts` / `Privacy` / `Transfer` / `URL redirect` / `Email forwarding`, etc. **Two of them matter** — click into `Privacy` and `Transfer` and check the actual state inside:
+     - **Privacy sub-page**: Spaceship givers ICANN privacy protection for free on `.com`, so the status field is most likely already `On` / `Active`. If it shows `Off`, enable it manually.
+     - **Transfer sub-page**: make sure it's locked (the exact toggle name depends on what you see — it may be `Transfer Lock` or `Domain Lock`). Otherwise anyone with your email verification code could walk away with the domain.
 
-   > ⚠️ 上面两个子页里的具体开关名，我没有下钻截图（首次域名购买流程用不到进入子页的操作），仅基于 Spaceship 官方文档的常见命名给出参考名。
+   > ⚠️ I didn't drill into screenshots for those two sub-pages' exact toggle names (the first-time domain-buying flow doesn't actually need to visit those sub-pages) — the names above are common labels based on Spaceship's official docs.
 
 <!-- 📸 截图位 #4: spaceship-domain-overview.png (域名 + 价格已 redact-image.sh 打码, On toggle 保留) -->
 ![Spaceship Domain Manager — Auto-renew On toggle with Privacy and Transfer sub-menu entries visible](/images/remote-payment/beginners-practical-guide/spaceship-domain-overview.png)
 
-📸 **上图说明**：可见 `Auto-renew On` 状态、`Privacy` 和 `Transfer` 子菜单入口。
+📸 **Above**: the `Auto-renew On` status, plus the `Privacy` and `Transfer` sub-menu entries are visible.
 
-### 步骤 5：PayPal 中国区账户安全设置（防风控 + 防盗刷）
+### Step 5: China-Region PayPal Account Security Settings (Anti-Risk-Control + Anti-Fraud)
 
-PayPal 中国区账户开通后，直接大额消费极易触发风控。下面 3 步是稳账户的基础操作。
+Once your China-region PayPal account is open, going straight to a large purchase is the easiest way to trigger risk control. These three steps are the foundation for keeping the account stable.
 
-1. **开启两步验证（2FA）**：登录 PayPal ➔ 设置 ➔ 安全 ➔ **两步验证** ➔ 选「短信验证码」（推荐，门槛最低）。不开 2FA 的账户，首次跨境消费触发风控的概率显著提升。
+1. **Turn on two-step verification (2FA)**: sign in to PayPal ➔ Settings ➔ Security ➔ **Two-step verification** ➔ pick "SMS code" (recommended — the lowest barrier). Accounts without 2FA are significantly more likely to trip risk control on their first cross-border purchase.
 
-2. **完成实名认证**：设置 ➔ 账户 ➔ **认证状态** ➔ 上传身份证正反面 + 绑定一张本人名下的银行卡。**未实名账户的年度结汇额度有严格上限**（具体数额以 PayPal 官方公告为准），完成实名后额度会大幅提升。
+2. **Complete identity verification**: Settings ➔ Account ➔ **Verification status** ➔ upload the front and back of your national ID + link a bank card under your own name. **Unverified accounts have strict caps on annual foreign-exchange settlement quotas** (the exact figure follows PayPal's official announcement); once verified, the quota jumps significantly.
 
-3. **设置提现银行卡**：钱包 ➔ 关联银行卡 ➔ 输入前面步骤里那张中国银行 / 工商银行储蓄卡卡号。**这张卡必须与实名姓名一致**，否则首次提现会失败并进入人工审核。
-
----
-
-## 四、 PayPal 账户常见限制原因（公开资料整理）
-
-本节为 PayPal 官方帮助文档的公开资料整理，仅用于事前了解风险，**非作者亲历**。请勿将其当作完整或权威的合规依据——以 PayPal 最新帮助页为准：
-
-- 通用：[Why is my PayPal account limited or locked?](https://www.paypal.com/us/cshelp/article/help164)
-- 解除流程：[Accessing your PayPal account if it's limited](https://www.paypal.com/us/cshelp/article/help345)
-- 限制原因清单：[Why is my PayPal account restricted?](https://www.paypal.com/us/cshelp/article/help165)
-- 常见问答：[What can I do if my PayPal account is limited — FAQ](https://www.paypal.com/us/smarthelp/article/what-can-i-do-if-my-paypal-account-is-limited-faq4047)
-
-### 4.1 账户被限制（Limited / Restricted）
-
-按 PayPal 官方文档，账户可能被限制的常见原因包括：新账户短期内异常活动、账户信息缺失或需复核、信用/风控规则命中、以及合规要求触发的复审。被限制后，PayPal 通常会在账户首页顶部展示黄色横幅提示，并要求提交相应材料（身份证件、地址证明、消费凭证等，**具体清单以账户内弹窗为准**）。
-
-### 4.2 提现到银行卡失败
-
-PayPal 官方明确：**账户姓名与银行卡开户姓名不一致会导致提现（转账）失败**。规避方法就是保证两者一致（含生僻字、空格）。如果姓名不一致，处理路径是先去银行侧确认/变更，或在 PayPal 侧提交更名申请（具体审核时长以 PayPal 反馈为准，官方未公开承诺）。
-
-### 4.3 永久限制与"代付"
-
-按 PayPal 的[账户类型政策](https://www.paypal.com/us/cshelp/article/help164)，账户可能被永久限制（包括余额无法提现）。社区与第三方资料中常被列为高风险触发的行为包括：短期内 IP 频繁切换、单笔金额远高于账户历史消费水平、替他人代收代付等。这些属于**传闻级风险信号**，请勿将其当作 PayPal 的官方禁令牌——是否触发、严重程度如何，最终由 PayPal 风控系统判定。
+3. **Set up your withdrawal bank card**: Wallet ➔ Link a bank card ➔ enter the Bank of China / ICBC savings card number from earlier steps. **This card must match the name on your verified identity**, otherwise the first withdrawal will fail and enter manual review.
 
 ---
 
-✅ 至此，域名购买 + 跨境支付 + 账户安全 + 风控边界全链路打通。**PayPal 通道仅适用于跨境消费场景**（域名续费、SaaS 订阅、海外服务付款等），**不适用于收款**。AdSense / 联盟营销的美元收款走万里汇（WorldFirst）通道，详见后续 WorldFirst 实战文章。
+## 4. Common Reasons for PayPal Account Limits (Compiled from Public Sources)
+
+This section is compiled from PayPal's official help documentation — for pre-emptive risk awareness only, **not first-hand experience**. Do not treat it as a complete or authoritative compliance reference — defer to PayPal's latest help pages:
+
+- General: [Why is my PayPal account limited or locked?](https://www.paypal.com/us/cshelp/article/help164)
+- Resolution flow: [Accessing your PayPal account if it's limited](https://www.paypal.com/us/cshelp/article/help345)
+- Reason checklist: [Why is my PayPal account restricted?](https://www.paypal.com/us/cshelp/article/help165)
+- FAQ: [What can I do if my PayPal account is limited — FAQ](https://www.paypal.com/us/smarthelp/article/what-can-i-do-if-my-paypal-account-is-limited-faq4047)
+
+### 4.1 Account Limited / Restricted
+
+Per PayPal's official docs, common reasons an account may be limited include: unusual activity on a new account in a short window, missing or needing-recheck account info, a hit on credit / risk-control rules, or a compliance-triggered review. Once limited, PayPal typically shows a yellow banner at the top of the account home page and asks for supporting materials (ID, address proof, purchase receipts, etc. — **the exact list depends on the in-account pop-up**).
+
+### 4.2 Withdrawal to Bank Card Fails
+
+PayPal's docs are explicit: **a mismatch between the account holder name and the bank card holder name will cause withdrawal (transfer) to fail**. The workaround is to make the two names match exactly (including rare characters and spacing). If they don't, the resolution path is to first confirm or correct the name on the bank side, or submit a name-change request on PayPal's side (the review duration follows whatever PayPal responds — the company has not publicly committed to a timeline).
+
+### 4.3 Permanent Limits and "Proxy Payments"
+
+Per PayPal's [account-type policy](https://www.paypal.com/us/cshelp/article/help164), accounts can be permanently limited (including balance withdrawal). Community and third-party sources frequently flag the following as high-risk triggers: frequent IP switching in a short window, a single transaction far above the account's historical spend level, receiving or paying on behalf of third parties, and so on. These are **rumour-grade risk signals** — do not treat them as PayPal's official ban list; whether they trigger and how severely is ultimately decided by PayPal's risk-control system.
+
+---
+
+✅ With this, the full chain — domain purchase + cross-border payment + account security + risk-control boundaries — is done. **The PayPal route only works for cross-border spending scenarios** (domain renewals, SaaS subscriptions, overseas service payments, etc.) — **it does not work for receiving payments**. AdSense / affiliate-marketing USD receipts go through WorldFirst instead — see the upcoming WorldFirst walkthrough.
