@@ -174,6 +174,20 @@
 
 *   **2026-08-16 偏好记录 / commit 消息语言**：用户明确要求后续 commit message 优先用中文描述（含标题行 + body 说明），便于本地翻账与跨会话追溯。即刻生效于 D5 起的所有 commit（含本轮「D5 博客主页分类导航重构」尚未提交的 2 个 commit）。push 边界沿用 D4 第七次校准：本地 commit 可直接做，`git push` 必须经用户显式 ack。
 
+*   **2026-08-16 状态校准 / D5 第一次（博客主页分类导航重构落地）**：nav 4 大内容集群从草案到落地一次走完，3 commit 全部 push 至 origin/main。
+    * **3 commit 列表**（按时间序）：
+        * `186d1e2` chore: 记录 commit 消息中文偏好到 README §6
+        * `e1315c3` D5: 顶 nav 4 大内容集群重排
+        * `ffbd326` D5: Payment → Remote-Payment 迁移 + 301 兜底
+    * **nav 新结构**：Static Site / Remote Payment / AI Agent / Side Project（权重 10/20/30/40）+ 工具页 Archives / Search / About / Contact（50/60/70/71）。主题菜单权重梯度均匀分布，便于未来插入「Newsletter」「Reviews」等单篇页时按 5-10 阶梯插队。
+    * **301 兜底**：`/categories/payment/` → `/categories/remote-payment/`，CF Pages 边缘解析，本地 `hugo server` 不生效，5 分钟内线上验证。
+    * **已知 UX 小坑（已接受）**：AI Agent / Side Project 空分类首篇文章到位前 404。Hugo 默认不为未引用分类生成列表页，这是已知行为不是 bug。等 J 系列 / AI-Agent 系列首篇标 `categories = ["AI Agent"]` / `["Side Project"]` 后页面自动出现，无需再改 nav。
+    * **Java-Advanced 落地**：仅作 tag（用户 Q2 决策），不上 nav。`/tags/java-advanced/` 页面在 J1 首篇落地后自动可见。PaperMod `single.html` 默认不渲染 tag chip 的问题留作独立 task，本轮不修。
+    * **推后动作**：
+        1. **线上验证窗口**（push 后 5 分钟）：浏览器访问 `https://heimaeden.com/categories/payment/`，期望 301 跳到 `/categories/remote-payment/` 且页面显示 1 篇文章。
+        2. **GSC 索引**（3-7 天）：新分类 URL 重新抓取 + 旧 URL 301 迁移权重。
+    * **D5 解锁**：B1（写第二/第三篇图文长文）不再被 nav 结构阻塞，可按 docs/topic-pool.md 选题推进。AI Agent 集群首篇是关键——出文即关闭「空分类 404」UX 坑。
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
