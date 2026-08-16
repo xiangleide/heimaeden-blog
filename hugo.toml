@@ -80,12 +80,6 @@ minify = false
     weight = 50
 
 [[menu.main]]
-    identifier = "search-menu"
-    name = "Search"
-    url = "/search/"                # 补齐首尾斜杠，避免 CF Pages 308 跳转
-    weight = 60
-
-[[menu.main]]
     identifier = "about-menu"
     name = "About"
     url = "/about/"
@@ -96,6 +90,12 @@ minify = false
     name = "Contact"
     url = "/contact/"
     weight = 71
+
+[[menu.main]]
+    identifier = "search-menu"
+    name = "Search"
+    url = "/search/"                # 补齐首尾斜杠，避免 CF Pages 308 跳转
+    weight = 80
 
 # ==========================================================================
 # 页脚合规法务菜单配置 (Footer Menus)

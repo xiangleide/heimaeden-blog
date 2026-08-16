@@ -120,3 +120,35 @@ a:hover {
     background: var(--primary-color, #10b981);
     color: var(--theme);
 }
+
+/* ==========================================================================
+   🟢 D5 实验:Search 菜单项 icon 化
+   PaperMod 原生菜单是水平排布的文字链接。这里把 search-menu 的 li 变成
+   icon-only 风格,并通过 margin-left:auto 推到 nav 最右侧。
+   ========================================================================== */
+.menu-item-icon {
+    margin-left: auto;             /* 推到 nav 最右 */
+}
+
+.menu-item-icon > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--radius, 12px);
+    color: var(--primary, #24292f);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-item-icon > a:hover,
+.menu-item-icon > a:focus-visible {
+    background: var(--tertiary, #f0f2f5);
+    color: var(--primary-color, #10b981);
+    outline: none;
+}
+
+.menu-item-icon > a svg {
+    display: block;
+}
