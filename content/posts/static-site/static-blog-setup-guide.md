@@ -94,11 +94,11 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
 
     * 截图一：被误导进入的 Workers 配置界面（没有框架预设，只有 wrangler 字段）：
 
-      ![Cloudflare Workers configuration screen — wrangler-style fields with no framework preset dropdown](/images/cloudflare-workers-config-screen.png)
+      ![Cloudflare Workers configuration screen — wrangler-style fields with no framework preset dropdown](/images/static-site/cloudflare-workers-config-screen.png)
 
     * 截图二：隐藏极深的 Pages 灰色文字入口：
 
-      ![Cloudflare Pages entrance link — the grey "Looking to deploy Pages? Get started" row at the bottom of the card](/images/cloudflare-pages-entrance-link.png)
+      ![Cloudflare Pages entrance link — the grey "Looking to deploy Pages? Get started" row at the bottom of the card](/images/static-site/cloudflare-pages-entrance-link.png)
 
 * **【我的踩坑经历】**：进入后台后，我下意识地点击了右上角最显眼的蓝色按钮 `Create application`。进去绑定 GitHub 后，发现配置界面里死活找不到“框架预设（Framework preset）”下拉框，只有 `Build command`（显示 None）和 `Deploy command`（显示 `npx wrangler deploy`），强行部署就会疯狂报错。
 * **【我是如何解决的】**：我发现新版 Cloudflare 把控制台做成了聚合流。点击 `Create application` 后，默认进入的是 **Workers（Serverless函数部署）** 流程，而静态博客必须走 **Pages** 流程。我点击 Back 退出来，在创建页面的卡片最下方，找到了那行极小的灰色字 `Looking to deploy Pages? Get started`（如截图二所示），点击 **Get started** 链接，这才成功切进了纯净的 Pages 流程，彻底甩掉了 `wrangler` 报错。
@@ -115,3 +115,73 @@ lint_allow = ["cjk-body"]  # 历史包袱：存量文豁免英文要求；新文
   +++
   ```
   保存后重新 `git push`，Cloudflare 瞬间秒级编译成功，我的 `heimaeden.com` 正式点亮全球！
+
+---
+
+<!-- 📸 截图位 #1
+     位置: §6.1 step 1 后
+     内容: 浏览器访问 https://你的域名.com/sitemap.xml 看到完整 XML 输出
+     文件: /images/static-site/static-blog-setup-guide/sitemap-xml-browser.png
+     脱敏: 真实域名 → example.com（必做）
+     建议尺寸: 1200×800 浏览器全屏截 -->
+
+## 六、 首次部署后必做的 3 件事
+
+部署成功只是起点。下面这 3 件事漏掉任意一项，你的博客都会被搜索引擎当成「孤岛网页」永远找不到。
+
+### 6.1 提交 sitemap.xml（让搜索引擎知道你有页面）
+
+1. **确认 sitemap 已生成**：Hugo 在每次构建时会自动生成 `/sitemap.xml`，部署后浏览器访问 `https://你的域名.com/sitemap.xml` 应能看到完整的 XML 内容（列出所有已发布的文章 URL）。
+
+<!-- 📸 截图位 #1 — 在此处插入截图 -->
+
+2. **如果看不到**：检查 `hugo.toml` 中是否被误关：
+   ```toml
+   [sitemap]
+       changefreq = "weekly"
+       priority = 0.5
+       filename = "sitemap.xml"
+   ```
+   任何被注释掉或缺失的字段都会让 Hugo 默认跳过 sitemap 生成。
+
+### 6.2 在 Google Search Console 提交域名
+
+1. 访问 [Google Search Console](https://search.google.com/search-console/) 并用 Google 账户登录。
+2. 点击左上角 **Add property**（添加资源），选择 **URL prefix**（网址前缀），输入你的完整域名（含 `https://`）。
+3. 验证方式选 **HTML tag**（推荐，因为零运维）：
+   * Google 会给出一段 `<meta>` 标签，形如：
+     ```html
+     <meta name="google-site-verification" content="xxxxxxxx" />
+     ```
+   * 在 Hugo 项目根目录的 `static/` 下新建 `googlexxxxxx.html`（Google 给的具体文件名），把 `content="xxxxxxxx"` 那串字符单独复制进去保存。
+
+<!-- 📸 截图位 #2
+     位置: §6.2 step 3 HTML tag 后
+     内容: static/googlexxxxxx.html 文件内容截图（用编辑器打开）
+     文件: /images/static-site/static-blog-setup-guide/gsc-verification-html-file.png
+     脱敏: ⚠️ content="xxxxxxxx" 字符串必打码（任何人拿到这串能冒认你的站点所有权）
+     建议尺寸: 800×400 代码编辑器窗口截 -->
+
+4. 提交后 Cloudflare Pages 会在下一次构建时把它发布到根路径，Google 自动验证通过。
+5. 验证通过后，左侧菜单 **Sitemaps** ➔ 输入 `sitemap.xml` ➔ 提交。
+
+### 6.3 把 Cloudflare SSL/TLS 模式设为 Full（strict）
+
+1. 回到 Cloudflare 后台，左侧菜单选你的域名 ➔ **SSL/TLS**。
+2. 默认状态是 **Flexible**，**这是错的**：浏览器到 Cloudflare 是 HTTPS，但 Cloudflare 到源站（你的 Pages）是 HTTP，中间人可篡改。
+3. 改成 **Full (strict)**：Cloudflare 会校验源站证书真实性，整条链路端到端加密。
+
+<!-- 📸 截图位 #3 — 在此处插入截图 -->
+<!--
+     截图位 #3
+     位置: §6.3 step 3 后
+     内容: Cloudflare SSL/TLS 页面显示 "Full (strict)" 已选中
+     文件: /images/static-site/static-blog-setup-guide/cloudflare-ssl-full-strict.png
+     脱敏: 域名脱敏
+     建议尺寸: 1200×600 SSL 配置区域截 -->
+
+4. Cloudflare Pages 自带有效证书，无需你手动上传。
+
+---
+
+✅ 完成后，你的博客就有了「sitemap + GSC 收录 + 端到端 HTTPS」三件套，搜索引擎 1-2 周内会开始自然抓取。

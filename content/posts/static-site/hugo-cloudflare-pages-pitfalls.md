@@ -28,7 +28,7 @@ Go back to the application creation page. Ignore the massive central buttons.
 
 If you accidentally fell into the Workers workflow, your interface will look like this confusing mess—showing wrangler settings and completely lacking framework presets:
 
-![Confusing Workers Settings Interface](/images/cloudflare-workers-trap.png)
+![Confusing Workers Settings Interface](/images/static-site/cloudflare-workers-config-screen.png)
 
 To escape this trap, look closely at the very bottom of the white card for a tiny, easily missed row of grey text: 
 
@@ -36,7 +36,7 @@ To escape this trap, look closely at the very bottom of the white card for a tin
 
 Here is the exact hidden entrance you need to look for in your dashboard to trigger the correct pipeline:
 
-![Hidden Cloudflare Pages Entrance Link](/images/cloudflare-pages-entrance.png)
+![Hidden Cloudflare Pages Entrance Link](/images/static-site/cloudflare-pages-entrance-link.png)
 
 Click the blue **Get started** link. This takes you into the pure Pages Git-binding flow where you will find the proper Hugo presets.
 
