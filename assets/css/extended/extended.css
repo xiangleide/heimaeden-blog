@@ -152,3 +152,18 @@ a:hover {
 .menu-item-icon > a svg {
     display: block;
 }
+
+/* ==========================================================================
+   🟢 覆盖 PaperMod .md-content img — 防止 1440px 截图溢出 720px 内容列
+   PaperMod 原生规则只有 border-radius + margin, 缺 max-width: 100% / height: auto,
+   导致 HTML 上 width="1440" 的图片直接按 1440 渲染, 把内容列撑爆或被挤压变形.
+   覆盖: max-width 100% 让图片自适应容器, height auto 保持源宽高比, 居中.
+   ========================================================================== */
+.post-content img,
+.md-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

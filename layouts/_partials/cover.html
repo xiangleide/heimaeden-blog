@@ -1,0 +1,88 @@
+{{/*
+  cover.html — HeimaEden override of PaperMod cover.html
+  ------------------------------------------------------------------
+  Purpose: enable cover images for SINGLE-FILE post layout by adding
+           an assets/ lookup (PaperMod only checks page bundle + global).
+
+  Without this override, cover.image in front matter rendered as
+  <img src="...absURL"> which 404'd because:
+    - Page bundle lookup (.Resources.ByType "image") needs index.md
+    - Global resources lookup (resources.ByType "image") only sees data/
+    - Neither finds assets/images/<path>/cover.jpg
+
+  This override adds ONE line ($assetsCover via resources.Get) and
+  inherits all other PaperMod behavior (responsive srcset, WebP via
+  extended Hugo, linkFullImages option, caption rendering).
+
+  Trade-off vs page-bundle layout (CLAUDE.md §3.3 preferred):
+    + Single-file layout retained (no .md -> index.md refactor)
+    + Full resource optimization (srcset + WebP + width/height)
+    - Override becomes stale if PaperMod updates cover.html upstream
+      → Long-term: migrate to Hugo Modules (separate task)
+*/}}
+
+{{- with .cxt}}
+{{- if (and .Params.cover.image (not $.isHidden)) }}
+<figure class="entry-cover">
+    {{- $loading := cond $.IsSingle "eager" "lazy" }}
+    {{- $addLink := (and site.Params.cover.linkFullImages $.IsSingle) }}
+    {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) }}
+    {{- $alt := (.Params.cover.alt | default .Params.cover.caption | plainify) }}
+    {{- $responsiveImages := (.Params.cover.responsiveImages | default site.Params.cover.responsiveImages) | default true }}
+
+    {{- /* HeimaEden: page bundle + global + assets/ (third lookup added) */ -}}
+    {{- $pageBundleCover := (.Resources.ByType "image").GetMatch (printf "*%s*" (.Params.cover.image)) }}
+    {{- $globalResourcesCover := (resources.ByType "image").GetMatch (printf "*%s*" (.Params.cover.image)) }}
+    {{- $assetsCover := resources.Get (printf "images/%s" .Params.cover.image) }}
+    {{- $cover := (or $pageBundleCover $globalResourcesCover $assetsCover)}}
+
+    {{- $sizes := (slice "360" "480" "720" "1080" "1500") }}
+    {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+    {{- if hugo.IsExtended -}}
+        {{- $processableFormats = $processableFormats | append "webp" -}}
+    {{- end -}}
+
+    {{- $imgdl := (.Params.cover.image) | absURL }}
+    {{- if $cover -}}
+        {{- $imgdl = $cover.Permalink }}
+    {{- end -}}
+
+    {{- if $addLink }}
+        <a href="{{ $imgdl }}" target="_blank" rel="noopener noreferrer">
+    {{- end }}
+
+    {{- if $cover -}}
+        {{/* Present in page bundle / global / assets */}}
+        {{- if (and (in $processableFormats $cover.MediaType.SubType) ($responsiveImages) (eq $prod true)) }}
+            <img loading="{{$loading}}"
+                srcset='{{- range $size := $sizes -}}
+                            {{- if (ge $cover.Width $size) }}
+                                {{- printf "%s %s" (($cover.Resize (printf "%sx" $size)).Permalink) (printf "%sw," $size) }}
+                            {{- end }}
+                        {{- end }}
+                        {{- printf "%s %dw" ($cover.Permalink) ($cover.Width) }}'
+                src="{{ $cover.Permalink }}"
+                sizes="(min-width: 768px) 720px, 100vw"
+                width="{{ $cover.Width }}" height="{{ $cover.Height }}"
+                alt="{{ $alt }}">
+        {{- else }}{{/* Unprocessable image or responsive images disabled */}}
+            <img loading="{{ $loading }}" src="{{ $imgdl }}" alt="{{ $alt }}">
+        {{- end }}
+    {{- else }}
+        {{- /* For absolute urls and external links, no img processing here */}}
+        <img loading="{{ $loading }}" src="{{ $imgdl }}" alt="{{ $alt }}">
+    {{- end }}
+
+    {{- if $addLink }}
+        </a>
+    {{- end -}}
+
+    {{- /*  Display Caption  */}}
+    {{- if $.IsSingle }}
+        {{ with .Params.cover.caption -}}
+            <figcaption>{{ . | markdownify }}</figcaption>
+        {{- end }}
+    {{- end }}
+</figure>
+{{- end }}{{/* End image */}}
+{{- end -}}{{/* End context */ -}}

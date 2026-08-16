@@ -1,0 +1,33 @@
+{{/*
+  render-link.html — HeimaEden link render hook
+  ------------------------------------------------------------------
+  Per CLAUDE.md §3.4:
+    External links with target="_blank" MUST also include rel="noopener".
+
+  This hook enforces that pattern for ALL external http/https links so
+  every outbound click:
+    1. Opens in a new tab (reader doesn't lose their place)
+    2. Cannot tabnab the source page via window.opener (noopener)
+
+  What stays untouched:
+    - mailto: / tel:        → opens OS handler; new tab would be confusing
+    - Anchor (#xxx)         → jumps in-page; same tab is correct
+    - Internal (/path)      → same-tab is the right default
+    - Unknown scheme        → passthrough (safe default)
+
+  Deliberately NOT added:
+    - rel="noreferrer"      → affiliate attribution needs referrer header
+    - rel="nofollow"        → SEO decision, not this hook's job
+    - touch of raw <a>      → author is responsible for hand-written HTML
+
+  Note: this hook fires on every markdown [text](url). Internal refs via
+  {{< ref "..." >}} are handled by Hugo separately as plain anchors.
+*/}}
+
+{{- $dest := .Destination | safeURL -}}
+
+{{- if or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+  <a href="{{ $dest }}"{{ with .Title }} title="{{ . }}"{{ end }} target="_blank" rel="noopener">{{ .Text | safeHTML }}</a>
+{{- else -}}
+  <a href="{{ $dest }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- end -}}
