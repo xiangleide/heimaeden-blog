@@ -18,8 +18,8 @@ This blog documents the practical things I learn along the way:
 
 Most posts are written **after I actually run into the problem myself**, so you'll find real screenshots, real error logs, and honest "this didn't work" notes — not polished marketing copy.
 
-If you spot an inaccuracy, or want to suggest a topic I should try next, drop me a line via the [contact page](/contact/).
+If you spot an inaccuracy, or want to suggest a topic I should try next, drop me a line using the email below.
 
 ---
 
-Contact: [heimaeden@proton.me](mailto:heimaeden@proton.me)
+📩 **Get in touch**: [heimaeden@proton.me](mailto:heimaeden@proton.me)

@@ -1,2 +1,5 @@
 # D5 分类重命名：Payment → Remote-Payment
 /categories/payment/   /categories/remote-payment/   301
+
+# D5 Contact → About 合并
+/contact/   /about/   301
