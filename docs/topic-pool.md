@@ -58,20 +58,20 @@
 ### A2. Static Blog Setup Guide
 - **来源讨论**：2026-08-13 Hugo 入门
 - **目标关键词**：hugo static site setup, papermod theme install, cloudflare pages git deploy
-- **实际字数**：621 词 ❌ **未达 ≥800 词门槛**
+- **实际字数**：~1,300 词 ✅ **达 ≥800 词门槛**（D5 第二次英译扩容）
 - **分类**：Static-Site（部署类）
 - **联盟预留**：否
-- **AI 推荐理由**：入门流量大但字数不足，需扩写到 ≥800
-- **状态**：⚠️ 已发但**待扩写**
+- **AI 推荐理由**：入门流量大；D5 翻译后字数充足
+- **状态**：✅ 已发布英文版（commit `b751bdb`）
 
 ### A3. Remote Payment Beginners Practical Guide
 - **来源讨论**：2026-08-15 `remote-payment/` 子目录首发
-- **目标关键词**：overseas payment Chinese developer, AdSense payout China, cross-border payment individual
-- **实际字数**：416 词 ❌ **未达 ≥800 词门槛**
+- **目标关键词**：overseas domain purchase, cross-border payment Chinese developer, PayPal UnionPay debit card
+- **实际字数**：~1,500 词 ✅ **达 ≥800 词门槛**（D5 第二次英译扩容）
 - **分类**：Remote-Payment（部署/概述类）
 - **联盟预留**：是（Payoneer / Wise / PingPong — 占位已留，第二版填实）
-- **AI 推荐理由**：集群首发但字数不足，需扩写
-- **状态**：⚠️ 已发但**待扩写**
+- **AI 推荐理由**：集群首发；D5 翻译后字数充足
+- **状态**：✅ 已发布英文版（commit `b751bdb`）
 
 ---
 

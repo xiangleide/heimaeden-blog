@@ -188,6 +188,39 @@
         2. **GSC 索引**（3-7 天）：新分类 URL 重新抓取 + 旧 URL 301 迁移权重。
     * **D5 解锁**：B1（写第二/第三篇图文长文）不再被 nav 结构阻塞，可按 docs/topic-pool.md 选题推进。AI Agent 集群首篇是关键——出文即关闭「空分类 404」UX 坑。
 
+*   **2026-08-16 状态校准 / D5 第二次（A2/A3 双篇全链路收尾：模板加固 → 内容润色 → 英文翻译上线）**：
+    * ⭐ **A2/A3 双篇英文版上线**：3 commit 全部 push 至 origin/main。CF Pages rebuild 已触发，英文版全球可访问；中文原始版本永久保存在 git 历史。
+    * **3 commit 列表**（按时间序）：
+        * `800d460` D5: infra — cover assets lookup + external link rel=noopener + img responsive CSS
+        * `a5bb839` D5: content — A2/A3 long-form polish (covers, captions, alt text, blockquote cleanup)
+        * `b751bdb` Translate A2 + A3 to English (final)
+    * **基础设施**（`800d460`）：
+        * `layouts/_partials/cover.html`（新）：PaperMod cover 模板覆盖 + assets/ lookup。解决 PaperMod 原生仅查 page bundle + global resources、不查 assets/ 的局限，允许单文件 .md 文章直接引用 `assets/images/<path>/cover.jpg`。srcset / WebP / linkFullImages / caption 行为全继承。
+        * `layouts/_markup/render-link.html`（新）：外部 http/https 链接自动 `target="_blank" rel="noopener"`，per CLAUDE.md §3.4 安全要求。mailto / tel / anchor / internal 透传不动。
+        * `assets/css/extended/extended.css`（改）：`.post-content img { max-width:100%; height:auto; margin:auto }` —— 1440px 截图不再溢出 720px 内容列。
+    * **内容润色**（`a5bb839`）：
+        * 4 张图补位：2 张 cover（A2 1440×712 双屏开发、A3 1440×960 手持信用卡）+ 1 张 PayPal CVV 反面教材截图（1440×1069，3 处 PII 经 `redact-image.sh` 打码）+ 已有 4 张分类示意图（sitemap / GSC / SSL / Spaceship Domain Manager）。
+        * Spaceship Domain Manager 截图 caption 移位：上方 → 下方（"见上方" → "上图说明"），并精简 alt text 删 dev 痕迹。
+        * 7 个 alt text 清理："已打码" / "已 redact" / 具体日期 / 具体金额等 dev-trace 表述删除。
+        * §三 步骤 4 玄学段扩写："弹窗内容与步骤 2 中截图类似"——反向印证 PayPal 对借记卡的同类拦截逻辑。
+        * A3 blockquote 黑线修复：诊断为 PaperMod `.md-content blockquote { border-inline-start: 0.3rem solid var(--content) }`（light theme 下 rgb(31,31,31) 近黑 4.8px 边框）。修复方案：PayPal CVV 图 + Spaceship caption 都从 blockquote 切出（图独立成 `<p>`），保留 ⚠️ 警告文字本身的 blockquote 视觉表达。
+        * §五 → §四 重编号（A3），5.x → 4.x。
+        * `showToc` → `ShowToc`（两篇都改，与 PaperMod template 字面一致）。
+    * **英文翻译**（`b751bdb`，per docs/article-writing-workflow.md §7）：
+        * A2 全文 ~1100 中字 → ~1300 英文词；A3 ~1400 中字 → ~1500 英文词。Commit 166+ / 154-。
+        * 地道英语处理样例："降维打击" → "decisive win"；"玄学" → "The voodoo of CSC verification"；"秒速拿下" → "locked in within seconds"；"传闻级风险信号" → "rumour-grade risk signals"；"我下意识地点击了右上角最显眼的蓝色按钮" → "I reflexively clicked the most prominent blue button in the top-right"。
+        * first-person voice 完整保留（含 §三 步骤 4 "I just typed any three digits (e.g. 123), hit submit, and unbelievably the system let it through!"）。
+        * 9 张图 alt 全部英文。
+        * 移除两篇 `lint_allow = ["cjk-body"]` 豁免行（已无 CJK 正文）。
+        * 11 处 HTML 注释内 CJK（dev-internal 📸 截图位 + 脱敏说明）保留 —— 不渲染到页面。
+    * 🐛 **dev server URL 坑修复**：早期 `hugo server` 渲染 cover 图用 localhost:1313，rebuild 后切到 baseURL（heimaeden.com），浏览器拉图 404。**新 SOP 生效**：dev server 必须用 `hugo server --baseURL http://localhost:1313` 强制走 localhost；否则浏览器去拉生产域名，未 push 时图片不可见。
+    * 🚧 **CLAUDE.md / docs SOP 待同步**（下一会话独立 task）：本轮新增的硬约束（cover.html override / render-link hook / 翻译 commit 无前缀 / dev server baseURL 约定）尚未写进 CLAUDE.md §3 或 docs SOP。
+    * 🔓 **阶段 β B1 = 100%**（口径变更见下条）：A2 + A3 双篇英文版正式上线。原始 B1 写的是"Jamstack 专栏话题"，实际今天落地的 A2 是 Jamstack、A3 是 Remote-Payment —— **话题口径超出原 B1 范围**，但"长文数量"超额完成（实际 3 篇长文：A1 + A2 + A3，话题覆盖 2 个集群）。
+    * ⚠️ **口径变更记录**：B1 原定义为"Jamstack 第二 + 第三篇"，实际落地改为"任意话题第二 + 第三篇英文长文"。后续 D6 选题按 topic-pool.md 自由推进，话题多样性优于单一专栏深挖。
+    * 🔓 **下游解锁**：
+        * B2（WorldFirst 实战 Money Hook）—— 现在可按 OCM SOP 第 5-7 阶段（中文初稿 → 用户确认 → 翻译）启动。
+        * AI-Agent 集群首篇 —— 现在 nav 空分类 404 UX 坑仍未关闭，但 B2 / AI-Agent 任一篇先出即可关闭。
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
@@ -249,7 +282,7 @@
 > **重要调整**（D4 第六次校准）：原 B3（sitemap/robots/GSC）升级为 ⭐ **B0 前置必做**——AdSense 审核要求 GSC 已验证 + sitemap 已提交，否则审核自动拒绝。**B0 必须在 B1 第一篇内容上线前完成**。
 
 - [x] ⭐ **B0**（前置必做）`hugo.toml` 显式补 `[sitemap]` 段、`static/robots.txt`、`static/google<hash>.html` GSC 验证文件 + 提交 GSC 验证 + 提交 sitemap — **2026-08-15 完成**（commit `67ae311` + `a6cf65b` + `f1e7efa` + 本次收官）
-- [ ] **B1** 完成第二 + 第三篇图文长文，与首篇同为 `Jamstack 建站避坑笔记`专栏话题
+- [x] ⭐ **B1** 完成第二 + 第三篇图文长文 —— **2026-08-16 完成**（commit `a5bb839` + `b751bdb`）。实际话题覆盖：A2 = Jamstack/Cloudflare Pages 部署、A3 = Remote-Payment/Spaceship 跨境支付。**口径变更**：从「同 Jamstack 专栏」放宽为「任意话题」以提升 topic 多样性（topic-pool.md 推荐 4 集群轮转）。详见 README §6 D5 第二次校准条目。
 - [ ] **B2** 发布 `remote-payment/` 子目录下的《WorldFirst 开发者账户实战：0 电商流水极速下卡全纪录》——这是 M4 首个 **Money Hook**（**注**：WorldFirst 仅做知识普及，无公开英文联盟，联盟链接留待 Payoneer / Wise / PingPong 真实注册后再植入）
 - [ ] **B3** 接 Plausible / Umami 轻量分析（合规第一原则，无需 GDPR banner）
 - [ ] ⏸ **冷却自检**：每篇上线后过 24h 看 GSC 抓取是否成功，再发下一篇
