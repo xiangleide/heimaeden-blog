@@ -7,6 +7,7 @@
 > **Project clock**:
 > - Start date = **2026-08-11** (D0, domain registration)
 > - This file's authoring = **D3** (2026-08-14)
+> - Last revision = **D5** (2026-08-16) — added §3.9 中文会话铁律
 
 ---
 
@@ -28,15 +29,29 @@
 ├── Content-Agent-ACM.md  # OCM 6-stage SOP
 ├── hugo.toml           # site config (TOML only)
 ├── archetypes/default.md
-├── assets/css/extended/extended.css   # theme override (geek-green)
+├── assets/
+│   ├── css/extended/extended.css   # theme override (geek-green)
+│   └── images/                     # CONTENT screenshots (Hugo-processed → WebP)
+│       └── <category>/             # e.g. static-site/, remote-payment/
+│           ├── <shared>.png        # cross-article in same category
+│           └── <article-slug>/     # e.g. static-blog-setup-guide/
+│               └── <purpose>.png   # article-specific screenshots
 ├── content/
-│   ├── about.md, contact.md, archives.md, search.md
+│   ├── about.md, archives.md, search.md
 │   ├── legal/                       # privacy/cookie/terms/affiliate
 │   └── posts/
-│       ├── payment/                # M4 money hook target
+│       ├── remote-payment/         # M4 money hook target
 │       └── static-site/            # existing 2 long-form posts
-├── layouts/partials/footer.html    # custom override
-├── static/                         # GSC verify, robots.txt, images root
+├── layouts/
+│   ├── _markup/render-image.html   # image render hook (WebP + lazy + dimensions)
+│   ├── _partials/header.html       # custom override
+│   └── partials/extend_head.html   # OG fallback tags
+├── scripts/
+│   ├── lint-post.sh                # front matter / body constraint linter
+│   ├── optimize-image.sh           # MUST run before staging screenshots (§3.3.2)
+│   └── redact-image.sh             # MUST run on screenshots with PII (§3.3.4)
+├── static/                         # GSC verify, robots.txt, _redirects
+│   └── images/og-default.png       # OG card ONLY — never content screenshots
 └── themes/PaperMod/                # TODO: migrate to Hugo Modules
 ```
 
@@ -78,10 +93,79 @@
 - **Length**: long-form posts ≥ 800 words, contain at least 2 real screenshots or code blocks.
 
 ### 3.3 Images
-- **Path format**: `/images/<filename>.ext` — leading slash, **never** include `static/`.
+- **Path format**: `/images/<filename>.ext` — leading slash, **never** include `static/`. Article-specific images **must** be prefixed with category and article slug (see §3.3.1).
 - **Alt text**: every image must have non-empty alt.
-- **Layout** (preferred): Page Bundles — `content/posts/<slug>/index.md` + colocated images.
 - **Source whitelist**: Unsplash, Pexels, self-captured screenshots. Never Google Images hotlink.
+
+#### 3.3.1 Storage layout (added 2026-08-16, D5) — put the file in the right place
+
+| Kind | Directory | Why |
+|---|---|---|
+| **OG / social card** (`og-default.png`) | `static/images/` | Social scrapers handle WebP unreliably and need a stable, non-fingerprinted URL. **Never move this to assets/.** |
+| **Content screenshots** | `assets/images/<category>/<article-slug>/` | Hugo can only read dimensions / re-encode files under `assets/`. Per-article subdirectory keeps ownership unambiguous (delete article → delete folder → zero orphans). |
+
+**Path naming convention** (apply to both directory layout and Markdown reference):
+
+| Scope | Directory | Markdown reference |
+|---|---|---|
+| **Article-specific** (default) | `assets/images/<category>/<article-slug>/<purpose>.png` | `/images/<category>/<article-slug>/<purpose>.png` |
+| **Shared across articles in same category** | `assets/images/<category>/<purpose>.png` | `/images/<category>/<purpose>.png` |
+
+`<category>` is the lowercase-hyphenated form of the front-matter `categories[0]` value. `<article-slug>` matches the article's directory name under `content/posts/`.
+
+**Example**: an image used only by `content/posts/static-site/static-blog-setup-guide.md` lives at `assets/images/static-site/static-blog-setup-guide/foo.png` and is referenced as `![alt](/images/static-site/static-blog-setup-guide/foo.png)`.
+
+The render hook (`layouts/_markup/render-image.html`) does a straight `resources.Get` lookup — no category inference. If the article references a path that doesn't exist under `assets/`, the build will warn and serve the image unprocessed (no WebP, no `width`/`height`). **A build with `render-image` warnings is broken — fix the path, don't ignore it.**
+
+Do **not** hand-write `<img>` tags in Markdown.
+
+#### 3.3.2 MANDATORY: optimize before `git add`
+
+**Any new screenshot MUST pass `./scripts/optimize-image.sh` before being staged.** Width ceiling **1440px** (2× PaperMod's ~720px content column; anything beyond is invisible to every user).
+
+```bash
+./scripts/optimize-image.sh            # resize assets/images/ in place
+./scripts/optimize-image.sh --check    # verify only, exit 1 if oversized
+```
+
+**Rationale — this rule is non-negotiable**: Git cannot delta-compress binaries. Every commit of an oversized PNG stores a **full new blob permanently**; screenshot posts get re-cropped often, so the waste compounds. Unlike a bad line of code, this **cannot be fixed by a later commit** — only by rewriting history (`git filter-repo`). Optimize up front or pay forever.
+
+**Claude Code duty**: when the user says screenshots are in place, run `optimize-image.sh` **automatically before staging** — do not wait to be asked.
+
+#### 3.3.3 Do NOT hand-optimize for the web
+
+WebP conversion, `width`/`height`, `loading="lazy"`, and `fetchpriority` are all emitted at build time by `layouts/_markup/render-image.html`. Never duplicate this in Markdown, in the script, or via external tools. `sips` cannot output WebP anyway; Hugo extended does it natively.
+
+Build-time warnings from that hook (`render-image: "..." not found under assets/`) mean a **broken image link** — treat as an error, not noise.
+
+#### 3.3.4 MANDATORY: redact PII before commit (added 2026-08-16, D5)
+
+Any screenshot containing UI that surfaces account-level data MUST pass `./scripts/redact-image.sh` **before `git add`**. Once PII (email, ID number, card tail, phone, full name, account number) reaches the public CDN, there is **no recall** — the value is permanently in the wild.
+
+**Workflow** (two-step — AI cannot paint pixels directly):
+
+1. **User** saves the raw screenshot locally and tells Claude Code "needs redaction for: <concerns>" (e.g. *email, card last 8, full name*).
+2. **Claude Code** `Read`s the image, identifies pixel coordinates of every region that looks like PII, and reports a list of `--box x,y,w,h` flags. Mark every region with a confidence tag (🔴 likely PII / 🟡 could be / ⚪ UI element). **The user makes the final call** — AI redacts conservatively, not aggressively.
+3. **User** runs:
+   ```bash
+   ./scripts/redact-image.sh raw.png clean.png \
+     --box 340,52,180,18 \    # email
+     --box 220,180,260,22 \   # card tail
+     --box 50,300,150,20      # full name
+   ```
+   Coordinates are pixels relative to the image's natural dimensions. Use `sips -g pixelWidth -g pixelHeight <file>` to confirm size before drafting boxes.
+4. **User** visually verifies `clean.png` (Preview / Quick Look) **before** moving it into `assets/images/<category>/<article-slug>/`.
+
+**Defaults**: opaque black fill `RGB(0,0,0)`, PNG container (lossless — WebP conversion is the render hook's job, not this script's). The script refuses to overwrite the source, rejects out-of-bounds and zero/negative-dimension boxes, and exits non-zero on any validation failure.
+
+**Dependencies**: `python3` + Pillow (`pip3 install --user Pillow`). The script detects missing Pillow and prints the install command.
+
+**Anti-patterns**:
+- ❌ **Cropping instead of overlaying**. `sips -c H W` destroys surrounding context. Black overlay keeps it.
+- ❌ **"Just blur lightly"**. Edge pixels leak. Black is forever; blur is forever-ish.
+- ❌ **Skipping redaction for "internal-looking" UIs** (Spaceship dashboard, PayPal wallet). Anything showing *your* account is still PII.
+
+**Claude Code duty**: when the user says "需要脱敏" / "needs redaction", **automatically** read the image, propose `--box` flags with confidence markers, and wait for user confirmation before they run the script — do not skip the user-review step.
 
 ### 3.4 Links
 - **Internal**: shortcode `{{< ref "path/to/page" >}}`. Never hand-typed absolute paths between own content.
@@ -105,10 +189,30 @@ Hard rules when writing English long-form posts (≥800 words). Violation = cont
 3. **Real content screenshots only**. AI does NOT use Unsplash/Pexels as content screenshots (those are for cover images only, per §3.3). Content screenshots MUST come from user's hands-on operation. 初稿必须标注截图位（位置 + 脱敏 + 文件命名规范）。
 4. **Affiliate placeholders in 初稿, not translation**. 初稿阶段就标 `[联盟-占位 platform]` + 推荐用语模板（按 README §五-3 双向互惠）。不延迟到翻译阶段。
 5. **Translation is 字面对应, not 改写**. 第三阶段翻译：AI 不增删任何事实, 不改写用户原话, 仅做字面对应 + 地道英语表达 + SEO 结构。
+6. **Cross-reference facts must have explicit anchors** (added 2026-08-16, D5). AI 起草时, 凡涉及**跨文章 / 跨工具 / 跨阶段**的事实性 cross-reference (e.g. "AdSense 收款可直接复用 PayPal 通道"), 必须能在以下任一锚点直接验证: (a) 用户本会话口述; (b) `CLAUDE.md` / `README.md` / `docs/*.md` 已有记录. **无锚点 → 必须用占位语**（如 "详见 XXX 文章" / "[待确认：YYY]"）, **绝不写结论句**. Violation = 凭空添加 cross-reference 关系, 与 rule 5 同等严重 (内容农场反模式).
 
 Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see `docs/article-writing-workflow.md`.
 
 > **D4 lesson**: B1 长文 #1 (`commit 4b8a8ea`) was reverted (`commit bc9a369`) because AI fabricated first-person debugging experience. This SOP exists to prevent recurrence.
+> **D5 lesson**: A3 扩写 (D5 第七次 commit 序列) 文末 AI 写了 "AdSense 收款可直接复用同一 PayPal 通道" — 这是无锚点 cross-reference 凭空结论, 实际收款走 WorldFirst (万里汇) 不是 PayPal. 用户当场指出后修正 + 加模糊化 6 处凭印象数字. 触发本条 rule 6 建立.
+
+### 3.9 会话默认语言 (added 2026-08-16, D5) — 铁律
+
+与用户的所有对话、AskUserQuestion 选项、说明性 prose、错误消息默认使用**中文**。这是 Claude Code 与用户交互的硬约束，**与文章 body 语言无关**（§3.2 仍然要求 ship 的 `.md` body 是英文）。
+
+**适用范围**：
+- ✅ Claude Code 回复、提问、解释 → 中文为主
+- ✅ AskUserQuestion 选项 label / description → 中文
+- ✅ 错误诊断、验证报告、commit 建议 → 中文
+- ✅ 工作区状态汇报、文件改动总结 → 中文
+
+**保留英文**（专业术语按惯例）：
+- 技术名词：Hugo, PaperMod, Cloudflare, PaperMod toggle key, WebP, lazy-loading, fetchpriority, TOML, front matter, PII, CSP, SRI 等
+- 代码块、文件路径、commit message、git 命令
+- 引用官方英文文档片段时保持原文
+- 用户口述的英文术语（如 "lint-post" 之类的脚本名）保持原名
+
+**触发历史**：用户于 D5 2026-08-16 明确要求 "转化成中文选项，后续与你的对话都以中文为主，记录到铁律中"，此前 Claude 一直默认英文造成用户阅读成本。
 
 ---
 
@@ -117,6 +221,10 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 - ❌ YAML-style front matter (any `:` in front matter)
 - ❌ Future-dated `date` field
 - ❌ Direct image references without leading `/` or with `static/` prefix
+- ❌ Committing a screenshot wider than 1440px (see §3.3.2 — irreversible repo bloat)
+- ❌ Putting content screenshots in `static/images/`, or moving `og-default.png` out of it (see §3.3.1)
+- ❌ Hand-written `<img>` tags in Markdown (bypasses the render hook → loses WebP/lazy/dimensions)
+- ❌ Committing a screenshot with visible PII (see §3.3.4 — no recall once public)
 - ❌ CJK characters in any shipped `.md` body or alt text
 - ❌ Affiliate `<a>` without shortcode wrap and proximity disclosure
 - ❌ Bypassing the OCM SOP (e.g. manually pushing to `main` without `lint-post.sh` passing)
