@@ -47,43 +47,55 @@ minify = false
     showBreadCrumbs = false         # 强行关闭显示物理路径面包屑，防止暴露本地隐私
 
 # ==========================================================================
-# 顶部主导航菜单配置 (Main Navbar Menus)
+# 顶部主导航菜单配置 (Main Navbar Menus) — D5 重排：4 大内容集群
 # ==========================================================================
-[[menu.main]]
-    identifier = "payment-menu"
-    name = "Payment"
-    url = "/categories/payment/"
-    weight = 10
-
 [[menu.main]]
     identifier = "static-site-menu"
     name = "Static Site"
     url = "/categories/static-site/"
+    weight = 10
+
+[[menu.main]]
+    identifier = "remote-payment-menu"
+    name = "Remote Payment"
+    url = "/categories/remote-payment/"
     weight = 20
+
+[[menu.main]]
+    identifier = "ai-agent-menu"
+    name = "AI Agent"
+    url = "/categories/ai-agent/"
+    weight = 30
+
+[[menu.main]]
+    identifier = "side-project-menu"
+    name = "Side Project"
+    url = "/categories/side-project/"
+    weight = 40
 
 [[menu.main]]
     identifier = "archives-menu"
     name = "Archives"
     url = "/archives/"              # 补齐首尾斜杠，避免 CF Pages 308 跳转
-    weight = 30
+    weight = 50
 
 [[menu.main]]
     identifier = "search-menu"
     name = "Search"
     url = "/search/"                # 补齐首尾斜杠，避免 CF Pages 308 跳转
-    weight = 40
+    weight = 60
 
 [[menu.main]]
     identifier = "about-menu"
     name = "About"
     url = "/about/"
-    weight = 45
+    weight = 70
 
 [[menu.main]]
     identifier = "contact-menu"
     name = "Contact"
     url = "/contact/"
-    weight = 46
+    weight = 71
 
 # ==========================================================================
 # 页脚合规法务菜单配置 (Footer Menus)
