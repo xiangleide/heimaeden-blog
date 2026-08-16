@@ -172,6 +172,8 @@
     * 🚧 **push 边界重划**：用户在 D4 第七次校准对话中明确质疑「未经确认就 git push」。**新边界即刻生效**：所有 `git push` 必须经用户显式 ack 后执行；本地 `git commit` 可直接做（本地可 amend/reset）。本次 commit（`docs/seo-setup-checklist.md` Phase 4 ✅ + README §7.3 B0 勾选 + 本次校准条目）将停在本地，**等待用户 ack push**。
     * 🔓 **下一步解锁**：B1（写第二/第三篇图文长文）+ B2（WorldFirst 实战 Money Hook）不再被 B0 阻塞。
 
+*   **2026-08-16 偏好记录 / commit 消息语言**：用户明确要求后续 commit message 优先用中文描述（含标题行 + body 说明），便于本地翻账与跨会话追溯。即刻生效于 D5 起的所有 commit（含本轮「D5 博客主页分类导航重构」尚未提交的 2 个 commit）。push 边界沿用 D4 第七次校准：本地 commit 可直接做，`git push` 必须经用户显式 ack。
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
