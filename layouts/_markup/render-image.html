@@ -1,0 +1,62 @@
+{{/*
+  Image render hook — HeimaEden
+  ------------------------------------------------------------------
+  Turns plain Markdown `![alt](/images/foo.png)` into a performance-
+  correct <img> tag, without changing any article syntax.
+
+  What it fixes (see CLAUDE.md §3.3):
+    - LCP  : downscales to MAXW and re-encodes as WebP at build time
+    - CLS  : always emits width/height so the browser reserves space
+    - Above/below fold: first image on a page loads eager+high priority,
+             every later image is lazy
+
+  Resolution order for the destination path:
+    1. external URL (http/https)      -> passthrough, no processing
+    2. assets/<path>                  -> processed (resize + webp)
+    3. anything else (e.g. static/)   -> passthrough + lazy only
+
+  Note: static/images/og-default.png is intentionally NOT processed.
+  Social scrapers handle WebP unreliably and OG images need a stable,
+  non-fingerprinted URL.
+*/}}
+
+{{- $maxW := 1440 -}}
+{{- $quality := "webp q85" -}}
+
+{{- $dest := .Destination | safeURL -}}
+{{- $alt := .Text | plainify -}}
+{{- $title := .Title -}}
+{{- $isFirst := eq .Ordinal 0 -}}
+
+{{- /* 1. External URL: never touch */ -}}
+{{- if or (hasPrefix $dest "http://") (hasPrefix $dest "https://") (hasPrefix $dest "//") -}}
+  <img src="{{ $dest }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }}
+       loading="lazy" decoding="async" referrerpolicy="no-referrer">
+
+{{- else -}}
+  {{- /* Normalise "/images/foo.png" -> "images/foo.png" for assets lookup */ -}}
+  {{- $lookup := strings.TrimPrefix "/" $dest -}}
+  {{- $res := resources.Get $lookup -}}
+
+  {{- if $res -}}
+    {{- /* 2. Found in assets/: resize (only if oversized) then encode WebP */ -}}
+    {{- $img := $res -}}
+    {{- if gt $img.Width $maxW -}}
+      {{- $img = $img.Resize (printf "%dx %s" $maxW $quality) -}}
+    {{- else -}}
+      {{- $img = $img.Process $quality -}}
+    {{- end -}}
+    <img src="{{ $img.RelPermalink }}"
+         alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }}
+         width="{{ $img.Width }}" height="{{ $img.Height }}"
+         {{ if $isFirst }}loading="eager" fetchpriority="high"{{ else }}loading="lazy"{{ end }}
+         decoding="async">
+
+  {{- else -}}
+    {{- /* 3. Not in assets/ (static/ file or missing): passthrough */ -}}
+    {{- warnf "render-image: %q not found under assets/ — served unprocessed, no width/height (page: %s)" $dest .Page.Path -}}
+    <img src="{{ $dest }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }}
+         {{ if $isFirst }}loading="eager" fetchpriority="high"{{ else }}loading="lazy"{{ end }}
+         decoding="async">
+  {{- end -}}
+{{- end -}}
