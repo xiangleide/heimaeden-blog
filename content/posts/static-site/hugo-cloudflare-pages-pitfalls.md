@@ -143,23 +143,30 @@ When I moved my legal compliance pages (Privacy Policy, etc.) out of the `posts`
 I injected custom styles inside `extended.css` to freshen up the blog's UI cards, but clicking the sun/moon icon on the live site suddenly became completely unresponsive.
 
 ### The Root Cause
-A triple-stacked failure that fuses a wrong config key with two production-build traps:
-1. **Selector Mismatch**: Modern PaperMod does not toggle a simple class like `.dark` on the body. It relies on a specific html attribute selector: `html[data-theme="dark"]`. Raw styling applied blindly to `.dark` locks the engine's interface variables.
-2. **Wrong Config Key**: PaperMod's theme-toggle gating is **inverted** — its parameter is `disableThemeToggle`, *not* `showThemeToggle`. The actual condition the engine evaluates (in `header.html`, `footer.html`, and `head.html`) is `{{ if (not site.Params.disableThemeToggle) }}`. Since the key defaults to `nil` (falsy), the gating `if` evaluates false, the button never renders, and the click handler script never executes. Setting `showThemeToggle = true` (regardless of case) does *nothing* — PaperMod simply does not consult that key. This is the silent killer most retro articles gloss over.
-3. **SRI Verification Lockdown**: Leaving `[params.assets] disableSRI = true` unconfigured lets the Content-Security-Policy integrity check drop the inline toggle event listener if its hash mismatches the deferred asset fingerprint.
+One real culprit, plus two widespread misdiagnoses that waste hours of debugging.
+
+**The Real Culprit**: PaperMod's theme-toggle gating reads an *inverted* config key, not the one most tutorials name. The relevant predicates in `header.html`, `footer.html`, and `head.html` all evaluate `{{ if (not site.Params.disableThemeToggle) }}`. The correct key is `disableThemeToggle = false`. Setting `showThemeToggle = true` — regardless of casing — is a NO-OP: PaperMod never consults that key. With the wrong key in place, the button never renders, the inline click handler never attaches, and "the theme is broken" feels true while the actual bug is one mistyped variable name. This is the silent killer every retro "PaperMod dark mode" article glosses over.
+
+**Misdiagnosis #1 — Selector Mismatch**: PaperMod's built-in stylesheets correctly use `html[data-theme="dark"]` as the selector. If your custom CSS inside `extended.css` keys off a `.dark` class on the body or `<html>`, your style block will *look* like it does nothing — because PaperMod never sets that class. Mirror PaperMod's `html[data-theme="dark"]` pattern in your variables, or you will keep "fixing" CSS that was never the bug.
+
+**Misdiagnosis #2 — SRI Verification Lockdown**: Older guides blame Cloudflare Pages minification + Subresource Integrity (SRI) hash mismatches for "killing the toggle click handler". This conflates two separate mechanisms: SRI only gates external `<script integrity="...">` tags, not the inline `onclick` attribute on the toggle button. If you do hit an SRI mismatch on an external asset, the fix is `disableSRI = true` inside a `[params.assets]` table — but be aware that the inline dotted form `assets.disableSRI = true` is itself a NO-OP, for the same reason `showThemeToggle` was: only the parameter-table form is read. In practice this is rarely the actual cause of an unresponsive toggle.
 
 ### The Solution
-1. Fix your CSS selectors to look for `html[data-theme="dark"]`.
-2. Use PaperMod's actual toggle-gating key, then reformat the assets block into a top-level table so the SRI override survives all inheritance paths:
+1. The one line that actually fixes the click bug, in your `hugo.toml`:
    ```toml
-   minify = false # 👈 Place at the very top level, not under [params]
+   [params]
+       disableThemeToggle = false   # 👈 THIS is the real key (not showThemeToggle)
+   ```
+2. If your `extended.css` uses a `.dark` selector, mirror PaperMod's pattern:
+   ```css
+   html[data-theme="dark"] { --your-var: #...; }
+   ```
+3. Only if Cloudflare Pages minification actually trips an SRI mismatch on a real external asset, add the assets table — keep `minify = false` at the top level too, as a belt-and-braces measure:
+   ```toml
+   minify = false   # 👈 Top-level only — params.minify is not read
 
    [params.assets]
-       disableSRI = true   # 👈 Required: bypass SRI integrity check on the toggle script
-
-   [params]
-       defaultTheme = "auto"
-       disableThemeToggle = false # 👈 THIS is the real key (not showThemeToggle)
+       disableSRI = true   # 👈 Table form only — inline dotted form is a NO-OP
    ```
 
 ---
