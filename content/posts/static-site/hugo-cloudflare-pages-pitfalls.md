@@ -5,6 +5,11 @@ date = 2026-08-13T07:45:00Z
 draft = false
 tags = ["Hugo", "Cloudflare Pages", "Troubleshooting", "DevOps"]
 categories = ["Static-Site"]
+
+[cover]
+    image = "static-site/hugo-cloudflare-pages-pitfalls/cover.jpg"
+    alt = "A blueprint illustration of a glowing deployment pipeline with three nodes and seven red lightning-shaped fault markers along the line, evoking hidden pitfalls in static site deployment."
+
 showToc = true
 TocOpen = true
 +++
