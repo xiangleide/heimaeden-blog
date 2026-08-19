@@ -1,140 +1,183 @@
-# Cover Prompt — hugo-cloudflare-pages-pitfalls（A1）
+# Cover Prompt v2 — hugo-cloudflare-pages-pitfalls（A1）
 
-> **目标文章**：`content/posts/static-site/hugo-cloudflare-pages-pitfalls.md`（commit `f7c1b80d` 初次发布，D3；当前 `[correction] be430eb` + `[polish] f8c5aef` 已校准根因 + 视觉净化）
+> **目标文章**：`content/posts/static-site/hugo-cloudflare-pages-pitfalls.md`（初次发布 D3，当前 `[correction] be430eb` + `[polish] f8c5aef` 已校准根因 + 视觉净化）
 >
-> **风格基调**：Minimalist Cyberpunk Developer Vibe（极简高级全栈程序员黑客风）
+> **风格基调**：技术蓝图 + dev ops dashboard 风（部署管线 + 故障断点）
 >
-> **首次落地**：2026-08-17（D6）
+> **版本**：v2（替换 v1 捕兽夹方案）—— 首次落地 v1 2026-08-17 / 866eaf2；v2 落地 2026-08-19
 >
-> **目的**：可复用 prompt 资产——后续姊妹篇（Cloudflare Pages 其他主题）能借鉴同一套 visual language / palette / negative prompt。
+> **v2 变更理由**：用户反馈 v1 不合适（捕兽夹抽象度过高、不面向技术人员的运维审美、不显式总结文章内容），改为中文 prompt + 文章内容驱动的部署管线蓝图
 
 ---
 
-## 一、视觉概念设计意图
+## 一、目标文章内容总结
+
+文章主题：**Hugo 静态站点 + Cloudflare Pages 部署流程中的 7 个隐藏陷阱**。
+
+7 个陷阱（按部署时序）：
+
+| # | 陷阱标题 | 部署阶段 | 故障类别 |
+|---|---|---|---|
+| 1 | Cloudflare Dashboard UI 混淆（Workers vs Pages） | 项目初始化 | 平台选择错 |
+| 2 | `npm error could not determine executable to run` | 构建配置 | 运行时找不到二进制 |
+| 3 | `unmarshal failed: toml: expected character =` | front matter 撰写 | 语法错误 |
+| 4 | 在线首页完全为空 | 部署上线 | 时区/路由导致 hidden post |
+| 5 | `page reference "X" is ambiguous` | 导航配置 | 命名冲突导致死循环 |
+| 6 | Root-Level 404 + localhost 跳转循环 | 法律页迁移 | 路径斜杠漏写 |
+| 7 | 主题切换（Dark Mode）失效 | 主题定制 | 键名错 + SRI 配置 |
+
+**文章核心叙事**：一次完整部署过程中，**从 UI 入口 → 构建配置 → 内容撰写 → 上线验证 → 导航 → 法律页迁移 → 主题定制**七个环节，每个环节踩一个坑，并精准定位修复。
+
+---
+
+## 二、视觉概念设计意图（v2 替换 v1）
 
 | 视觉元素 | 对应文章隐喻 |
 |---|---|
-| 抽象 `<>` HTML 标签重塑为**线框捕兽夹**（snap-trap） | "陷阱"主题词；闭合的夹子 = 等待踩坑的部署 |
-| 沿上颚排布的 **7 颗红色 LED** | "7 Hidden Traps" 数量显式表达 |
-| `#39ff14` 霓虹绿线框 | Cyberpunk 主色，克制不过饱和 |
-| 底部单条 `#00d9ff` cyan 细线 | Cloudflare Pages 边缘网络 |
-| 暗紫黑底色 + 扫描线 + 远处 monospace 字符流 | 程序员终端氛围，全栈开发者黑客感 |
-| 无人物 / 无可读文字 / 极简负空间 | 欧美本土独立博客封面克制审美 |
+| 一条横向发光的"**部署管线**"贯穿画面 | Hugo + Cloudflare Pages 部署流程（7 个 trap 在这条流上发生） |
+| **三个发光节点**：代码仓库 / 构建 / 上线网站 | 部署流程的三个关键阶段（对应文章 "初始化 / 构建配置 / 上线验证" 主线） |
+| 沿管线均匀分布 **7 个橙红色闪电断点** | 7 个隐藏陷阱（"陷阱"直接可视化，闪电 = dev 圈熟悉的 fault 符号） |
+| 编号 **01-07** 小标签 | dev ops 风格的可定位 trap 标识（仿 PagerDuty / Datadog dashboard） |
+| **坐标网格 + 模糊代码片段**背景 | 工程蓝图 + 终端环境氛围 |
+| **深蓝黑底 + 青色主线 + 橙红断点** | dev ops dashboard 风（Slack / PagerDuty / Datadog 同款配色） |
 
 ---
 
-## 二、完整 Prompt（方案 A · 可复制粘贴）
+## 三、完整 Prompt（中文 v2 · 可直接复制）
 
 ```text
-Minimalist cyberpunk developer aesthetic, ultra-clean composition.
+极简科技工程蓝图风格，主题为"静态网站部署故障诊断图"。
 
-Central focal point: a large abstract HTML opening tag "<>" reimagined as a sleek snap-trap (mouse-trap jaw), rendered in thin neon-green wireframe line-art against a dark void. Seven small red LED dots are arranged along the trap's upper jaw — each LED glowing softly, symbolizing the "7 hidden traps" of Hugo + Cloudflare Pages deployment.
+中央主体（占画面 70%）：一条横向发光的"部署管线"，从左至右贯穿画面，包含三个发光节点——最左侧"代码仓库"（抽象的代码方块）、中部"构建流水线"（连续发光线段）、最右侧"已上线网站"（抽象的浏览器窗框）。管线呈淡青色辉光，节点用淡青色描边圆角矩形表示。
 
-Background: deep matte black fading into graphite purple, overlaid with faint horizontal scanlines for a subtle CRT vibe, and a barely-visible dotted grid pattern fading toward the edges. In the far background, a few ghostly rows of dim monospace characters drift vertically. A single thin cyan accent line bisects the bottom third, evoking the edge network.
+沿管线均匀分布 7 个显眼的"故障断点"标记，每个断点由一个橙红色闪电符号构成，周围环绕细微的故障光晕。每个闪电上方悬浮一个小型的诊断编号标签（仅含抽象的 01 至 07 两位数字风格），以等距排列从左到右沿管线依次呈现。
 
-Mood: cold, technical, precise — like a senior full-stack developer's terminal at 2am after a successful debug session.
+背景：深蓝黑色基调（#0a0e1a），覆盖半透明的工程蓝图坐标网格（淡青色细线 #1a2a3a），叠加模糊处理的部署日志代码片段（仅作为环境氛围层，不可清晰阅读），整体形成"工程师工作台上的故障定位作战图"氛围。
 
-Technical specs: 16:9 widescreen aspect ratio, no human figures, no readable text anywhere (UI elements are abstract glyphs only), minimal clutter, cinematic negative space, no excessive ornamentation.
+色调锁定：底色 #0a0e1a 深蓝黑、青色主线 #4dd0e1、橙红色闪电 #ff5722、少量暖白高光 #f5f5f5。
 
-Color palette (LOCKED):
-- Base: #0a0a0f deep matte black
-- Atmospheric: #1a0a2e deep graphite purple
-- Primary UI: #39ff14 neon green (trap wireframe + core accent)
-- Trap emphasis: #ff2a3c single red (reserved for the seven LEDs only)
-- Edge accent: #00d9ff faint cyan (bottom line only)
+风格关键词：技术蓝图、运维作战地图、调试战情室、dev ops dashboard、故障定位视图、电路原理图。
 
-Negative prompts: photorealistic humans, faces, hand-drawn look, watercolor, cluttered UI, multiple focal points, decorative borders, frames, vintage paper texture, off-axis tilt, busy backgrounds, rainbow neon effects.
+技术参数：16:9 宽屏（1440×810 最小尺寸），无人物、无可读文字、无装饰边框、构图极简留白。
+
+负面提示词：避免人物面孔、避免手绘水彩感、避免装饰边框、避免彩虹色霓虹、避免多焦点、避免过度装饰、避免现实摄影感、避免大面积红色覆盖（仅 7 个闪电使用橙红）。
 ```
 
 ---
 
-## 三、模型特定参数（生成时附加）
+## 四、模型特定参数
 
 | 模型 | 附加参数 | 备注 |
 |---|---|---|
-| **Midjourney v6+** | `--ar 16:9 --style raw --s 50 --q 2` | `raw` + 低 stylize=50 出极简；`q=2` 高细节 |
-| **DALL-E 3** | 选 `1792×1024` 尺寸；style 选 `vivid` 出饱和 / `natural` 出更克制 | prompt 直接贴全文 |
-| **Stable Diffusion XL** | `--ar 16:9`，Cyberpunk 风格 LoRA（如 `CyberpunkAnime` / `DreamShaper`），配 ControlNet 锁色块 | 适合自托管，需要 venv |
-| **Flux.1 / Recraft v3** | 自然语言直接用；强调 "ultra-minimalist" | 这俩对极简风格支持最好 |
-
-**色彩锁是关键**：上面 5 个 hex 码决定风格基调。如果出图偏亮/偏蓝，**多半是没锁住 palette**——在生成参数里强制锁色而不是只写颜色名。
+| **Midjourney v6+** | `--ar 16:9 --style raw --s 80 --q 2` | `raw` 保持极简；stylize=80 让中文 prompt 更精确 |
+| **DALL-E 3** | 选 1792×1024 尺寸；style `vivid` 出饱和蓝色调 | 中文 prompt 直接贴全文 |
+| **Stable Diffusion XL** | `--ar 16:9`，Tech / Blueprint 风格 LoRA（如 `BlueprintArt` / `TechDiagram`），配 ControlNet 锁色块 | 适合自托管 |
+| **Flux.1 / Recraft v3** | 自然语言直接用；强调 "engineering blueprint" | 风格最贴近 |
 
 **风格微调关键词**：
-- 更"安静"（接近欧美独站博客极简审美）：把 `Minimalist cyberpunk` 改成 `Minimalist tech-noir`，cyberpunk 元素自然收敛
-- 更"尖锐"：MJ 加 `--chaos 15`；SDXL 加 high contrast LoRA
+- 更"冷静"：把 `dev ops dashboard` 改成 `minimalist tech diagram`
+- 更"工业"：把节点从圆角矩形改成六角形（HUD 风）
+- 更"湿润"（更立体）：MJ 加 `--style scenic` 或 SDXL 配 `SciFiStyle` LoRA
 
 ---
 
-## 四、落地路径（生成后落档约定）
+## 五、落地路径（与 v1 保持一致）
 
 | 维度 | 值 |
 |---|---|
 | **物理路径** | `assets/images/static-site/hugo-cloudflare-pages-pitfalls/cover.jpg` |
 | **front matter 引用** | `static-site/hugo-cloudflare-pages-pitfalls/cover.jpg` |
 | **目录命名** | kebab-case，沿用 article filename |
-| **格式** | JPG（封面图统一 JPG，screenshots 才是 PNG） |
-| **尺寸上限** | 1440px（per CLAUDE.md §3.3.2，`optimize-image.sh` 会自动降采样） |
+| **格式** | JPG（封面图统一 JPG） |
+| **尺寸上限** | 1440px（per CLAUDE.md §3.3.2） |
 
 ---
 
-## 五、Alt 文本建议
-
-欧美独立博客封面 alt 风格：**一句具体描述，不超过 200 字符**，避免 SEO 关键词堆砌。
+## 六、Alt 文本建议（欧美独站博客克制风格）
 
 **首选**：
-> Snap-trap wireframe in neon green with seven red LEDs, evoking the hidden pitfalls of static site deployment.
+> A blueprint illustration of a glowing deployment pipeline with three nodes and seven red lightning-shaped fault markers along the line, evoking hidden pitfalls in static site deployment.
 
-**备选**（如果首选生成图与描述不符）：
-> A minimalist cyberpunk illustration: a green wireframe snap-trap shape with seven red dots along its jaw, against a deep purple void.
+**备选**：
+> A minimalist dev ops dashboard view: a horizontal cyan pipeline with three glowing nodes and seven orange-red lightning fault markers numbered 01 to 07.
 
 ---
 
-## 六、Front Matter 拼接示例
+## 七、Front Matter 拼接示例
 
 ```toml
 [cover]
     image = "static-site/hugo-cloudflare-pages-pitfalls/cover.jpg"
-    alt = "Snap-trap wireframe in neon green with seven red LEDs, evoking the hidden pitfalls of static site deployment."
+    alt = "A blueprint illustration of a glowing deployment pipeline with three nodes and seven red lightning-shaped fault markers along the line, evoking hidden pitfalls in static site deployment."
 ```
 
 插入位置：tags 之后、showToc 之前（与 A2/A3 当前 front matter 风格保持一致）。
 
 ---
 
-## 七、生成后落档流程 Checklist
+## 八、生成后落档流程 Checklist
 
 按顺序执行（任一步失败都先停下，**不要直接 commit**）：
 
 - [ ] **保存原始 PNG/JPG** 到 `~/Downloads/cover-raw.png`（任意暂存路径）
-- [ ] **跑优化**：`./scripts/optimize-image.sh <raw.png>` 自动降采样到 1440px ceiling（per CLAUDE.md §3.3.2）
+- [ ] **跑优化**：`./scripts/optimize-image.sh <raw.png>`（自动降采样到 1440px ceiling）
 - [ ] **移动到物理路径**：优化后的文件落到 `assets/images/static-site/hugo-cloudflare-pages-pitfalls/cover.jpg`
-- [ ] **更新 A1 front matter**：加 `[cover]` 块（image + alt，按本文件 §六）
+- [ ] **更新 A1 front matter**：加 `[cover]` 块（image + alt，按本文件 §七）
 - [ ] **跑 lint**：`./scripts/lint-post.sh content/posts/static-site/hugo-cloudflare-pages-pitfalls.md`
 - [ ] **跑 hugo build**：`hugo --gc`（0 errors 才算合格）
-- [ ] **commit prefix**：`[asset]` 或 `[cover]`（CLAUDE.md §附 D 没列；建议新增 `[asset]` 表示"补 cover 资产"）
+- [ ] **commit prefix**：`[asset]`（表示"补 cover 资产"）
 - [ ] **HOLD push**（per CLAUDE.md §6 所有 commit 等用户 ack）
 
 ---
 
-## 八、复用备注
+## 九、复用备注（蓝图风变体表）
 
-写姊妹篇（Cloudflare Pages 其他主题，例如 Worker 路由配置、CDN 缓存策略、Cloudflare R2 集成等）时，**沿用本文件的 palette + negative prompts + composition 风格**，但视觉核心需要换：
+写姊妹篇（Cloudflare Pages 其他主题）时，**沿用本文件的"管线 + 故障断点"叙事骨架**，按主题替换主线语义：
 
-- **Worker 路由主题**：捕兽夹 → 抽象网络路由分叉（split path），7 个 routing trap 改为 "edge cases"
-- **CDN 缓存主题**：捕兽夹 → 抽象缓存盒（cache box），7 traps 改为 "cache invalidation pitfalls"
-- **Cloudflare R2 主题**：捕兽夹 → 抽象存储桶（bucket wireframe），7 traps 改为 "object storage pitfalls"
+| 姊妹篇主题 | 主线变体 | 7 trap 替换主题 |
+|---|---|---|
+| Worker 路由配置 | "request → routing → response" | routing edge cases |
+| CDN 缓存策略 | "origin → cache → edge → user" | cache invalidation pitfalls |
+| Cloudflare R2 集成 | "upload → bucket → fetch" | object storage pitfalls |
+| Access 鉴权 | "user → JWT → edge → origin" | auth pitfalls |
+| Stream 视频 | "upload → encode → deliver" | video pipeline pitfalls |
 
-⚠️ **数量 7 不要硬塞**：如果姊妹篇不是 7 个 trap，改用对应数字（5 / 10 / N）替换 LED 数量即可。
+⚠️ **数量 7 不要硬塞**：如果姊妹篇不是 7 个 trap，改用对应数字（5 / 10 / N）替换闪电数量即可。
 
 ---
 
-## 附录 A · 设计取舍记录
+## 附录 A · 设计取舍记录（v2 替换 v1 决策对照）
 
-| 取舍 | 决定 | 理由 |
+| 维度 | v1（捕兽夹）— 用户判定不合适 | v2（管线蓝图）— 现行 |
 |---|---|---|
-| 选"捕兽夹"隐喻而非"终端撞地球" | 捕兽夹 | 极简单焦点（一物一 LED 排），比"两物相撞"叙事更稳；显式呼应 "traps" 关键词 |
-| 选 neon green 单一主色（不用多色霓虹） | 单绿 | 欧美独站博客审美走"克制"而非"赛博朋克霓虹彩虹"——后者容易被归类为内容农场视觉 |
-| 选 7 LED 红色而非散点 | 7 LED | 显式数量表达；红色锁定为唯一强调色（palette discipline）；其他红色干扰要进 negative prompts |
-| 选无人物 | 无人物 | 抽象 glyph 优于人脸——避免"AI-Generated face"这种 Pinterest 内容农场陷阱 |
-| 锁 hex code 而非仅写颜色名 | 锁 hex | 多数模型对 "neon green" 解释不一致，给 hex 才能稳定出 cyberpunk 绿 |
-| 副隐喻用底部 cyan line 而非 globe | 线条 | globe 是 Cloudflare 官方图标，会撞版权；抽象线条更通用，也更克制 |
+| 核心视觉 | 线框捕兽夹 + 7 红 LED | 发光部署管线 + 7 闪电断点 |
+| 提示词语言 | 英文 | **中文**（用户明确要求） |
+| 是否总结文章内容 | 弱（"陷阱"概念泛化对应） | **强**（管线 = 部署流程，断点 = 7 trap 编号 01-07） |
+| 面向人群审美 | 抽象极客 cyberpunk | **dev ops dashboard 风**（Slack/PagerDuty/Datadog 同款，更贴 ops 圈） |
+| 生动形象 | 几何抽象 | **流程具象**（节点 + 流向 + 断点位置） |
+| 科技风格 | cyberpunk 暗调紫黑 | **工程蓝图亮调**（坐标网格 + 节点连接 + 编号标签） |
+| 主色调 | 紫黑 + 单绿 + 红 | **蓝黑 + 青色主线 + 橙红断点**（更"故障定位地图"语义） |
+| 保留项 | 7 数量显式表达 | 同上，且**新增编号 01-07 进一步强化** |
+| 新增项 | — | **三个节点**（仓库/构建/上线）显式对应部署三阶段 |
+
+---
+
+## 附录 B · 版本演进
+
+| 版本 | commit | 日期 | 方案 | 用户反馈 |
+|---|---|---|---|---|
+| v1 | `866eaf2` | 2026-08-17 | 极简赛博朋克捕兽夹 × 7 LED | **不合适**：抽象度过高、不显式总结文章、不面向 dev ops 审美 |
+| v2 | （待 commit） | 2026-08-19 | 中文 dev ops 部署管线蓝图 + 7 闪电断点 | （待确认） |
+
+---
+
+## 附录 C · 为什么不沿用 v1 一些组件
+
+| v1 元素 | v2 是否保留 | 理由 |
+|---|---|---|
+| `<>` HTML 标签 ghost 框架 | **删除** | v1 太抢戏，且没显式表达"Hugo"——v2 用"代码仓库节点"更直接 |
+| 暗紫黑色背景 | **替换为深蓝黑** | dev ops dashboard 调色板偏蓝（Slack/Linear/Datadog 同款），紫黑太 cyberpunk |
+| 7 LED 排布 | **替换为 7 闪电断点** | LED 太抽象（与"trap"无语义关联），闪电符号在 dev 圈直指 fault |
+| 单绿色霓虹 | **替换为青色 + 橙红双色** | v1 单绿太"安静"；v2 青色（healthy flow）+ 橙红（fault point）符合 ops 仪表盘对比配色 |
+| 远处 monospace 字符流 | **保留为模糊代码片段层** | 仍然贡献"终端环境氛围"——但加坐标网格丰富背景层次 |
+| 底部 cyan 边缘线 | **删除** | v2 把 cyan 作为"主线"贯穿整张图，不再单点 cyan 边缘线 |
