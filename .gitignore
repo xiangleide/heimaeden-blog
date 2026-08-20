@@ -9,3 +9,12 @@ resources/
 # Private payout config override (per docs/worldfirst-usd-checklist.md §3.2)
 # Contains WorldFirst USD account 4 fields — NEVER commit.
 hugo.local.toml
+
+# GSC service account JSON key (per docs/gsc-setup-guide.md §4)
+# OAuth credential — if leaked, attacker can read Search Console data.
+scripts/gsc-key.json
+
+# Mock reader feedback reports (per docs/mock-reader-personas.md)
+# Default ignored so docs/feedback/ stays out of git; user can `git add -f`
+# individual reports they want to archive.
+docs/feedback/

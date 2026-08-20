@@ -1,0 +1,203 @@
+{
+  "$schema": "./persona-data.schema.json",
+  "$comment": "Mock reader persona data — raw cache for mock-reader-feedback skill. Real data sources override these fields: GSC (search queries), CF Analytics (geo/device/referrer), Plausible (page-level engagement), Reddit/HN/GitHub (community signals). When --live flag is passed, fetch-persona-data.sh regenerates this file. Mark fields as [MOCK] if no real data source is wired yet.",
+  "version": "0.1.0",
+  "last_updated": "2026-08-20",
+  "data_sources": {
+    "gsc": "[MOCK] Not yet wired — see docs/gsc-setup-guide.md",
+    "cf_analytics": "[MOCK] Not yet wired",
+    "reddit_hn_github": "[MOCK] Not yet wired",
+    "plausible": "[MOCK] Not yet wired"
+  },
+  "personas": {
+    "P1": {
+      "label": "强华陆 dev",
+      "geo_distribution": {
+        "CN": 0.85,
+        "HK": 0.05,
+        "TW": 0.05,
+        "SG": 0.03,
+        "OTHER": 0.02
+      },
+      "device_split": {
+        "desktop_windows": 0.65,
+        "mobile_android": 0.30,
+        "tablet": 0.05
+      },
+      "top_search_queries": [
+        "deploy spring boot on cheap vps",
+        "hugo cloudflare pages 404",
+        "MiniMax api python setup",
+        "nginx 403 forbidden static site fix",
+        "java 1.8 install vps tutorial"
+      ],
+      "top_pages_visited": [
+        "/posts/static-site/hugo-cloudflare-pages-pitfalls/",
+        "/posts/static-site/static-blog-setup-guide/"
+      ],
+      "avg_session_duration_sec": 240,
+      "bounce_rate": 0.42,
+      "returning_pct": 0.15,
+      "community_signals": {
+        "reddit_subs": ["r/devops", "r/java", "r/CloudFlare"],
+        "hn_activity": "low",
+        "github_languages": ["java", "python", "shell"]
+      },
+      "primary_intent": "deploy-fixing",
+      "feedback_style": "direct_technical"
+    },
+    "P2": {
+      "label": "海外华人 dev",
+      "geo_distribution": {
+        "US": 0.45,
+        "CA": 0.20,
+        "AU": 0.15,
+        "GB": 0.10,
+        "DE": 0.05,
+        "OTHER": 0.05
+      },
+      "device_split": {
+        "desktop_mac": 0.70,
+        "mobile_iphone": 0.25,
+        "tablet_ipad": 0.05
+      },
+      "top_search_queries": [
+        "payoneer vs worldfirst for chinese developers",
+        "adsense payment to chinese mainland 2026",
+        "W-8BEN form adsense tutorial",
+        "stripe alternative for chinese residents",
+        "worldfirst individual developer account"
+      ],
+      "top_pages_visited": [
+        "/posts/remote-payment/",
+        "/posts/static-site/"
+      ],
+      "avg_session_duration_sec": 210,
+      "bounce_rate": 0.55,
+      "returning_pct": 0.10,
+      "community_signals": {
+        "reddit_subs": ["r/ImmigrationCanada", "r/cscareerquestions", "r/China"],
+        "hn_activity": "medium",
+        "github_languages": ["typescript", "go", "rust"]
+      },
+      "primary_intent": "compliance-resolution",
+      "feedback_style": "reddit-grade"
+    },
+    "P3": {
+      "label": "西方 indie hacker",
+      "geo_distribution": {
+        "US": 0.55,
+        "GB": 0.15,
+        "DE": 0.10,
+        "CA": 0.08,
+        "AU": 0.07,
+        "OTHER": 0.05
+      },
+      "device_split": {
+        "desktop_mac": 0.80,
+        "tablet_ipad": 0.10,
+        "mobile_iphone": 0.10
+      },
+      "top_search_queries": [
+        "best payment gateway for solo saas 2026",
+        "hugo vs astro for developer blog",
+        "MiniMax claude code workflow",
+        "cheap vps for indie project 2026",
+        "self-hosted static site comparison"
+      ],
+      "top_pages_visited": [
+        "/posts/ai-agent/",
+        "/posts/remote-payment/"
+      ],
+      "avg_session_duration_sec": 180,
+      "bounce_rate": 0.62,
+      "returning_pct": 0.08,
+      "community_signals": {
+        "reddit_subs": ["r/IndieHackers", "r/SaaS", "r/Entrepreneur"],
+        "hn_activity": "high",
+        "github_languages": ["typescript", "python", "elixir"]
+      },
+      "primary_intent": "selection-decision",
+      "feedback_style": "one-liner"
+    },
+    "P4": {
+      "label": "排错专注者",
+      "geo_distribution": {
+        "IN": 0.25,
+        "US": 0.20,
+        "BR": 0.10,
+        "DE": 0.10,
+        "CN": 0.10,
+        "GB": 0.08,
+        "OTHER": 0.17
+      },
+      "device_split": {
+        "desktop_any": 0.75,
+        "mobile_any": 0.25
+      },
+      "top_search_queries": [
+        "nginx 403 forbidden fix",
+        "hugo build failed frontmatter",
+        "MiniMax api connection refused",
+        "spring boot class not found error",
+        "cloudflare pages deployment failed oom"
+      ],
+      "top_pages_visited": [
+        "/posts/static-site/hugo-cloudflare-pages-pitfalls/"
+      ],
+      "avg_session_duration_sec": 90,
+      "bounce_rate": 0.72,
+      "returning_pct": 0.05,
+      "community_signals": {
+        "reddit_subs": ["r/devops", "r/sysadmin", "r/programming"],
+        "hn_activity": "low",
+        "github_languages": ["any"]
+      },
+      "primary_intent": "error-fixing",
+      "feedback_style": "silent-success-or-grumpy-fail"
+    },
+    "P5": {
+      "label": "选型决策者",
+      "geo_distribution": {
+        "US": 0.40,
+        "GB": 0.20,
+        "DE": 0.15,
+        "NL": 0.08,
+        "AU": 0.07,
+        "OTHER": 0.10
+      },
+      "device_split": {
+        "desktop_mac": 0.55,
+        "desktop_windows": 0.25,
+        "desktop_linux": 0.10,
+        "tablet": 0.10
+      },
+      "top_search_queries": [
+        "worldfirst vs payoneer vs wise for saas",
+        "best static site generator 2026",
+        "best vps for spring boot production",
+        "hugo vs jekyll vs astro 2026",
+        "MiniMax api pricing comparison"
+      ],
+      "top_pages_visited": [
+        "/posts/remote-payment/",
+        "/posts/static-site/",
+        "/posts/ai-agent/"
+      ],
+      "avg_session_duration_sec": 360,
+      "bounce_rate": 0.30,
+      "returning_pct": 0.35,
+      "community_signals": {
+        "reddit_subs": ["r/SaaS", "r/sysadmin", "r/devops"],
+        "hn_activity": "high",
+        "github_languages": ["any"]
+      },
+      "primary_intent": "vendor-selection",
+      "feedback_style": "long-form-rss"
+    }
+  },
+  "site_aggregate": {
+    "total_uv_monthly": "[MOCK] 0",
+    "comment": "Real values injected after GSC + CF Analytics wired. See docs/gsc-setup-guide.md."
+  }
+}
