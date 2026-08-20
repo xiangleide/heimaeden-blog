@@ -1,17 +1,17 @@
 ---
 name: commit-with-prefix
-description: Analyzes git diff for HeimaEden blog changes, suggests the correct commit prefix from CLAUDE.md §3.4, runs pre-commit gates (verify-image-paths + verify-cross-refs + lint-post.sh), composes the commit message, holds push per §6. Use when user says "commit" / "提交" / "git commit" / "commit 一下" / "stage 一下".
+description: Analyzes git diff for HeimaEden blog changes, suggests the correct commit prefix from CLAUDE.md §3.4, runs 4 pre-commit gates (verify-image-paths + verify-cross-refs + lint-post.sh + hugo --gc), composes the commit message, holds push per §6. Use when user says "commit" / "提交" / "git commit" / "commit 一下" / "stage 一下".
 ---
 
 # commit-with-prefix
 
-HeimaEden 提交流水线编排：分析 diff → 推荐 prefix → 串行跑 3 个 pre-commit gate → 精确 `git add` → 写 commit message → HOLD push 等用户 ack。
+HeimaEden 提交流水线编排：分析 diff → 推荐 prefix → 串行跑 4 个 pre-commit gate → 精确 `git add` → 写 commit message → HOLD push 等用户 ack。
 
 ## 触发场景
 
 - 用户说："commit 一下" / "提交" / "git commit" / "stage 一下"
 - 用户说："[draft] <topic>" / "[zh-final] <topic>" / "[polish] <topic>" / "[asset] ..." / "[fix] ..." / "[correction] ..." / "[docs] ..."
-- OCM 阶段 2/4/5/7 完成后（自动建议而非用户主动说）
+- TCM 阶段 2/4/5/7 完成后（自动建议而非用户主动说）
 
 ## 不要做的事
 
@@ -35,7 +35,7 @@ git diff --stat            # 全部 unstaged
 - `.md` in `docs/` → 文档/封面 prompt
 - `.jpg/.png/.webp` in `assets/images/` → 截图资产
 - `.sh` in `scripts/` → 脚本
-- `CLAUDE.md` / `README.md` / `Content-Agent-ACM.md` → 顶层规则文件
+- `CLAUDE.md` / `README.md` / `Content-Agent-TCM.md` → 顶层规则文件
 - `topic-pool.md` → 题目池
 
 ### 2. 推荐 prefix（按 CLAUDE.md §3.4）
@@ -52,7 +52,7 @@ git diff --stat            # 全部 unstaged
 | 仅改 docs/、CLAUDE.md、SOP | `[docs]` | `[docs] article-writing-workflow-附G` |
 | 跨多类（无法归一） | **拆 commit**，每个一类一个 | — |
 
-### 3. 跑 3 个 pre-commit gate（**任一失败则 stop，不 commit**）
+### 3. 跑 4 个 pre-commit gate（**任一失败则 stop，不 commit**）
 
 **并行**调用：
 
@@ -65,6 +65,10 @@ git diff --stat            # 全部 unstaged
 
 # Gate C：lint 通过（如果改了 .md）
 ./scripts/lint-post.sh content/posts/<path>.md   # 必须 0/0
+
+# Gate D：hugo build 0 errors（CLAUDE.md §5 pre-action #3）
+hugo --gc 2>&1 | tee /tmp/hugo-build.log
+# 必须 0 errors；warning 可接受但需报告
 ```
 
 **Gate A 失败示例**：
@@ -74,10 +78,24 @@ git diff --stat            # 全部 unstaged
 
 **Gate B 失败示例**：
 - `§步骤 9` 但文档只到 §步骤 5 → 必须删 ref 或加章节
+- phantom conclusion（"X 可无缝切换到 Y"）无锚点 → 必须改占位语
 
 **Gate C 失败示例**：
 - TOML 写成 YAML 风格 → 必须改 `:` 为 `=`
 - 正文含 CJK 但没有 `lint_allow = ["cjk-body"]` → 必须改英文
+- date 是未来时间 → 必须改过去时间（CLAUDE.md §3.1）
+
+**Gate D 失败示例**：
+- front matter TOML 错 → hugo 报 `unmarshal failed`
+- 引用不存在的 shortcode → hugo 报 `template not found`
+- 跨文章 ref 路径错 → hugo 报 `ref .* not found`
+- 图片未在 `assets/images/` → render-image.html hook warning
+
+**Gate D 触发条件**：
+- ✅ 必须：所有改了 `.md` 的 commit
+- ✅ 必须：所有改了 `layouts/` / `hugo.toml` 的 commit
+- ⏸ 可跳过：纯 `.md` 文档类（`docs/`、`CLAUDE.md`、`.claude/skills/`）——除非改了 SOP 影响 lint 脚本
+- ⏸ 可跳过：纯 `.sh` / 脚本类——但建议仍跑一次防止副带影响
 
 ### 4. E 方案判断（备份到临时分支）
 
@@ -141,7 +159,7 @@ git status                   # 应该 clean
 ```
 ✓ Commit landed: <hash> <prefix> <topic>
 ✓ Files staged: <count>
-✓ Pre-commit gates: image-paths ✓ / cross-refs ✓ / lint ✓
+✓ Pre-commit gates: image-paths ✓ / cross-refs ✓ / lint ✓ / build ✓
 ⏸ Push: HOLD (per CLAUDE.md §6 — 等你 ack)
 ```
 
@@ -160,5 +178,6 @@ git status                   # 应该 clean
 - **CLAUDE.md §3.4**：prefix 列表来源
 - **CLAUDE.md §3.8**：commit 边界 + 阶段对应
 - **CLAUDE.md §4 forbidden**：amend / -A / --no-verify / push --force
+- **CLAUDE.md §5 pre-action #3**：跑 `hugo --gc` 验证 0 errors
 - **CLAUDE.md §6 destructive**：永远等 ack
 - **docs/article-writing-workflow.md §附 D**：commit 边界总览
