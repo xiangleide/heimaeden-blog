@@ -67,11 +67,14 @@ minify = false
     url = "/categories/ai-agent/"
     weight = 30
 
-[[menu.main]]
-    identifier = "side-project-menu"
-    name = "Side Project"
-    url = "/categories/side-project/"
-    weight = 40
+# ⏸ side-project-menu 临时移除 (D6 2026-08-20)：content/posts/side-project/ 无文章，
+# 点击会触发 CF Pages 404。等 X1（虚拟卡选型）首篇上线后加回。
+# 还原时解开下方注释即可：
+# [[menu.main]]
+#     identifier = "side-project-menu"
+#     name = "Side Project"
+#     url = "/categories/side-project/"
+#     weight = 40
 
 [[menu.main]]
     identifier = "archives-menu"

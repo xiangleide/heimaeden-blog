@@ -42,6 +42,8 @@
 
 ⚠️ **下次选题约束**：连续 2 篇静态站 → B1 推荐中已选 static-site 排错类，**B2 应切换 AI-Agent 或 Remote-Payment**。
 
+> 🆕 **D6 进度（2026-08-20）**：AI-Agent 集群首篇已 commit `e2dde89`（中文版 + 4 张实操截图），等 Task #4 [zh-final] 完成后由 Task #5 翻译并 push 即解锁。届时最近 3 篇会有 AI-Agent，**B3 之后**的下一次选题约束重新从 "避免连续同话题" 开始。
+
 ---
 
 ## ✅ 已完成（Published）
@@ -337,7 +339,9 @@
 
 ---
 
-### Side-Project（**缺口 2 篇**）
+### Side-Project（**缺口 2 篇 · nav 临时关闭**）
+
+> ⏸ **D6 收尾**：因 `content/posts/side-project/` 仍无文章，hugo.toml 已临时移除 side-project-menu（2026-08-20）。`/categories/side-project/` 实际会 404——保留 nav 会让用户点击落空。等 **X1（虚拟卡选型）** 首篇上线后恢复 nav。
 
 #### X1. Best virtual card for developers to subscribe to overseas SaaS tools
 - **来源**：`think-payment.md` #35（普适版去 Chinese-based 扩流量池）
