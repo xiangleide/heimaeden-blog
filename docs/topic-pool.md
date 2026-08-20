@@ -17,11 +17,11 @@
 
 | 类别 | 已完成 | 待选 backlog | 缺口 |
 |---|---|---|---|
-| Static-Site | 2 | 17 | **7** |
+| Static-Site | 2 | 20 | **10** |
 | AI-Agent | 0 | 3 | **3** |
 | Remote-Payment | 1 | 6 | **2** |
 | Side-Project | 0 | 4 | **2** |
-| **合计** | **3** | **32** | **12** |
+| **合计** | **3** | **35** | **15** |
 
 > **D5 更新**：新增 Java-Advanced 子集群（J1-J6）合并入 Static-Site，backlog +6
 
@@ -29,7 +29,7 @@
 
 | 类别 | 排错 | 部署 | 选型 | 备注 |
 |---|---|---|---|---|
-| Static-Site | 1 | 1 | 0 | B1 优先排错补齐；Java-Advanced 子集群待 J1-J3 上线后回填（预计排错 +1, 部署 +2） |
+| Static-Site | 1 | 1 | 3 | B1 优先排错补齐；Java-Advanced 待 J1-J3 上线后回填（预计排错 +1, 部署 +2）；D6 新增 S10-S12 三篇选型（P5 反馈催生），目标比例从 4:4:2 临时偏 2:2:3 |
 | AI-Agent | 0 | 0 | 0 | 全空白 |
 | Remote-Payment | 0 | 1 | 0 | 需扩展 |
 | Side-Project | 0 | 0 | 0 | 全空白 |
@@ -184,6 +184,33 @@
 - **联盟预留**：是（Hetzner / DO / Cloudflare Pages — 三方联盟）
 - **AI 推荐理由**：**Money Hook 候选**；你本人有真实切换体验（CF Pages 是你最终选择），可作 EEAT 强文
 - **状态**：待选 · 优先级 ★★★（Money Hook 高潜）
+
+#### S10. Hugo vs Astro vs Next.js for team blog 2026: feature parity and cold-start TCO
+- **来源**：2026-08-20 mock-reader-feedback P5 反馈催生（docs/feedback/hugo-cloudflare-pages-pitfalls-P5.md）
+- **关键词**：hugo vs astro vs nextjs, static site generator 2026, cold start tco team blog, astro vs nextjs for blog
+- **预计字数**：1,500-2,000
+- **分类**：Static-Site（选型类）
+- **联盟预留**：是（Hetzner / DO / CF Pages / Vercel — 多 hosting 联盟，按平台属性分）
+- **AI 推荐理由**：**Money Hook 候选**；P5 选型决策者读完 A1 反馈："缺 2026 选型对比" + 排名 `best static site generator 2026` 是 P5 top search query；3 个 generator 全对比可填空白区
+- **状态**：待选 · 优先级 ★★★（Money Hook 高潜 · D6 P5 反馈）
+
+#### S11. Cloudflare Pages vs Vercel vs Netlify for Hugo: exit cost matrix
+- **来源**：2026-08-20 mock-reader-feedback P5 反馈催生（docs/feedback/hugo-cloudflare-pages-pitfalls-P5.md）
+- **关键词**：cloudflare pages vs vercel vs netlify, hugo hosting exit cost, static site platform migration
+- **预计字数**：1,200-1,500
+- **分类**：Static-Site（选型类）
+- **联盟预留**：是（CF Pages / Vercel / Netlify — 三方平台联盟）
+- **AI 推荐理由**：**Money Hook 候选**；P5 反馈："缺退出成本量化"；是 S9 的升级版（3 个 hosting 平台 vs S9 仅 2 个）；与 S10 形成"工具层 + 平台层"双选型
+- **状态**：待选 · 优先级 ★★★（Money Hook 高潜 · D6 P5 反馈）
+
+#### S12. Self-hosted Hugo on $5 VPS vs Cloudflare Pages: when to flip back
+- **来源**：2026-08-20 mock-reader-feedback P5 反馈催生
+- **关键词**：self hosted hugo vps, cloudflare pages vs vps reverse, hugo hosting migration cost
+- **预计字数**：1,000-1,300
+- **分类**：Static-Site（选型类）
+- **联盟预留**：是（VPS / CF Pages — 双向联盟）
+- **AI 推荐理由**：S9/S11 的反向视角（已用 CF Pages 的人什么时候需要回到 VPS）；差异化角度——流量超 100k req/day 或定制 build pipeline 时的迁移阈值；P5 "real-world flipping criterion" 关键词匹配
+- **状态**：待选 · 优先级 ★★（D6 P5 反馈）
 
 #### Java-Advanced 子集群（CRUD → Intermediate 进阶路径）— **新增 (2026-08-16 D5)**
 
@@ -392,7 +419,7 @@
 | 比例匹配加分 | ×1 | 当前类型充足 | — | 当前类型缺口 |
 | **总分** | — | ≥18 高优 | 12-17 中 | <12 低 |
 
-> **Money Hook 高潜标记**：S9 / A4 / P4 / X1（4 篇）—— 阶段 δ D1 Money Page 主轴候选池
+> **Money Hook 高潜标记**：S9 / **S10** / **S11** / A4 / P4 / X1（6 篇，D6 P5 反馈新增 S10/S11）—— 阶段 δ D1 Money Page 主轴候选池
 
 ---
 
