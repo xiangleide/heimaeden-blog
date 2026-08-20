@@ -5,7 +5,7 @@
 > **协作模式**：AI 推荐候选 → 用户确认 → 状态推进（待选 → 推荐中 → 初稿）
 > **分类约定**（对齐 `think-strategy.md` §三-5 四集群）：
 > - **Static-Site**：VPS / Hugo / Cloudflare Pages / Java 部署 / 排错
-> - **AI-Agent**：OpenClaw / MiniMax / Claude Code / MCP 实操
+> - **AI-Agent**：Claude Code / MiniMax / MCP 实操
 > - **Remote-Payment**：大陆个人开发者境外收款
 > - **Side-Project**：MVP / SaaS / Indie 工具
 
@@ -18,7 +18,7 @@
 | 类别 | 已完成 | 待选 backlog | 缺口 |
 |---|---|---|---|
 | Static-Site | 2 | 17 | **7** |
-| AI-Agent | 0 | 5 | **3** |
+| AI-Agent | 0 | 3 | **3** |
 | Remote-Payment | 1 | 6 | **2** |
 | Side-Project | 0 | 4 | **2** |
 | **合计** | **3** | **32** | **12** |
@@ -83,7 +83,7 @@
 - **预计字数**：1,200-1,500
 - **分类**：Static-Site（部署类）
 - **联盟预留**：否
-- **AI 推荐理由**：D4 回滚留下的必补选题；M4.5 阶段 γ C2（OCM 第 16 步从直推 main 改 preview URL 流程）直接依赖本文上线
+- **AI 推荐理由**：D4 回滚留下的必补选题；M4.5 阶段 γ C2（TCM 第 16 步从直推 main 改 preview URL 流程）直接依赖本文上线
 - **状态**：🎯 **推荐中（B1 候选 1 — 默认走）**
 - ⚠️ **D4 红色警戒**：严禁 AI 代笔 first-person 调试经验；初稿必须 step-by-step 操作清单；翻译阶段仅字面对应
 
@@ -256,37 +256,19 @@
 - **预计字数**：1,200-1,500
 - **分类**：AI-Agent（部署类）
 - **联盟预留**：否（自身工具）
-- **AI 推荐理由**：你本人是 OCM 重度用户，独家一手实操壁垒；高 RPM 开发者受众
+- **AI 推荐理由**：你本人是 TCM 重度用户，独家一手实操壁垒；高 RPM 开发者受众
 - **状态**：待选 · 优先级 ★★★（集群首发必做）
 
-#### A2. Run OpenClaw on cheap VPS for local AI agent blog workflow
-- **来源**：`think-templates.md` #4
-- **关键词**：openclaw setup, openclaw vps deploy, ai agent gateway
-- **预计字数**：1,000-1,300
-- **分类**：AI-Agent（部署类）
-- **联盟预留**：是（VPS 联盟）
-- **AI 推荐理由**：OCM 网关是项目核心架构，专文稀缺
-- **状态**：待选 · 优先级 ★★
-
-#### A3. OpenClaw MCP server connection fail common fix for new user
-- **来源**：`think-templates.md` #19
-- **关键词**：openclaw mcp connection failed, mcp server timeout, ai agent debug
-- **预计字数**：800-1,000
-- **分类**：AI-Agent（排错类）
-- **联盟预留**：否
-- **AI 推荐理由**：MCP 协议排错专文稀缺，竞品文档不完整
-- **状态**：待选 · 优先级 ★★
-
-#### A4. How to integrate Claude Code with Hugo blog for auto content publishing
-- **来源**：2026-08-15 OCM 流水线实战
+#### A2. How to integrate Claude Code with Hugo blog for auto content publishing
+- **来源**：2026-08-15 TCM 流水线实战
 - **关键词**：claude code hugo integration, ai blog auto publish, content agent workflow
 - **预计字数**：1,200-1,500
 - **分类**：AI-Agent（部署类）
 - **联盟预留**：否
-- **AI 推荐理由**：项目内 OCM SOP 完整外化版，对外是稀缺资产
+- **AI 推荐理由**：项目内 TCM SOP 完整外化版，对外是稀缺资产
 - **状态**：待选 · 优先级 ★★（Money Hook 高潜）
 
-#### A5. Best low-cost server for practicing MCP AI agent local workflow
+#### A3. Best low-cost server for practicing MCP AI agent local workflow
 - **来源**：`think-templates.md` #30
 - **关键词**：cheap vps ai agent, mcp server hosting, local ai workflow vps
 - **预计字数**：1,000-1,300

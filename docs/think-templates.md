@@ -39,8 +39,7 @@ AI生成初稿，你本地尽量复现一遍步骤，补充真实踩坑点，不
 1. How to deploy Spring Boot Java application on budget VPS step‑by‑step
 2. Deploy Hugo site to Cloudflare Pages for beginners without CLI experience
 3. How to set up MiniMax API for local blog automation workflow
-4. Run OpenClaw on cheap VPS for local AI agent blog workflow
-5. How to install Java 1.8 on low‑cost VPS for development testing
+4. How to install Java 1.8 on low‑cost VPS for development testing
 6. Set up Nginx reverse proxy on budget VPS for Java web project
 7. How to configure custom domain for Cloudflare Pages Hugo blog
 8. Deploy simple Java web filter project on VPS for learning purpose
@@ -57,8 +56,7 @@ AI生成初稿，你本地尽量复现一遍步骤，补充真实踩坑点，不
 16. VPS SSH connection timeout beginner troubleshooting steps
 17. Spring boot provided scope tomcat local run class not found error
 18. MiniMax API connection refused local integration debug guide
-19. OpenClaw MCP server connection fail common fix for new user
-20. Nginx 403 forbidden static website simple step‑by‑step troubleshooting
+19. Nginx 403 forbidden static website simple step‑by‑step troubleshooting
 21. Cloudflare ERR_TOO_MANY_REDIRECTS custom domain fix for Hugo blog
 22. Maven dependency works in IDE but fails on VPS build environment
 23. Java Spring application cannot bind server port on fresh VPS instance

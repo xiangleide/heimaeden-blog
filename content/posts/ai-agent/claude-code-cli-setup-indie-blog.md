@@ -17,15 +17,22 @@ disableShare = false
     alt = "Terminal window running Claude Code CLI next to an editor showing a Hugo blog post in progress."
 
 # Draft exemption per docs/article-writing-workflow.md §附 G (D6 新增)
-# 原因：本文件是 [draft] 状态的中文初稿，OCM 阶段 7 英文版 commit 前必须移除此行
+# 原因：本文件是 [draft] 状态的中文初稿，TCM 阶段 7 英文版 commit 前必须移除此行
 lint_allow = ["cjk-body"]
 +++
 
-## 引言：5 分钟装好你的桌面 AI 写作搭档
+## 引言：把 Claude Code CLI 接到你的一人海外博客
+
+本文有两类读者，主线和附录的写法不一样：
+
+- **如果你已经在本机装好了 Claude Code CLI**（绝大多数从搜索结果进来的读者），**主线**（§步骤 1-3 + §常见错误 + §优缺点 + §组合对比）帮你做两件事：(1) 在 Hugo 博客项目里跑通端到端验证（读 `CLAUDE.md`、列 `.md` 文件、保存会话），(2) 通过单家 vs 组合的对比，决定要不要加路由层。
+- **如果你第一次装 CLI**（全新笔记本、刚拿到订阅），**§附录 A** 帮你从零走到"主线 §步骤 1"那一刻。建议先按 A.1-A.3 跑完，再回到主线。
+
+为什么这样切？已装读者打开本文不需要再花 5 分钟扫"npm 安装"的 10 行命令——你早走过了。本文主线以**已装读者视角**写，省略你已经走过的安装路径。
 
 如果你正在经营一个一人海外技术博客（周一选关键词、周二写大纲、周三打磨、周五部署），Claude Code CLI 是把 AI 搭档直接请到本地最便宜的一条路：不用 SSH 到 VPS，不用 GitHub Action，不用 Cloudflare Worker；安装一次，在任意项目目录下敲 `claude`，就拥有了一个常驻终端的 AI agent，可以读你的 Markdown、推结构、起草正文、跑 shell。
 
-本文走通**「全新 macOS/Linux 笔记本 → 你的 Hugo 博客目录里第一次启动 Claude Code 会话」的最短可行路径**，每个非显然步骤都标注截图位。范围明确限定在「一人 + 一台笔记本 + 一个博客」——MCP 服务器配置、多 agent 路由、自定义 hook 工程化、子 agent 编排都不在本文范围。
+范围明确限定在「一人 + 一台笔记本 + 一个博客」——MCP 服务器配置、多 agent 路由、自定义 hook 工程化、子 agent 编排都不在本文范围。
 
 ---
 
@@ -69,7 +76,7 @@ git init
 ### 4. 稳定的网络——地理相关注意
 
 > ⚠️ **提示**：如果你从中国大陆、香港、澳门、俄罗斯、伊朗或任何 Anthropic API 间歇可达的区域连入，请预先准备：
-> - 一条 HTTPS 代理 / VPN（CLI 1.x **暂不支持** HTTPS 代理——§步骤 4 会给环境变量兜底方案）
+> - 一条 HTTPS 代理 / VPN（CLI 1.x **暂不支持** HTTPS 代理——§步骤 2 会给环境变量兜底方案）
 > - 确认所用支付方式在 Claude API 跨境结算时可用
 >
 > 上述以外的地区可跳过本条。
@@ -78,121 +85,7 @@ git init
 
 ---
 
-## 步骤 0：动键盘前的踩坑搜索
-
-按下任何安装命令前，先花 5 分钟扫一遍社区报告的踩坑。Claude Code 生态更新快，本文的安装路径截至 2026 年 8 月可用，但**故障模式随地区和账号年龄略有差异**。
-
-### 搜索关键词
-
-| 渠道 | 关键词 |
-|---|---|
-| Reddit r/ClaudeAI | "claude code install failed" |
-| Reddit r/webdev | "claude code review" |
-| GitHub Issues（`anthropics/claude-code`） | 按最近更新时间排序 |
-| GitHub Issues（任意 npm 子包） | "claude-code-cli" |
-| Stack Overflow | tag:claude-code |
-| Anthropic Community | 筛选未解决 |
-
-### 你要写下来的东西
-
-3-5 条被引用最多的坑，每条记录：
-
-- 一句话症状
-- 链接源
-- 解决方式属于操作层（安装步骤）还是环境层（OS/网络/账号）
-
-这张清单进你的「踩坑工作文档」，装完后做交叉验证。
-
-### 为什么提前搜？
-
-1. 对可能卡哪一步形成心理预期
-2. 如果安装顺畅，这些坑变成正文§「社区已知问题」——EEAT 信任锚
-3. 如果卡住，已有搜索上下文，不必再花 30 分钟重新 Google
-
-![GitHub Issues page for anthropics/claude-code repository, showing open issues sorted by recent activity as a community health check before installing](/images/ai-agent/claude-code-cli-setup-indie-blog/step-0-community-search.png)
-
----
-
-## 步骤 1：通过 npm 安装 CLI
-
-打开 Terminal（macOS）/ 默认 shell（Linux）/ Windows Terminal，跑：
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-预期结尾输出类似：
-
-```
-+ @anthropic-ai/claude-code@X.Y.Z
-added 247 packages in 18s
-```
-
-验证安装成功：
-
-```bash
-claude --version
-```
-
-预期：形如 `1.0.18` 的版本号（实际数字看安装时的最新版）。
-
-### macOS / Linux 上报 `EACCES` 怎么办
-
-这是 **npm 全局安装最高频的失败**——npm 想往你的用户没权限的系统目录写。两种解法：
-
-1. **加 sudo 重装**（共享机器不推荐）：
-
-   ```bash
-   sudo npm install -g @anthropic-ai/claude-code
-   ```
-
-2. **把 npm 全局前缀改到用户目录**（推荐）：
-
-   ```bash
-   mkdir -p ~/.npm-global
-   npm config set prefix '~/.npm-global'
-   export PATH=~/.npm-global/bin:$PATH
-   # 把上面 export 行追加进 ~/.zshrc 或 ~/.bashrc 永久生效
-   ```
-
-   然后再跑 `npm install -g @anthropic-ai/claude-code`。
-
-![Terminal showing successful `npm install -g @anthropic-ai/claude-code` output, with username and hostname redacted for privacy](/images/ai-agent/claude-code-cli-setup-indie-blog/step-1-npm-install.png)
-
----
-
-## 步骤 2：进入博客目录首次启动
-
-进到 Hugo 项目根目录启动 CLI：
-
-```bash
-cd ~/projects/your-blog
-claude
-```
-
-首次启动会走一个 setup wizard，问你用哪种认证方式：
-
-```text
-Welcome to Claude Code!
-? Select authentication method: (Use arrow keys)
-❯ Anthropic Console (API key)
-  Claude Pro or Max subscription
-  Bedrock (AWS)
-  Vertex AI (GCP)
-```
-
-一人博客推荐路径：
-
-- **前置条件方案 A 选了按量付费** → 这里选 `Anthropic Console (API key)`，粘贴 `sk-ant-...` key
-- **前置条件方案 B 选了订阅** → 选 `Claude Pro or Max subscription`，CLI 会弹浏览器跳 claude.ai，登录、批准设备、回到终端
-
-> ⚠️ **如果身后有防火墙**：OAuth 步骤可能超时。在 `~/.zshrc` 或 `~/.bashrc` 设 `ANTHROPIC_AUTH_TOKEN=<你的 api-key>` 环境变量，走直接 API key 登录，不走浏览器握手。改完重启终端。
-
-> 📌 **已装读者跳过**：本节描述的是 Claude Code CLI 首次启动时的 setup wizard 菜单（OAuth / API key 选择）——这是一次性场景，已装好的读者直接跳到 §步骤 3。如果你是新装机者，跟着上面命令跑 `claude` 后会引导你完成 setup wizard。
-
----
-
-## 步骤 3：让 Claude 读你项目里的 `CLAUDE.md`
+## 步骤 1：让 Claude 读你项目里的 `CLAUDE.md`
 
 进到 Claude Code 的 REPL（提示符是 `>`），敲：
 
@@ -216,7 +109,7 @@ Read the CLAUDE.md at the project root and summarize the hard constraints in 5 b
 
 ---
 
-## 步骤 4：验证 CLI 已连上文件系统
+## 步骤 2：验证 CLI 已连上文件系统
 
 跑一个低风险的只读操作：
 
@@ -224,13 +117,13 @@ Read the CLAUDE.md at the project root and summarize the hard constraints in 5 b
 List all .md files under content/posts/ in this project.
 ```
 
-预期：Claude Code 打印一个列表（或树形）。**这证明安装完整链路通了**。如果报 "permission denied" 或 "filesystem not accessible"，跳到§常见错误。
+预期：Claude Code 打印一个列表（或树形）。**这证明安装完整链路通了**。如果报 "permission denied" 或 "filesystem not accessible"，跳到 §常见错误。
 
-> 📌 **可选验证**：本节要求 Claude Code 列出项目里的 `.md` 文件——如果 §步骤 3 读 `CLAUDE.md` 通了，文件系统链路就通了，本节可以跳过。读者也可以自己跑 `List all .md files under content/posts/ in this project.` 做一次端到端验证。
+> 📝 **截图省略说明**：本节省略实操截图——拍这张图需要先让 Claude REPL 在你的真实博客目录里跑命令，截图会暴露未发布草稿文件名（如果你有）。如果 §步骤 1 读 `CLAUDE.md` 通了，文件系统链路就通了，本节不需要额外视觉证据。
 
 ---
 
-## 步骤 5：保存会话，复用工作上下文
+## 步骤 3：保存会话，复用工作上下文
 
 `/exit`（或 `Ctrl+D`）退出 Claude Code。CLI 自动把对话存到 `~/.claude/projects/<hashed-cwd>/<session-id>.jsonl`——这意味着明天的会话可以 `/resume` 接着上次继续，不必重读 `CLAUDE.md`。
 
@@ -253,6 +146,8 @@ rm -rf ~/.claude/projects/<hash>
 
 ### 错误 1：`npm install -g` 之后 `claude: command not found`
 
+> 📌 **本节面向新装机者**：如果你走的是 §附录 A.2 还没装好，这节帮你修。已经装好且 `claude --version` 能跑通的，可以跳过。
+
 **根因**：npm 全局 prefix 不在你的 `$PATH` 里。
 
 **修复**：
@@ -262,10 +157,12 @@ npm config get prefix   # 看 npm 全局装到哪
 echo $PATH              # 看该目录在不在
 # 如果 prefix 是 /usr/local 之类的但不在 $PATH，两种解法：
 #   a) 直接走 prefix 下的 bin 子目录：$(npm config get prefix)/bin/claude --version
-#   b) 加进 PATH（见 §步骤 1.2 用户目录 prefix 兜底）
+#   b) 加进 PATH（见 §附录 A.2 用户目录 prefix 兜底）
 ```
 
 ### 错误 2：API Key 登录后立刻 `401 Unauthorized`
+
+> 📌 **本节面向新装机者**：setup wizard 走 API key 粘贴路径的看这里。
 
 **根因**：API key 复制时带了首尾空白，或贴到了错的环境变量里。
 
@@ -277,9 +174,11 @@ echo $PATH              # 看该目录在不在
 
 ### 错误 3：OAuth 阶段网络超时（大陆用户）
 
+> 📌 **本节面向新装机者 + 大陆网络环境**：OAuth 浏览器握手在这类网络下经常超时。
+
 **根因**：Anthropic API 端点在国内间歇可达性差。
 
-**修复**：配置 `ANTHROPIC_AUTH_TOKEN` 环境变量走 API key 直连，不走 OAuth（见 §步骤 2 警告）。仍超时就在终端层级套 SOCKS5/HTTPS 代理（CLI 1.x 不原生支持 `HTTPS_PROXY`——可用 `proxychains4` 包一层）。
+**修复**：配置 `ANTHROPIC_AUTH_TOKEN` 环境变量走 API key 直连，不走 OAuth（见 §附录 A.3 警告）。仍超时就在终端层级套 SOCKS5/HTTPS 代理（CLI 1.x 不原生支持 `HTTPS_PROXY`——可用 `proxychains4` 包一层）。
 
 ---
 
@@ -387,8 +286,118 @@ cd ~/projects/your-blog
 claude
 ```
 
-…回到上次离开的地方，`CLAUDE.md` 约束自动加载。从这里出发，本系列的下一篇会讲**「把 Claude Code 接到你的 Hugo 博客做日常内容发布」**——发布流水线、内容自动化、OCM 风格的多 agent 工作流都在那篇登场。
+…回到上次离开的地方，`CLAUDE.md` 约束自动加载。从这里出发，本系列的下一篇会讲**「把 Claude Code 接到你的 Hugo 博客做日常内容发布」**——发布流水线、内容自动化、TCM 风格的多 agent 工作流都在那篇登场。
 
 ---
 
-> 📌 **结尾 demo 已省略**：本文专注于"装好 CLI"这一关，文末不放 demo 截图。完整的 Claude Code + Hugo 集成 demo 见本系列下一篇（[待发布]）。
+## 附录 A：全新装机者从这里开始
+
+> 📌 **本节读者**：第一次装 Claude Code CLI 的读者按 A.1 → A.2 → A.3 顺序跑完，再回到主线 §步骤 1。已装读者可跳过整个附录。
+
+### A.1：动键盘前的踩坑搜索
+
+按下任何安装命令前，先花 5 分钟扫一遍社区报告的踩坑。Claude Code 生态更新快，本文的安装路径截至 2026 年 8 月可用，但**故障模式随地区和账号年龄略有差异**。
+
+#### 搜索关键词
+
+| 渠道 | 关键词 |
+|---|---|
+| Reddit r/ClaudeAI | "claude code install failed" |
+| Reddit r/webdev | "claude code review" |
+| GitHub Issues（`anthropics/claude-code`） | 按最近更新时间排序 |
+| GitHub Issues（任意 npm 子包） | "claude-code-cli" |
+| Stack Overflow | tag:claude-code |
+| Anthropic Community | 筛选未解决 |
+
+#### 你要写下来的东西
+
+3-5 条被引用最多的坑，每条记录：
+
+- 一句话症状
+- 链接源
+- 解决方式属于操作层（安装步骤）还是环境层（OS/网络/账号）
+
+这张清单进你的「踩坑工作文档」，装完后做交叉验证。
+
+#### 为什么提前搜？
+
+1. 对可能卡哪一步形成心理预期
+2. 如果安装顺畅，这些坑变成正文§「社区已知问题」——EEAT 信任锚
+3. 如果卡住，已有搜索上下文，不必再花 30 分钟重新 Google
+
+![GitHub Issues page for anthropics/claude-code repository, showing open issues sorted by recent activity as a community health check before installing](/images/ai-agent/claude-code-cli-setup-indie-blog/step-0-community-search.png)
+
+### A.2：通过 npm 安装 CLI
+
+打开 Terminal（macOS）/ 默认 shell（Linux）/ Windows Terminal，跑：
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+预期结尾输出类似：
+
+```
++ @anthropic-ai/claude-code@X.Y.Z
+added 247 packages in 18s
+```
+
+验证安装成功：
+
+```bash
+claude --version
+```
+
+预期：形如 `1.0.18` 的版本号（实际数字看安装时的最新版）。
+
+#### macOS / Linux 上报 `EACCES` 怎么办（用户目录 prefix 兜底）
+
+这是 **npm 全局安装最高频的失败**——npm 想往你的用户没权限的系统目录写。两种解法：
+
+1. **加 sudo 重装**（共享机器不推荐）：
+
+   ```bash
+   sudo npm install -g @anthropic-ai/claude-code
+   ```
+
+2. **把 npm 全局前缀改到用户目录**（推荐）：
+
+   ```bash
+   mkdir -p ~/.npm-global
+   npm config set prefix '~/.npm-global'
+   export PATH=~/.npm-global/bin:$PATH
+   # 把上面 export 行追加进 ~/.zshrc 或 ~/.bashrc 永久生效
+   ```
+
+   然后再跑 `npm install -g @anthropic-ai/claude-code`。
+
+![Terminal showing successful `npm install -g @anthropic-ai/claude-code` output, with username and hostname redacted for privacy](/images/ai-agent/claude-code-cli-setup-indie-blog/step-1-npm-install.png)
+
+### A.3：进入博客目录首次启动
+
+进到 Hugo 项目根目录启动 CLI：
+
+```bash
+cd ~/projects/your-blog
+claude
+```
+
+首次启动会走一个 setup wizard，问你用哪种认证方式：
+
+```text
+Welcome to Claude Code!
+? Select authentication method: (Use arrow keys)
+❯ Anthropic Console (API key)
+  Claude Pro or Max subscription
+  Bedrock (AWS)
+  Vertex AI (GCP)
+```
+
+一人博客推荐路径：
+
+- **前置条件方案 A 选了按量付费** → 这里选 `Anthropic Console (API key)`，粘贴 `sk-ant-...` key
+- **前置条件方案 B 选了订阅** → 选 `Claude Pro or Max subscription`，CLI 会弹浏览器跳 claude.ai，登录、批准设备、回到终端
+
+> ⚠️ **如果身后有防火墙**：OAuth 步骤可能超时。在 `~/.zshrc` 或 `~/.bashrc` 设 `ANTHROPIC_AUTH_TOKEN=<你的 api-key>` 环境变量，走直接 API key 登录，不走浏览器握手。改完重启终端。
+
+完成 setup wizard 后，回到主线 §步骤 1（让 Claude 读 `CLAUDE.md`）继续。

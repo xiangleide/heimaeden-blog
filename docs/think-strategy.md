@@ -71,7 +71,7 @@
 
 ### 1. 最高优先级：AI代码Agent实操集群（占比15%）
 
-- 核心内容：OpenClaw、MiniMax、OpenCode、Claude-Code、MCP协议本地搭建、排错、工作流实操
+- 核心内容：Claude Code、MiniMax、MCP协议本地搭建、排错、工作流实操
 - 优势：一手实操壁垒、市场稀缺、广告RPM高、可联动VPS联盟变现
 - 适配自身AI自动化博客生产流水线，内容完全自产自证
 

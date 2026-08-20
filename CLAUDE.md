@@ -2,7 +2,7 @@
 
 > **Auto-loaded by Claude Code on every session start.** This file is the
 > **single source of truth for hard constraints**. Soft strategy lives in
-> `README.md` §7. Workflow SOP lives in `Content-Agent-ACM.md`.
+> `README.md` §7. Workflow SOP lives in `Content-Agent-TCM.md`.
 >
 > **Project clock**:
 > - Start date = **2026-08-11** (D0, domain registration)
@@ -15,7 +15,7 @@
 
 - **Site**: https://heimaeden.com — Hugo static blog, PaperMod theme
 - **Owner intent**: English-language overseas tech blog + affiliate marketing
-- **AI combo (OCM)**: OpenClaw gateway ➔ MiniMax (default tier) ➔ Claude (translation / SEO tier)
+- **AI combo (TCM)**: MiniMax-M3 (default tier) ➔ Claude Opus 4.6 (translation / SEO tier)
 - **Hard-coded locale**: `locale = "en-us"`, `hasCJKLanguage = false`
 
 ---
@@ -26,7 +26,7 @@
 /                       # repo root
 ├── README.md           # strategic roadmap (do not move sections around)
 ├── CLAUDE.md           # this file (hard constraints)
-├── Content-Agent-ACM.md  # OCM 6-stage SOP
+├── Content-Agent-TCM.md  # TCM 6-stage SOP
 ├── hugo.toml           # site config (TOML only)
 ├── archetypes/default.md
 ├── assets/
@@ -227,7 +227,7 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 - ❌ Committing a screenshot with visible PII (see §3.3.4 — no recall once public)
 - ❌ CJK characters in any shipped `.md` body or alt text
 - ❌ Affiliate `<a>` without shortcode wrap and proximity disclosure
-- ❌ Bypassing the OCM SOP (e.g. manually pushing to `main` without `lint-post.sh` passing)
+- ❌ Bypassing the TCM SOP (e.g. manually pushing to `main` without `lint-post.sh` passing)
 - ❌ Running `rm -rf public`, `rm -rf resources`, `git push --force`, `git reset --hard` without explicit user instruction
 
 ---
@@ -238,7 +238,7 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 |---|---|
 | "What stage are we in?" | `README.md §7.3 Forward Battle Map` |
 | "What just happened?" | `README.md §6 Dynamic Notes` |
-| "How do I run OCM stage X?" | `Content-Agent-ACM.md` |
+| "How do I run TCM stage X?" | `Content-Agent-TCM.md` |
 | "How do I write a new long-form post?" | `docs/article-writing-workflow.md` (8-step collaboration SOP) |
 | "Is this hard rule?" | this file (§3) |
 | "Is this preference?" | `README.md §5 Operational Precautions` |
@@ -280,6 +280,6 @@ Current known issues live in §6 of `README.md`. When triaged, mirror them here 
 
 Default order of resolution:
 
-1. Re-read relevant section of `README.md` (strategy) and `Content-Agent-ACM.md` (workflow).
+1. Re-read relevant section of `README.md` (strategy) and `Content-Agent-TCM.md` (workflow).
 2. Re-read §3 above — does this violate a hard constraint?
 3. If still unclear, **ask the user** before any file write. Never assume.

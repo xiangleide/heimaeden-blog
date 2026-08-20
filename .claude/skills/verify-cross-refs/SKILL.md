@@ -12,7 +12,7 @@ Pre-commit gate：验证文章里所有 `§`-style 锚点指向实际 heading，
 - `commit-with-prefix` skill 串行调用（Gate B）
 - 用户说："verify cross-refs" / "check references" / "检查锚点"
 - 文章重构 / 章节重排后立即验证
-- OCM 阶段 4（[zh-final] 中文定稿）完成后
+- TCM 阶段 4（[zh-final] 中文定稿）完成后
 
 ## 检查项（2 类）
 

@@ -11,7 +11,7 @@ Pre-commit gate：验证文章里所有图片引用合规（路径 + 尺寸 + al
 
 - `commit-with-prefix` skill 串行调用（Gate A）
 - 用户说："verify images" / "check image paths" / "image audit"
-- OCM 阶段 5（英文翻译 + lint）之前自动调用
+- TCM 阶段 5（英文翻译 + lint）之前自动调用
 - 新截图加入 `assets/images/` 后立即验证
 
 ## 检查项（4 条硬约束）

@@ -218,7 +218,7 @@
     * 🔓 **阶段 β B1 = 100%**（口径变更见下条）：A2 + A3 双篇英文版正式上线。原始 B1 写的是"Jamstack 专栏话题"，实际今天落地的 A2 是 Jamstack、A3 是 Remote-Payment —— **话题口径超出原 B1 范围**，但"长文数量"超额完成（实际 3 篇长文：A1 + A2 + A3，话题覆盖 2 个集群）。
     * ⚠️ **口径变更记录**：B1 原定义为"Jamstack 第二 + 第三篇"，实际落地改为"任意话题第二 + 第三篇英文长文"。后续 D6 选题按 topic-pool.md 自由推进，话题多样性优于单一专栏深挖。
     * 🔓 **下游解锁**：
-        * B2（WorldFirst 实战 Money Hook）—— 现在可按 OCM SOP 第 5-7 阶段（中文初稿 → 用户确认 → 翻译）启动。
+        * B2（WorldFirst 实战 Money Hook）—— 现在可按 TCM SOP 第 5-7 阶段（中文初稿 → 用户确认 → 翻译）启动。
         * AI-Agent 集群首篇 —— 现在 nav 空分类 404 UX 坑仍未关闭，但 B2 / AI-Agent 任一篇先出即可关闭。
 
 ---
@@ -252,7 +252,7 @@
 **判定**：⚡ **Hyper-Velocity（极速档）**。
 
 **加速度来源解构**：
-- OCM 自动化流水线的体感加速：**~40-50%**（内容生成 + 配置改写）
+- TCM 自动化流水线的体感加速：**~40-50%**（内容生成 + 配置改写）
 - 个人对欧美出海链路已具备 pre-knowledge：**~30%**（跳过早期认知坑）
 - 真实剩余速度债（即被高速度掩盖的问题）：
 
@@ -290,7 +290,7 @@
 #### 📍 阶段 γ — M4.5 索引与权重过渡期（D6 → D14）
 
 - [ ] **C1** 监控 GSC 索引曲线，单篇 7 天未被索引则手动 fetch + 检查 robots
-- [ ] **C2** Cloudflare Pages 开启 Preview Branches，OCM SOP 第 16 步从「直推 main」改为「feature 分支 → preview URL → 人工审 → merge main」
+- [ ] **C2** Cloudflare Pages 开启 Preview Branches，TCM SOP 第 16 步从「直推 main」改为「feature 分支 → preview URL → 人工审 → merge main」
 - [ ] **C3** `themes/PaperMod/` 由整库内联迁移到 Hugo Modules，同步更新 `.gitignore`（追加 `.hugo_build.lock`、`public/`、`resources/`）
 - [ ] **C4** 已发布 2 篇 `posts/` 重构为 Page Bundles（同名文件夹里 `index.md` + 图片），启用 `Resize` + `WebP` 优化线图
 
