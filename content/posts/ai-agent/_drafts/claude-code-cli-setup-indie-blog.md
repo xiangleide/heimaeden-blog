@@ -2,7 +2,7 @@
 title = "How to Set Up Claude Code CLI for a One-Person Overseas Tech Blog in 2026"
 description = "Step-by-step Claude Code CLI installation for solo indie bloggers running an English-language tech site — no VPS, no MCP, no AI engineering background required."
 date = 2026-08-17T11:00:00Z
-draft = false
+draft = true
 tags = ["Claude Code", "AI Coding Agent", "Indie Blogger", "Tutorial"]
 categories = ["AI-Agent"]
 
@@ -13,11 +13,9 @@ comments = true
 disableShare = false
 
 [cover]
-    image = "ai-agent/claude-code-cli-setup-indie-blog/cover.jpg"
+    image = "ai-agent/_drafts/claude-code-cli-setup-indie-blog/cover.png"
     alt = "Terminal window running Claude Code CLI next to an editor showing a Hugo blog post in progress."
 
-# Draft exemption per docs/article-writing-workflow.md §附 G (D6 新增)
-# 原因：本文件是 [draft] 状态的中文初稿，TCM 阶段 7 英文版 commit 前必须移除此行
 lint_allow = ["cjk-body"]
 +++
 
@@ -44,8 +42,6 @@ lint_allow = ["cjk-body"]
 
 - **方案 A — 按量付费 API**：注册 [Anthropic Console](https://console.anthropic.com/) 账号 → 用 Visa/Mastercard 充值至少 \$5 → 创建一个 API key（形如 `sk-ant-...`）。对每周写 1-3 篇的一人博客最便宜。
 - **方案 B — Pro（\$20/月）或 Max（\$200/月）订阅**：在 [claude.ai](https://claude.ai) 订阅 → 在 profile 设置里启用开发者 CLI。月费更高但网页端也能用，且速率限制是方案 A 的 5 倍以上，浏览器端也用 Claude 的用户更划算。
-
-> 📎 **【无联盟占位】** Claude 是平台方自营工具，按 FTC 邻近披露规则不适合植入联盟链接。
 
 ### 2. Node.js 18 或更高（CLI 安装器要求）
 
@@ -261,11 +257,6 @@ export ANTHROPIC_AUTH_TOKEN=sk-xxxxx
 - **每周 1-3 篇博客，全用英文**：单家 Claude Code 足够，无需路由层
 - **每周 3+ 篇 + 涉及中文场景**：考虑加国产模型，手改 env var 切换
 - **一人 SaaS / 跨 SaaS / 高频次 API**：必须上路由层（CCR 或 LiteLLM），否则 token 成本失控 + 单点故障率高
-
-> **初稿边界声明**：本节基于公开 anchor，不含 first-hand 实操数据。第二版时再补：
-> - 实际切换的 endpoint 配置
-> - 路由规则在 blog 工作流里的实测表现
-> - token 成本横评
 
 ## 最后贴士
 
