@@ -221,6 +221,43 @@
         * B2（WorldFirst 实战 Money Hook）—— 现在可按 TCM SOP 第 5-7 阶段（中文初稿 → 用户确认 → 翻译）启动。
         * AI-Agent 集群首篇 —— 现在 nav 空分类 404 UX 坑仍未关闭，但 B2 / AI-Agent 任一篇先出即可关闭。
 
+*   **2026-08-21 状态校准 / D10（draft 文章暴露事故复盘 + mock-reader 实战 + 5 项策略决策）**：
+    * 🎯 **核心事故**：commit `581555b` 把 claude-code-cli-setup-indie-blog 移到 `_drafts/` + `draft=true`，本地 dev server 启动后**仍展示该文章**——通过 `/categories/ai-agent/` 分类页（旧 HTML fallback）+ 文章 URL（旧产物 fallback）双重路径暴露。
+    * 🚨 **根因链（3 层叠加）**：
+        1. Hugo `--gc` 只清理 `resources/` 缓存，**不清理 `public/` 旧 HTML**（Hugo 设计如此，不是 bug）
+        2. Hugo dev server 增量构建 fallback——找不到 source page 时**直接服务 `public/` 旧 HTML**
+        3. Hugo 把"page 从 published 变 draft"**不触发** taxonomy 列表页 rebuild（仅"有新 page"才触发）
+    * 🔧 **修复序列**（用户授权 2 次精确 `rm -rf public/` 子目录）：
+        * 第一轮：rm 3 个 draft 相关目录（`public/posts/ai-agent/claude-code-cli-setup-indie-blog/` + `public/tags/claude-code/` + `public/images/ai-agent/claude-code-cli-setup-indie-blog/`）—— 修文章 URL 与 tag 页
+        * 第二轮：rm 整个 `public/categories/`（11 文件）—— 修分类页 fallback
+        * 验证：`grep -r "claude-code-cli\|Set Up Claude Code" public/` 全站 0 处匹配
+    * 🟢 **生产安全确认**：CF Pages 部署时跑 `hugo`（无 flag）默认排除 draft + 从 source 重建 `public/`——线上**不会暴露**。事故范围**仅限本地 dev**。
+    * 🆕 **新 SOP**（待写入 CLAUDE.md §3）：
+        * 未来把文章改 draft 时：**先** `hugo --gc` + **删 `public/` 对应目录**，**再** `hugo server --buildDrafts=false`
+        * dev server 标准启动命令：`hugo server --baseURL http://localhost:1313 --buildDrafts=false --disableFastRender`
+        * 验证命令：`grep -r "draft-title-substring" public/` 看是否有 stale 引用
+    * 📚 **mock-reader-feedback 实战**（commit `7d2cdee` 的 skill MVP 首次跑）：
+        * 跑 P1（强华陆 dev）+ P3（西方 indie hacker）+ P5（选型决策者）三件套
+        * 4 份报告归档：`docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`
+        * 关键发现：文章定位漂移（同时服务 P1+P3+P5 但两边都不够深）；4 处 dev-internal marker 翻译前必清
+    * 🚫 **claude-code-cli-setup-indie-blog 暂存决策**（commit `581555b`）：
+        * 用户决定"暂存不删"——理由：未来可能重启或基于本文产出新内容
+        * 实施：清 3 处 dev-internal marker + 补 `cover.png`（cp 自 `step-3-claudemd-summary.png`, 1440×699 符合 §3.3.2 上限）+ 移到 `_drafts/` 子目录
+        * 重启路径：mock-reader 报告留决策痕迹；§对比表格 TCO + §组合对比拆分两条 todo
+    * 🚫 **think-issue.md 归档**：
+        * 旧文件 `docs/think-issue.md`（D8 = 2026-08-19 创建）要求 AI 自动改写英文文章（违反 §3.8 rule 5/6）
+        * 重命名为 `docs/think-issue-rejected-2026-08-19.md` + 加拒绝理由块（4 条违规点明确引用 §3.8 rule 5/6）+ 保持 untracked
+        * 决策依据：违反 §3.8 rule 5（翻译字面对应，不改写）/ rule 6（无锚点不写结论句）/ 绕过 mock-reader-feedback SOP / 页脚建议未走 extended.css 集中管理
+    * ⚠️ **lint-post.sh 发现 11 处 HTML 注释内 CJK**：
+        * 位置：`beginners-practical-guide.md` L86-91, L110 + `static-blog-setup-guide.md` L131, L142, L168, L180
+        * 内容：dev-internal 截图位标记（`<!-- 📸 截图位 #N ... -->`），Hugo 不渲染到页面
+        * 处理：暂保留（与 D5 第二次校准 commit `b751bdb` 描述"11 处 HTML 注释内 CJK 保留"一致）
+        * 改进建议：lint-post.sh 未来可豁免 `<!-- ... -->` 注释内 CJK，避免误报
+    * 🔓 **解锁**：
+        * B2（WorldFirst Money Hook）—— 阶段 β 唯一欠产出，可按 TCM SOP 启动
+        * dev server 已稳定运行（task `bc7f4c3`, port 1313）—— 可继续视觉 QA / 部署验证
+        * 13 commit 待 push（含本次 `581555b`）—— 用户 ack 后推 origin/main
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
