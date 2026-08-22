@@ -67,7 +67,7 @@ lint_allow = ["cjk-body"]
 
 #### 2.2.1 起因
 
-D4 上午，我决定用 AI 代笔 A 系列第一篇英文长文（1787 词 troubleshooting）。任务交接给 AI 时，我给的不是「我的真实实操笔记」，而是**主题关键词 + 期望字数 + 一句文案框架**。
+D4 上午，我决定用 AI 代笔 A 系列第一篇英文长文。任务交接给 AI 时，我给的不是「我的真实实操笔记」，而是**主题关键词 + 期望字数 + 一句文案框架**。
 
 AI 输出一篇 1787 词英文 troubleshooting 长文，commit `4b8a8ea`（2026-08-15 22:00:49 +0800）：
 
@@ -77,14 +77,13 @@ D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide
 ```
 
 注意 commit message 末尾的 "I hit" 字样——**AI 已经污染了对自己工作的描述**，这是 self-contamination 现象，不只是正文。
-
-<留空 first-person 实操段：你当时把任务交给 AI 的真实考量是什么？比如「我以为单篇代笔不算 production output」「我默认 AI 会比照我之前三篇的 style」「我当天赶时间想冲 K 个数」等 — 用你原话，不超过 100 字>
+我起初想尝试一下完全让AI来为我编写一遍文章，一开始我默认 AI 会比照我之前三篇的 style进行编写，以此来快速填充线上博客中的文章数量，但最后的结果很差。
 
 #### 2.2.2 published 后自检触发
 
 晚间文章已经上线 Cloudflare Pages。我开始重读自己刚发的文章...
 
-<留空 first-person 实操段：你重读时哪一句 first-person 让你意识到不对劲？具体哪一句你查了 git history / Hugo 历史 / 自己 memory 才发现不存在？— 用你原话，不超过 150 字>
+当我读到【For my first two weeks of running heimaeden.com ...】时意识到了不对劲，写这篇文章的时间离我刚开始搭建博客根本不到两周，文章中ai站在我的角度杜撰了这部分内容，这引起的我的警惕，等我将整篇文章阅读完成之后，发现事情远比我想的严重，文章中ai杜撰了许多内容与实际不符。
 
 #### 2.2.3 撤销
 
@@ -95,13 +94,11 @@ Revert "D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide"
 This reverts commit 4b8a8ea9858a55637c9f0388badfcc832fa4b40b.
 ```
 
-<留空 first-person 实操段：你 revert 时的心情（警觉？失望？理性的"下次怎么防"？）— 用你原话，不超过 80 字>
+revert完成，检查线上确保没有这边文章之后，手指离开键盘的那一刻，我的冷汗才冒出来。处理完当前最紧急的事情，脑中想的内容还很多，有警觉，有失望，而更多的是考虑到如何避免后续类似的问题发生，我必须对claude新增一些铁律。
 
 #### 2.2.4 当晚不补 SOP，冷处理一夜
 
-当晚我没动 `CLAUDE.md` — 先退出 Claude 会话冷处理一夜。
-
-<留空 first-person 实操段：你当时为何选择「先睡觉明天再补」而不是「当场补 rule 1」？— 用你原话，不超过 100 字>
+当晚我没动 `CLAUDE.md` ，由于现场已经保留下来了，线上博客处于初始阶段，基本不会有读者看到那篇失败的文章，于是我决定先退出 Claude 会话冷处理一夜，制定哪些铁律需要仔细的思考，我需要平复一下自己的心情，并在得到充足的休息之后才能够完成更精准的判断与决策。
 
 #### 2.2.5 D5 下午：系统化 6 条 rule
 
