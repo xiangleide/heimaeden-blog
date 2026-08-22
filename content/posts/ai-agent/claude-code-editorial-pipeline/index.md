@@ -42,7 +42,7 @@ lint_allow = ["cjk-body"]
 5. **阶段五：英文翻译与合规清洗**（AI 字面对应 + 地道英语 + SEO 结构）
 6. **阶段六：本地编译与人工最终审核**（hugo --gc + 浏览器视觉 + git push）
 
-![Six-stage editorial pipeline from topic-pick to publish — Stage 1 topic selection, Stage 2 Chinese draft, Stage 3 hands-on debugging, Stage 4 second-pass polish, Stage 5 English translation, Stage 6 local build + manual review](/images/ai-agent/claude-code-editorial-pipeline/pipeline-overview.png)
+![Six-stage editorial pipeline (draw.io). Stage 1 Topic Pick + Money Hook, AI web search recommends 3 candidates, user picks 1. Stage 2 Local File + Chinese Draft, AI writes .md, draft commit, hold push. Stage 3 Hands-on Operation + Agent Debug, user runs commands, agent pairs to fix local config. Stage 4 Second-pass Chinese Polish, AI integrates debugging + feedback + screenshots, zh-final commit. Stage 5 English Translation + Cleanup, AI word-for-word + idiomatic English + SEO, remove lint_allow. Stage 6 Local Build + Manual Review, hugo --gc, browser visual, git push on user ack. Loops from Stage 6 back to Stage 1 labeled 'commit'.](/images/ai-agent/claude-code-editorial-pipeline/pipeline-overview.png)
 
 ---
 
