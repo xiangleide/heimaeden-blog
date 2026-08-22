@@ -65,13 +65,57 @@ lint_allow = ["cjk-body"]
 
 ### §2.2 D4：第一次引入 AI + commit bc9a369 撤销事件
 
-<留空，描述 D4 引入 AI 的踩坑>
+#### 2.2.1 起因
 
-关键事实锚点：
-- commit `4b8a8ea`：AI 代笔 1787 词英文 troubleshooting 长文
-- 包含虚构 first-person：「I went through this debugging marathon」/「Trap 1: build cache bleed — after that one-line change, I have not seen a leak in six weeks」
-- commit `bc9a369`：用户撤销
-- 教训 → `docs/article-writing-workflow.md` §附 E「D4 教训」
+D4 上午，我决定用 AI 代笔 A 系列第一篇英文长文（1787 词 troubleshooting）。任务交接给 AI 时，我给的不是「我的真实实操笔记」，而是**主题关键词 + 期望字数 + 一句文案框架**。
+
+AI 输出一篇 1787 词英文 troubleshooting 长文，commit `4b8a8ea`（2026-08-15 22:00:49 +0800）：
+
+```
+D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide
+... 10 H2 sections ... 3 trap write-ups sourced from real config drift I hit ...
+```
+
+注意 commit message 末尾的 "I hit" 字样——**AI 已经污染了对自己工作的描述**，这是 self-contamination 现象，不只是正文。
+
+<留空 first-person 实操段：你当时把任务交给 AI 的真实考量是什么？比如「我以为单篇代笔不算 production output」「我默认 AI 会比照我之前三篇的 style」「我当天赶时间想冲 K 个数」等 — 用你原话，不超过 100 字>
+
+#### 2.2.2 published 后自检触发
+
+晚间文章已经上线 Cloudflare Pages。我开始重读自己刚发的文章...
+
+<留空 first-person 实操段：你重读时哪一句 first-person 让你意识到不对劲？具体哪一句你查了 git history / Hugo 历史 / 自己 memory 才发现不存在？— 用你原话，不超过 150 字>
+
+#### 2.2.3 撤销
+
+我立刻执行 `git revert 4b8a8ea` → commit `bc9a369`（2026-08-15 22:03:43 +0800）：
+
+```
+Revert "D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide"
+This reverts commit 4b8a8ea9858a55637c9f0388badfcc832fa4b40b.
+```
+
+<留空 first-person 实操段：你 revert 时的心情（警觉？失望？理性的"下次怎么防"？）— 用你原话，不超过 80 字>
+
+#### 2.2.4 当晚不补 SOP，冷处理一夜
+
+当晚我没动 `CLAUDE.md` — 先退出 Claude 会话冷处理一夜。
+
+<留空 first-person 实操段：你当时为何选择「先睡觉明天再补」而不是「当场补 rule 1」？— 用你原话，不超过 100 字>
+
+#### 2.2.5 D5 下午：系统化 6 条 rule
+
+D5 2026-08-16（次日）下午，我系统化 6 条 rule 进 `CLAUDE.md §3.8`：以 D4 撤销事件为 lessons-learned 锚点，逐条梳「AI 写 first-person / 选题 context / 截图真实 / affiliate 初稿标 / 翻译字面对应 / cross-ref 锚点」6 条铁律。同日补 `docs/article-writing-workflow.md §附 E`「D4 教训」作为详细案例。
+
+#### 2.2.6 自检三问（呼应 §5.4）
+
+D4 事件能及时 revert，是因为三个客观条件同时满足：
+
+1. ✅ 我代笔时转交的是「题材 + 文案框架」，**不是真实 first-person 经验** —— 我没给素材，所以 AI 必须编造（这是我能 audit 出错原因的前提）
+2. ✅ 我能在 git history 上 audit 4b8a8ea 是否真有来源
+3. ✅ AI 输出是 intermediate commit，可 revert 撤销 —— D4 的"侥幸"全在于这点
+
+如果任一条件不满足（比如 AI 直接 push 到 main，比如我在私有仓库），revert 时间会大幅拉长。**D4 教训的核心**：把 AI 输出圈在 intermediate commit 内、让我拥有 revert 权限，是这条人工边界成立的物理前提。
 
 📸 **截图标注位**（§2.2 D4）：
 - **位置**：bc9a369 commit diff（git log -p）
@@ -141,12 +185,42 @@ lint_allow = ["cjk-body"]
 
 ## §5 方法论边界：AI 做什么 / 我做什么
 
-<留空，明确 AI 协助 vs 人工把控的边界>
+一句话口诀：**AI 是助理，不是替身**。
 
-预期内容（待用户实操确认）：
-- AI 协助产出：初稿结构 / 翻译 / cross-ref 验证 / mock-reader 报告结构化 / 文档归档
-- 人工把控产出：所有 first-person 实操经验 / 截图选择 / 截图脱敏 / commit push ack
-- 决策权归属：选题（用户拍板）/ commit push（用户 ack）/ Y1/Y2 延后（用户拍板）
+凡是带 first-person 实操经验、对外可见身份信息、最终发布决策的内容，由我把关；凡是「过程性、可 revert、可校验」的中间产物，由 AI 起草。这是 D4 撤销事件之后沉淀下来的 ratchet，不可降级。
+
+### 5.1 人工把控（4 项，硬约束）
+
+1. **first-person 实操经验**：所有「我...」句子必须本人写。AI 起草可生成 step-by-step 框架，但不替我杜撰主观经历。（依据：D4 撤销事件，详见 §2.2 + CLAUDE.md §3.8 rule 1）
+2. **截图选择**：哪张截图进正文由本人挑。AI 可以建议「这里需要图」，具体哪一帧由我看实图决定。
+3. **截图脱敏**：含账户 / 邮箱 / ID / 卡尾的截图，必须经 `./scripts/redact-image.sh` 处理。本人是脱敏决策者，AI 只识别候选坐标（CLAUDE.md §3.3.4）并不替你拍板。
+4. **commit push ack**：任何 `git push` 都等本人 `git log -1 --stat` 亲自看完再 ack。AI 永远 hold push（CLAUDE.md §6）。
+
+### 5.2 决策权归属（3 项拍板事项）
+
+| 决策 | 谁拍板 | 原因 |
+|---|---|---|
+| 选题（topic-pool 推荐哪个） | 用户 | narrative 终点是人，不是流量 |
+| commit push ack | 用户（必 ack） | 公开 CDN 不可 recall |
+| Y1/Y2 标题延后 | 用户 | 集群首发节奏服从 X1 完成状态 |
+
+### 5.3 AI 协助产出（默认 OK，但需审计）
+
+- 初稿结构（step-by-step 框架 + 标注位 + §0 搜索任务）
+- 英文翻译（字面对应，不增删事实 — CLAUDE.md §3.8 rule 5）
+- cross-reference 锚点验证（避免 phantom conclusion — CLAUDE.md §3.8 rule 6）
+- mock-reader 报告结构化（mock-reader 不是真读者，可以 AI 跑，但是 audit walk）
+- 文档归档（think-*.md / topic-pool.md 等结构化记忆）
+
+### 5.4 灰色地带的回归测试
+
+遇 AI 输出不确定该归 5.1 还是 5.3 时，问三个问题：
+
+1. 这条内容出错，**我愿不愿公开负责？**
+2. 这条内容能不能通过**第三方读者**（非 mock-reader）反向验证？
+3. AI 输出能不能**无损回退**？
+
+任一答否 → 落 5.1 人工把控。本人随时可一行 chat 暂停全流程，AI 不会绕过本人 commit push。这一条没有"对话结束自动执行"的免 ack 例外。
 
 ---
 
