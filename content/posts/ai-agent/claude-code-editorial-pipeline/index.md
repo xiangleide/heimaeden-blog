@@ -50,12 +50,17 @@ lint_allow = ["cjk-body"]
 
 ### §2.1 D0-D3：纯人工时代，Stack Overflow 排错
 
-<留空，描述 D0-D3 阶段的人工时代状态>
+#### 2.1.1 起点：D0 域名抢注 + D3 首篇长文上线
 
-关键事实锚点：
-- D0 = 2026-08-11 域名抢注
-- D3 = 2026-08-13 Hugo + Cloudflare Pages 流水线 + 首篇长文上线
-- 当时每篇文章耗时 = ~6 小时（查文档 + 试错 + 写 + 截图 + 翻译）
+2026-08-11 21:36（`8cf52ea` first commit）我抢注 heimaeden.com 域名。3 天后 2026-08-13 22:50（`504d0d1` "feat: complete图文并茂hugo deployment traps guide with elite screenshots"）Hugo + Cloudflare Pages 流水线 + 首篇英文长文上线。中间做的事：DNS / Cloudflare Pages 后台 / Hugo theme 配置 / 主题切换 SVG 渲染 / 字体优化 / 部署 hook — 全手工。
+
+<留空 first-person 实操段：你当时为什么想开始做 heimaeden.com？3 天内完成上线怎么做到的 / 最卡哪？≤150 字>
+
+#### 2.1.2 6 小时/篇：当时最耗时 / 最痛苦的环节
+
+D0-D3 期间 + 之后一段时间，每篇文章平均耗时 ~6 小时：查 Hugo / PaperMod 文档 + Stack Overflow 排错 + 写 + 截图 + 中文→英文翻译 + 多语言 SEO 设置。这 6 小时分散在我所有 daily 清醒时段，没有 AI 加速，只有 github issue 和 self-debug。
+
+<留空 first-person 实操段：6 小时里最浪费时间的具体环节是？查文档 / 排错 / 截图 / 翻译 / 多语言切换？≤120 字>
 
 📸 **截图标注位**（§2.1 D0-D3）：
 - **位置**：Hugo Cloudflare Pages 后台截图（D3.5 之前的版本）
@@ -122,14 +127,23 @@ D4 事件能及时 revert，是因为三个客观条件同时满足：
 
 ### §2.3 D5：双篇并行 + lint_allow 临时方案
 
-<留空，描述 D5 三件套 commit>
+#### 2.3.1 三件套 commit 上下文
 
-关键事实锚点：
-- `800d460` D5 infra: cover.html + render-link.html + img responsive CSS
-- `a5bb839` D5 content: A2/A3 long-form polish
-- `b751bdb` Translate A2 + A3 to English (final)
-- 11 处 HTML 注释内 CJK 保留（D5 决策，待 lint-post.sh 后续改进）
-- 阶段性结果 = 双篇英文版上线，原始中文版入 git 历史
+D5 2026-08-16 我做了 3 个相互独立的 commit：
+
+- `800d460` 22:30:52 — D5: infra（cover assets lookup + external link rel=noopener + img responsive CSS）
+- `a5bb839` 22:31:01 — D5: content（A2/A3 long-form polish，covers / captions / alt text / blockquote cleanup）
+- `b751bdb` 22:50:39 — Translate A2 + A3 to English (final)
+
+三个 commit 在 ~20 分钟内连发。这是 D4 `bc9a369` 撤销事件后第一次对全 content cluster 的批量 polish / publish 尝试。
+
+<留空 first-person 实操段：你为什么选择「双篇同期上线」而不是「一篇一篇」？是 batch 出版策略 vs 安全感？≤120 字>
+
+#### 2.3.2 lint_allow 临时方案
+
+11 处 HTML 注释内 CJK 保留 —— 当时为什么用 `lint_allow = ["cjk-body"]` 折中而不是立刻修 `lint-post.sh` 让 HTML 注释豁免 CJK？
+
+<留空 first-person 实操段：≤100 字>
 
 📸 **截图标注位**（§2.3 D5）：
 - **位置**：3 commit 序列的 git log graph
@@ -139,14 +153,23 @@ D4 事件能及时 revert，是因为三个客观条件同时满足：
 
 ### §2.4 D10：mock-reader-feedback skill 引入（commit 7d2cdee）
 
-<留空，描述 D10 mock-reader 实战>
+#### 2.4.1 mock-reader skill 的 trigger
 
-关键事实锚点：
-- `7d2cdee` mock-reader-feedback skill MVP + GSC wiring
-- `ee25372` archive 4 mock-reader reports（P1/P3/P5 + P1-vs-P3）
-- `8dedff0` add 3 P5-driven backlog entries (S10-S12)
-- 4 份报告归档：`docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`
-- 关键发现：定位漂移 / dev-internal marker / 首屏错位
+D10 2026-08-20 我意识到「AI 选 + AI 写」还缺第三方视角 —— AI 不会对自己的输出反向 audit，需要一个人格模拟读者。D10 当晚 17 分钟内连发 3 commit：
+
+- `7d2cdee` 22:24:14 mock-reader-feedback skill MVP + GSC wiring
+- `8dedff0` 22:33:57 add 3 P5-driven selection backlog entries (S10-S12)
+- `ee25372` 22:41:16 archive 4 mock-reader reports（P1/P3/P5 + P1-vs-P3）
+
+4 份报告归档：`docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`。关键发现：定位漂移（dev-internal marker 泄漏）/ 首屏错位 / 标题 AI 农场味。
+
+<留空 first-person 实操段：你怎么想到 mock-reader、为什么 5 persona 而不是其他设计？≤120 字>
+
+#### 2.4.2 P1/P3/P5 跑过的最反直觉反馈
+
+P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三个 persona 反馈出 4 份报告。最大的盲点之一是「dev-internal marker 泄漏」——我以为写在 background description 里就 self-evident 不影响，对 P3 来说完全反觉。
+
+<留空 first-person 实操段：哪一条反馈让你最没想到、最触动了？≤150 字>
 
 📸 **截图标注位**（§2.4 D10）：
 - **位置**：4 份 mock-reader 报告文件列表（`ls docs/feedback/`）
