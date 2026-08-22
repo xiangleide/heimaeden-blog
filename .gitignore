@@ -18,3 +18,8 @@ scripts/gsc-key.json
 # Default ignored so docs/feedback/ stays out of git; user can `git add -f`
 # individual reports they want to archive.
 docs/feedback/
+
+# Claude Code scratch dir (e.g. mermaid-build temp rendering pipeline)
+# Transient build artifacts + node_modules; never tracked. Clean up via
+# `rm -rf .claude/scratch/<build-name>/` after use.
+.claude/scratch/
