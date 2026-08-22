@@ -288,14 +288,15 @@
 - **AI 推荐理由**：你本人是 TCM 重度用户，独家一手实操壁垒；高 RPM 开发者受众
 - **状态**：待选 · 优先级 ★★★（集群首发必做）
 
-#### A2. How to integrate Claude Code with Hugo blog for auto content publishing
+#### A2. How to integrate Claude Code with Hugo blog for auto content publishing（**X1 主文章**）
 - **来源**：2026-08-15 TCM 流水线实战
-- **关键词**：claude code hugo integration, ai blog auto publish, content agent workflow
-- **预计字数**：1,200-1,500
+- **关键词**：claude code workflow, editorial pipeline, content automation, solo blog workflow
+- **预计字数**：1,400-1,800
 - **分类**：AI-Agent（部署类）
-- **联盟预留**：否
+- **联盟预留**：否（品牌+互链型，非 Money Hook）
 - **AI 推荐理由**：项目内 TCM SOP 完整外化版，对外是稀缺资产
-- **状态**：待选 · 优先级 ★★（Money Hook 高潜）
+- **详细规划**：`docs/think-x1-claude-code-pipeline.md`（D11 敲定叙事框架=编辑流水线 / 主关键词=Claude Code workflow / 节奏=拆 2 篇主+系列）
+- **状态**：🎯 **推荐中（X1 选题已敲定，2026-08-22 D11）** · 优先级 ★★★（D11 升级：原 ★★ → ★★★）
 
 #### A3. Best low-cost server for practicing MCP AI agent local workflow
 - **来源**：`think-templates.md` #30
