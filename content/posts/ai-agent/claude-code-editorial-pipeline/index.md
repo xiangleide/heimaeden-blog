@@ -20,19 +20,29 @@ lint_allow = ["cjk-body"]
 
 ## 引言（150 词）：11 天、6 次主迭代、从 6 小时到 2 小时/篇
 
-<留空，等用户实操后填>
+11 天前我在 NameCheap 抢注了 heimaeden.com 域名。当时只想搭一个 Hugo + Cloudflare Pages 流水线，没打算用 AI 写文章。今天（D11）我发了 3 篇英文长文，从「6 小时/篇、Stack Overflow 排错」进化到「2 小时/篇、AI 结对 debug」。中间发生 1 次 AI 代笔 + 我当场撤销的事故（commit `bc9a369`），沉淀 6 条铁律到 CLAUDE.md §3.8；最近引入 mock-reader skill 跑 P1/P3/P5 反馈，反向 audit 出多个我未意识到的盲点。
 
 > **本节事实基线**（已锚定，无需重写）：
 > - 项目启动日 = 2026-08-11 (D0)
 > - 当前日期 = 2026-08-22 (D11)
 > - 实际发文数 = 3 篇长文（A1 / A2 / A3）
-> - 演进史来源 = `README.md §6` + `CLAUDE.md §3.8` 教训条目 + `docs/think-x1-claude-code-pipeline.md`
+> - 演进史来源 = `README.md §六` + `CLAUDE.md §3.8` 教训条目 + `docs/think-x1-claude-code-pipeline.md`
 
 ---
 
 ## §1 现状：当前 6 阶段 TCM SOP（每阶段 50 字简述）
 
-<留空，每阶段 50 字简述>
+**阶段一：选题拦截与商业埋点确认** — AI 联网扫候选 3 题，给 SEO/差异化/合规比对，押到 Money Hook（联盟位）。Narrative 终点的第 0 道闸。
+
+**阶段二：本地文件创建与中文初稿注入** — AI 自动写盘 .md + front matter（lint_allow / cover / §0 搜索），[draft] commit、hold push。
+
+**阶段三：真机实操与 Agent 实时 Debug** — 用户跑命令 + 截图；Agent 端到端看错误日志结对修配置。这是 AI 做事与提供 context 的强耦合区。
+
+**阶段四：第二版中文美化** — AI 整合实操反馈 / 报错 / 截图，去 step-by-step 框架、引入 first-person，[zh-final] commit。删多于加。
+
+**阶段五：英文翻译与合规清洗** — AI 字面对应 + 地道英语 + SEO + remove lint_allow；翻译不增删事实（CLAUDE.md §3.8 rule 5）。
+
+**阶段六：本地编译与人工最终审核** — `hugo --gc` + 浏览器视觉 + 脱敏校验；用户 ack 后 `git push`，闭环回阶段一。最后仍是 human gate。
 
 阶段速览（对齐 Content-Agent-TCM.md 的 6 阶段）：
 1. **阶段一：选题拦截与商业埋点确认**（AI 联网搜索 + 推荐 3 候选 → 用户选 1）
