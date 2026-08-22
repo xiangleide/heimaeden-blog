@@ -42,11 +42,7 @@ lint_allow = ["cjk-body"]
 5. **阶段五：英文翻译与合规清洗**（AI 字面对应 + 地道英语 + SEO 结构）
 6. **阶段六：本地编译与人工最终审核**（hugo --gc + 浏览器视觉 + git push）
 
-📸 **截图标注位**（§1）：
-- **位置**：6 阶段流程图（建议用 Mermaid / draw.io 画）
-- **脱敏要求**：无
-- **文件命名**：`pipeline-overview.png`
-- **放哪**：Page Bundle 同目录
+![Six-stage editorial pipeline from topic-pick to publish — Stage 1 topic selection, Stage 2 Chinese draft, Stage 3 hands-on debugging, Stage 4 second-pass polish, Stage 5 English translation, Stage 6 local build + manual review](/images/ai-agent/claude-code-editorial-pipeline/pipeline-overview.png)
 
 ---
 
