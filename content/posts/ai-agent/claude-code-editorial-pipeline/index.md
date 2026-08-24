@@ -10,8 +10,8 @@ showToc = true
 TocOpen = true
 
 [cover]
-    image = "ai-agent/claude-code-editorial-pipeline/cover.jpg"
-    alt = "Editorial pipeline workflow diagram showing six stages from topic-pick to publish"
+    image = "ai-agent/claude-code-editorial-pipeline/cover.png"
+    alt = "Laptop glowing mint-green on a dark developer desk at night, code editor and commit graph on screen, mechanical keyboard in foreground, faded six-stage pipeline loop in background"
 +++
 
 ## Introduction: 11 Days, 4 Major Iterations, from 6 Hours to 2 Hours per Post
