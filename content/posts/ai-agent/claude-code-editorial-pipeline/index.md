@@ -100,11 +100,7 @@ D0-D3 期间 + 之后一段时间，每篇文章平均耗时 ~6 小时：查 Hug
 
 6 小时里最耗时间的是**翻译 + 多语言 SEO 设置 + Hugo 主题切换时的 SVG 渲染 / 字体优化**——这三块都不属于「写文章」本身，但每一项都能单独卡半天。D0-D3 那段时间没有 AI 加速，我唯一能做的就是 github issue 翻页 + 自己 stack overflow 排错 + 一遍遍本地 `hugo --gc` + 浏览器反复刷预览图。
 
-📸 **截图标注位**（§2.1 D0-D3）：
-- **位置**：Hugo Cloudflare Pages 后台截图（D3.5 之前的版本）
-- **脱敏要求**：移除 dev-internal 标识
-- **文件命名**：`d3-manual-era-hugo-cf.png`
-- **放哪**：Page Bundle 同目录
+![Hugo Cloudflare Pages dashboard from the manual era (D0-D3) before Claude Code automation. Shows DNS, Hugo theme, and Cloudflare Pages settings before the editorial pipeline existed.](/images/ai-agent/claude-code-editorial-pipeline/d3-manual-era-hugo-cf.png)
 
 ### §2.2 D4：第一次引入 AI + commit bc9a369 撤销事件
 
@@ -157,11 +153,7 @@ D4 事件能及时 revert，是因为三个客观条件同时满足：
 
 如果任一条件不满足（比如 AI 直接 push 到 main，比如我在私有仓库），revert 时间会大幅拉长。**D4 教训的核心**：把 AI 输出圈在 intermediate commit 内、让我拥有 revert 权限，是这条人工边界成立的物理前提。
 
-📸 **截图标注位**（§2.2 D4）：
-- **位置**：bc9a369 commit diff（git log -p）
-- **脱敏要求**：无 PII
-- **文件命名**：`d4-revert-commit-diff.png`
-- **放哪**：Page Bundle 同目录
+![git log -p output showing bc9a369 reverting commit 4b8a8ea. Two minutes fifty-four seconds between the AI-generated post landing at 22:00:49 and the human-driven revert at 22:03:43 on 2026-08-15.](/images/ai-agent/claude-code-editorial-pipeline/d4-revert-commit-diff.png)
 
 ### §2.3 D5：双篇并行 + lint_allow 临时方案
 
@@ -183,11 +175,7 @@ D5 2026-08-16 我做了 3 个相互独立的 commit：
 
 11 处全是 dev-internal 截图位标记（`<!-- 📸 截图位 #N ... -->`），Hugo 不渲染注释到页面，dev-trace 只在源码层可见。改脚本触及 CLAUDE.md §3.2 硬约束，等 D10 触发再统一修更稳妥；`lint_allow = ["cjk-body"]` 是「保 lint pass + 不动 SOP」的最小代价选择。
 
-📸 **截图标注位**（§2.3 D5）：
-- **位置**：3 commit 序列的 git log graph
-- **脱敏要求**：无
-- **文件命名**：`d5-three-commit-graph.png`
-- **放哪**：Page Bundle 同目录
+![Git log graph showing three D5 commits 800d460, a5bb839, b751bdb pushed within twenty minutes. Two infrastructure commits plus the content polish commit, then the English translation commit at 22:50:39.](/images/ai-agent/claude-code-editorial-pipeline/d5-three-commit-graph.png)
 
 ### §2.4 D10：mock-reader-feedback skill 引入（commit 7d2cdee）
 
@@ -209,11 +197,7 @@ P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三�
 
 P3 反馈里最触动的不是「标题农场味」也不是「首屏错位」——而是 **「dev-internal marker 泄漏」**。我以为写在 background description 里的 self-evident 备注（什么字段自填 / 配置占位 / 阶段标识）读者看不到，对 P3 来说完全反直觉：他们从描述里读出「作者明显还在搭建期」，瞬间信任感掉档。P1 那边反而给了一个反向确认：「命令行 EACCES 那段太短，应再补 2-3 张具体报错截图」——这是我 mock 之前自己没意识到的盲点。
 
-📸 **截图标注位**（§2.4 D10）：
-- **位置**：4 份 mock-reader 报告文件列表（`ls docs/feedback/`）
-- **脱敏要求**：无
-- **文件命名**：`d10-mock-reader-reports.png`
-- **放哪**：Page Bundle 同目录
+![ls docs/feedback/ output listing four mock-reader reports for claude-code-cli-setup-indie-blog: P1, P3, P5, and P1-vs-P3. Three commits on 2026-08-20 within 17 minutes archived the persona-driven feedback trail.](/images/ai-agent/claude-code-editorial-pipeline/d10-mock-reader-reports.png)
 
 ---
 
