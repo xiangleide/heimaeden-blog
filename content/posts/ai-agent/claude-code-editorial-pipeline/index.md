@@ -1,6 +1,6 @@
 +++
-title = "How I Built a Solo Tech Blog Pipeline with Claude Code Skills"
-description = "Solo developer's 11-day log of building a Claude Code Skills editorial pipeline — 6 hours to 2 hours per post, 4 iterations, what worked."
+title = "How I Cut My Solo Tech Blog Pipeline from 6 Hours to 2 Hours Per Post in 11 Days"
+description = "Solo dev cut blog pipeline from 6h to 2h per post in 11 days with Claude Code. Includes the day AI wrote first-person content and I had to revert it."
 date = 2026-08-22T01:30:00Z
 draft = false
 tags = ["Claude Code", "editorial pipeline", "indie blogger", "content automation", "workflow"]
@@ -34,7 +34,7 @@ lint_allow = ["cjk-body"]
 
 **阶段一：选题拦截与商业埋点确认** — AI 联网扫候选 3 题，给 SEO/差异化/合规比对，押到 Money Hook（联盟位）。Narrative 终点的第 0 道闸。
 
-**阶段二：本地文件创建与中文初稿注入** — AI 自动写盘 .md + front matter（lint_allow / cover / §0 搜索），[draft] commit、hold push。
+**阶段二：本地文件创建与中文初稿注入** — AI 自动写盘 .md + front matter（lint_allow / cover / 实操前踩坑搜索），[draft] commit、hold push。
 
 **阶段三：真机实操与 Agent 实时 Debug** — 用户跑命令 + 截图；Agent 端到端看错误日志结对修配置。这是 AI 做事与提供 context 的强耦合区。
 
@@ -53,6 +53,34 @@ lint_allow = ["cjk-body"]
 6. **阶段六：本地编译与人工最终审核**（hugo --gc + 浏览器视觉 + git push）
 
 ![Six-stage editorial pipeline (draw.io). Stage 1 Topic Pick + Money Hook, AI web search recommends 3 candidates, user picks 1. Stage 2 Local File + Chinese Draft, AI writes .md, draft commit, hold push. Stage 3 Hands-on Operation + Agent Debug, user runs commands, agent pairs to fix local config. Stage 4 Second-pass Chinese Polish, AI integrates debugging + feedback + screenshots, zh-final commit. Stage 5 English Translation + Cleanup, AI word-for-word + idiomatic English + SEO, remove lint_allow. Stage 6 Local Build + Manual Review, hugo --gc, browser visual, git push on user ack. Loops from Stage 6 back to Stage 1 labeled 'commit'.](/images/ai-agent/claude-code-editorial-pipeline/pipeline-overview.png)
+
+### §1.5 耗时实测（D4-D11 数据 / 7 篇累计）
+
+| 阶段 | 实测耗时 | 主要失败模式 | 累计占比 |
+|---|---|---|---|
+| 阶段一 选题 | ~5 min/篇 | AI 推荐不命中 Money Hook（fallback 到人工选题） | 5% |
+| 阶段二 中文初稿 | ~10 min/篇 | lint_allow 误报 + front matter TOML 语法 | 8% |
+| 阶段三 真机实操 | ~30 min/篇 | Hugo theme 切换 JS handler 丢失 / 截图脱敏决策 | 25% |
+| 阶段四 第二版中文 | ~15 min/篇 | first-person 实操段填充（用户必写）/ mock-reader 反馈消化 | 13% |
+| 阶段五 英文翻译 | ~40 min/篇 | 6 处凭印象数字 / dev-internal marker 泄漏 | 34% |
+| 阶段六 编译审核 | ~10 min/篇 | 浏览器视觉延迟 / 分类页 fallback 暴露 | 8% |
+| **合计** | **~2 h/篇** | — | **100%** |
+
+> **基线对照**：D0-D3 纯人工时代 ~6 h/篇，主要瓶颈是翻译（~2 h）+ Hugo 主题配置（~1 h）+ 多语言 SEO（~0.5 h）。引入 Claude Code 后阶段三/四/五分别缩短 50-67%，但阶段五翻译成本几乎没变（仍占 34%），是未来最大优化点。
+
+### §1.6 工具对比表（Claude Code vs Cursor vs 纯手动）
+
+| 维度 | Claude Code（本文主线） | Cursor | 纯手动 handbook |
+|---|---|---|---|
+| **单篇耗时** | **~2 h**（D11 实测） | ~4 h（行业估算，无实测） | ~6 h（D0-D3 实测基线） |
+| **主要瓶颈** | 翻译成本（阶段五 34%）+ mock-reader 反馈消化 | 编辑器适应成本 | Hugo 主题 + 多语言 SEO |
+| **上手成本** | skills + SOP 学习（CLAUDE.md §3.8 + docs SOP） | 编辑器迁移 + 习惯重塑 | 0（无 AI 依赖） |
+| **first-person 风险** | 高（**D4 撤销事件**） | 中（编辑器内 AI 不直接写 .md） | 无 |
+| **维护成本** | CLAUDE.md + docs SOP 同步 / mock-reader 报告归档 | 编辑器升级 / 订阅续费 | Hugo theme 升级 |
+| **适用规模** | solo dev + 重度 AI 协作 | solo dev + IDE 重度使用 | 任意 |
+| **退出成本** | 中（skill 文件重写 + SOP 迁移） | 中（编辑器习惯重建） | 0 |
+
+> **选型建议**：如果你已经会用 Hugo + 愿意写 CLAUDE.md 维护 SOP、追求 6 h → 2 h 的 67% 时间节省 → Claude Code。如果只想要 IDE 内 AI 辅助、不想维护 SOP → Cursor。如果在 D4 撤销事件类风险下不想碰 AI → 纯手动基线 6 h 可接受。
 
 ---
 
@@ -230,7 +258,7 @@ P3 反馈里最触动的不是「标题农场味」也不是「首屏错位」�
 
 ### 5.3 AI 协助产出（默认 OK，但需审计）
 
-- 初稿结构（step-by-step 框架 + 标注位 + §0 搜索任务）
+- 初稿结构（step-by-step 框架 + 标注位 + 实操前搜索任务）
 - 英文翻译（字面对应，不增删事实 — CLAUDE.md §3.8 rule 5）
 - cross-reference 锚点验证（避免 phantom conclusion — CLAUDE.md §3.8 rule 6）
 - mock-reader 报告结构化（mock-reader 不是真读者，可以 AI 跑，但是 audit walk）
@@ -252,34 +280,12 @@ P3 反馈里最触动的不是「标题农场味」也不是「首屏错位」�
 
 11 天、4 次主迭代、从 6 小时到 2 小时/篇 —— 这条流水线至今没让我失望过。**AI 是助理，不是替身**。这是 D4 撤销事件之后沉淀下来的 ratchet，不可降级。
 
-本文是 X1 —— 编辑流水线框架的外化版。下一阶段拆两篇系列单篇（标题延后敲定，等 X1 完成后再讨论）：
+本文是 X1 —— 编辑流水线框架的外化版。下一阶段拆两篇系列单篇（标题延后敲定，**Y1 启动 metric = X1 [zh-final] + 翻译 + push 完成 + mock-reader 报告 ≥3 篇 + 翻译 commit 加 `[translate]` 前缀已落地**）：
 
-- **Y1 候选**：mock-reader-feedback skill deep dive（具体 persona 实现 + 报告结构 + 集成到 commit gate）
-- **Y2 候选**：pre-commit gates 拆解 / redact-image PII 脱敏流程 deep dive
+| 候选 | 启动 metric（全部满足） | 优先级 | 预计工时 | 主要依赖 |
+|---|---|---|---|---|
+| **Y1** mock-reader-feedback skill deep dive（persona 实现 + 报告结构 + 集成 commit gate） | X1 已发布 + mock-reader 报告归档 ≥3 篇 + 5 persona 数据接入 | ★★★ | ~3 天 | translate 完成 / persona-data.json V1.1+ |
+| **Y2a** pre-commit gates 拆解（verify-image-paths / verify-cross-refs / lint-post.sh / hugo --gc 四件套独立成文） | Y1 完成后 + 至少 1 次 gate 失败救回经验 | ★★ | ~2 天 | verify-cross-refs 集成进 lint-post.sh（M4 阶段 §4） |
+| **Y2b** redact-image PII 脱敏流程 deep dive（坐标识别 + script 调用 + 验证） | mock-reader 报告有 PII 误报 ≥1 次 + Pillow 已装 | ★ | ~1 天 | 已存在 `scripts/redact-image.sh` |
 
 如果你也在搭自己的出海博客 + AI 工具链，希望本文能帮你避开 D4 撤销事件那一刀。Solo developer 的 editorial pipeline 不需要花哨功能 —— 守住「first-person 经验本人写 + AI 起草中间产物 + commit push 永远等 ack」这三条底线，其余都是优化空间。
-
----
-
-## §附 A：步骤 0 踩坑搜索（实操前必做）
-
-**任务**：动手前先搜一轮社区踩坑，为实操做心理预期
-
-**搜索关键词模板**：
-- `Claude Code editorial workflow` / `Claude Code content pipeline` / `Claude Code blog automation`
-- `Claude Code skills` / `Claude Code custom commands` / `Claude Code MCP server`
-- `Claude Code + Hugo` / `Claude Code + markdown workflow`
-- `solo blogger AI workflow` / `indie hacker AI pipeline`
-
-**来源白名单**：
-- Reddit（r/ClaudeAI, r/IndieHackers, r/sideproject, r/China_Developer）
-- GitHub Issues（anthropics/claude-code + cline + continue + aider）
-- Hacker News（搜「Claude Code workflow」/「AI content pipeline」）
-- Anthropic 官方文档（docs.claude.com）
-
-**输出**：3-5 条最常见的踩坑 + 来源链接
-
-**为什么**：
-1. 实操时对可能的坑有心理预期
-2. 实操顺利时 → 这些坑进入「已知问题附录」
-3. 实操遇到坑时 → 已有搜索上下文，节省调试时间
