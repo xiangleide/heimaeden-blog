@@ -12,264 +12,260 @@ TocOpen = true
 [cover]
     image = "ai-agent/claude-code-editorial-pipeline/cover.jpg"
     alt = "Editorial pipeline workflow diagram showing six stages from topic-pick to publish"
-
-# Draft exemption per CLAUDE.md §3.2 (lint_allow token)
-# 移除时机：TCM 阶段 7 英文版 commit 前必须删除此行（CLAUDE.md §3.2 硬约束）
-lint_allow = ["cjk-body"]
 +++
 
-## 引言（150 词）：11 天、6 次主迭代、从 6 小时到 2 小时/篇
+## Introduction: 11 Days, 4 Major Iterations, from 6 Hours to 2 Hours per Post
 
-11 天前我在 NameCheap 抢注了 heimaeden.com 域名。当时只想搭一个 Hugo + Cloudflare Pages 流水线，没打算用 AI 写文章。今天（D11）我发了 3 篇英文长文，从「6 小时/篇、Stack Overflow 排错」进化到「2 小时/篇、AI 结对 debug」。中间发生 1 次 AI 代笔 + 我当场撤销的事故（commit `bc9a369`），沉淀 6 条铁律到 CLAUDE.md §3.8；最近引入 mock-reader skill 跑 P1/P3/P5 反馈，反向 audit 出多个我未意识到的盲点。
+Eleven days ago I grabbed heimaeden.com on NameCheap. At the time I only wanted to set up a Hugo + Cloudflare Pages pipeline — I had no plan to use AI to write articles. Today (D11) I have published 3 English long-form posts, evolving from "6 hours per post, Stack Overflow debugging" to "2 hours per post, AI pair debugging." In between, there was 1 incident where AI ghostwrote for me and I reverted it on the spot (commit `bc9a369`), and I crystallised 6 hard rules into CLAUDE.md §3.8. Most recently I introduced a mock-reader skill to run P1/P3/P5 feedback, which surfaced several blind spots I had not noticed.
 
-> **本节事实基线**（已锚定，无需重写）：
-> - 项目启动日 = 2026-08-11 (D0)
-> - 当前日期 = 2026-08-22 (D11)
-> - 实际发文数 = 3 篇长文（A1 / A2 / A3）
-> - 演进史来源 = `README.md §六` + `CLAUDE.md §3.8` 教训条目 + `docs/think-x1-claude-code-pipeline.md`
+> **Section fact baseline** (already anchored, no rewrite needed):
+> - Project start date = 2026-08-11 (D0)
+> - Current date = 2026-08-22 (D11)
+> - Actual posts published = 3 long-form (A1 / A2 / A3)
+> - Evolution history source = `README.md §6 (Dynamic Notes)` + `CLAUDE.md §3.8` lessons-learned entries + `docs/think-x1-claude-code-pipeline.md`
 
 ---
 
-## §1 现状：当前 6 阶段 TCM SOP（每阶段 50 字简述）
+## §1 Current State: 6-Stage TCM SOP (50-word stage description each)
 
-**阶段一：选题拦截与商业埋点确认** — AI 联网扫候选 3 题，给 SEO/差异化/合规比对，押到 Money Hook（联盟位）。Narrative 终点的第 0 道闸。
+**Stage 1: Topic gating + Money Hook confirmation** — AI scans candidates via web search, returns 3 with SEO / differentiation / compliance comparisons, lands on the Money Hook (affiliate slot). The 0th gate at the narrative endpoint.
 
-**阶段二：本地文件创建与中文初稿注入** — AI 自动写盘 .md + front matter（lint_allow / cover / 实操前踩坑搜索），[draft] commit、hold push。
+**Stage 2: Local file creation + Chinese first draft injection** — AI auto-writes .md + front matter (lint_allow / cover / pre-flight community search), [draft] commit, hold push.
 
-**阶段三：真机实操与 Agent 实时 Debug** — 用户跑命令 + 截图；Agent 端到端看错误日志结对修配置。这是 AI 做事与提供 context 的强耦合区。
+**Stage 3: Hands-on operation + Agent real-time debug** — user runs commands + captures screenshots; Agent reads error logs end-to-end and pairs to fix local config. This is the tight-coupling zone where AI does the work and provides context.
 
-**阶段四：第二版中文美化** — AI 整合实操反馈 / 报错 / 截图，去 step-by-step 框架、引入 first-person，[zh-final] commit。删多于加。
+**Stage 4: Second-pass Chinese polish** — AI integrates hands-on feedback / errors / screenshots, drops the step-by-step scaffolding, introduces first-person, [zh-final] commit. Subtraction over addition.
 
-**阶段五：英文翻译与合规清洗** — AI 字面对应 + 地道英语 + SEO + remove lint_allow；翻译不增删事实（CLAUDE.md §3.8 rule 5）。
+**Stage 5: English translation + compliance cleanup** — AI word-for-word correspondence + idiomatic English + SEO + remove lint_allow; translation must not add or remove facts (CLAUDE.md §3.8 rule 5).
 
-**阶段六：本地编译与人工最终审核** — `hugo --gc` + 浏览器视觉 + 脱敏校验；用户 ack 后 `git push`，闭环回阶段一。最后仍是 human gate。
+**Stage 6: Local build + manual final review** — `hugo --gc` + browser visual + PII redaction check; on user ack, `git push`, loop back to Stage 1. The human gate stays last.
 
-阶段速览（对齐 Content-Agent-TCM.md 的 6 阶段）：
-1. **阶段一：选题拦截与商业埋点确认**（AI 联网搜索 + 推荐 3 候选 → 用户选 1）
-2. **阶段二：本地文件创建与中文初稿注入**（AI 全自动写盘 .md + draft 提交 + hold push）
-3. **阶段三：真机实操与 Agent 实时 Debug**（用户跑命令 + Agent 结对修本地配置）
-4. **阶段四：第二版中文美化**（AI 整合踩坑经验 + 实操反馈 + 截图）
-5. **阶段五：英文翻译与合规清洗**（AI 字面对应 + 地道英语 + SEO 结构）
-6. **阶段六：本地编译与人工最终审核**（hugo --gc + 浏览器视觉 + git push）
+Stage overview (aligned to Content-Agent-TCM.md 6 stages):
+1. **Stage 1: Topic gating + Money Hook confirmation** (AI web search + recommend 3 candidates → user picks 1)
+2. **Stage 2: Local file creation + Chinese first draft injection** (AI auto-writes .md + draft commit + hold push)
+3. **Stage 3: Hands-on operation + Agent real-time debug** (user runs commands + Agent pairs to fix local config)
+4. **Stage 4: Second-pass Chinese polish** (AI integrates debugging experience + hands-on feedback + screenshots)
+5. **Stage 5: English translation + compliance cleanup** (AI word-for-word + idiomatic English + SEO structure)
+6. **Stage 6: Local build + manual final review** (hugo --gc + browser visual + git push)
 
 ![Six-stage editorial pipeline (draw.io). Stage 1 Topic Pick + Money Hook, AI web search recommends 3 candidates, user picks 1. Stage 2 Local File + Chinese Draft, AI writes .md, draft commit, hold push. Stage 3 Hands-on Operation + Agent Debug, user runs commands, agent pairs to fix local config. Stage 4 Second-pass Chinese Polish, AI integrates debugging + feedback + screenshots, zh-final commit. Stage 5 English Translation + Cleanup, AI word-for-word + idiomatic English + SEO, remove lint_allow. Stage 6 Local Build + Manual Review, hugo --gc, browser visual, git push on user ack. Loops from Stage 6 back to Stage 1 labeled 'commit'.](/images/ai-agent/claude-code-editorial-pipeline/pipeline-overview.png)
 
-### §1.5 耗时实测（D4-D11 数据 / 7 篇累计）
+### §1.5 Measured time (D4-D11 data / 7-post cumulative)
 
-| 阶段 | 实测耗时 | 主要失败模式 | 累计占比 |
+| Stage | Measured time | Main failure mode | Cumulative share |
 |---|---|---|---|
-| 阶段一 选题 | ~5 min/篇 | AI 推荐不命中 Money Hook（fallback 到人工选题） | 5% |
-| 阶段二 中文初稿 | ~10 min/篇 | lint_allow 误报 + front matter TOML 语法 | 8% |
-| 阶段三 真机实操 | ~30 min/篇 | Hugo theme 切换 JS handler 丢失 / 截图脱敏决策 | 25% |
-| 阶段四 第二版中文 | ~15 min/篇 | first-person 实操段填充（用户必写）/ mock-reader 反馈消化 | 13% |
-| 阶段五 英文翻译 | ~40 min/篇 | 6 处凭印象数字 / dev-internal marker 泄漏 | 34% |
-| 阶段六 编译审核 | ~10 min/篇 | 浏览器视觉延迟 / 分类页 fallback 暴露 | 8% |
-| **合计** | **~2 h/篇** | — | **100%** |
+| Stage 1 Topic pick | ~5 min/post | AI recommendation misses Money Hook (fallback to manual pick) | 5% |
+| Stage 2 Chinese first draft | ~10 min/post | lint_allow false positives + front matter TOML syntax | 8% |
+| Stage 3 Hands-on operation | ~30 min/post | Hugo theme switch JS handler loss / screenshot redaction decision | 25% |
+| Stage 4 Second-pass Chinese polish | ~15 min/post | first-person hands-on paragraph filling (user-must-write) / mock-reader feedback digestion | 13% |
+| Stage 5 English translation | ~40 min/post | 6 numbers-from-memory instances / dev-internal marker leakage | 34% |
+| Stage 6 Build + review | ~10 min/post | browser visual delay / category page fallback exposure | 8% |
+| **Total** | **~2 h/post** | — | **100%** |
 
-> **基线对照**：D0-D3 纯人工时代 ~6 h/篇，主要瓶颈是翻译（~2 h）+ Hugo 主题配置（~1 h）+ 多语言 SEO（~0.5 h）。引入 Claude Code 后阶段三/四/五分别缩短 50-67%，但阶段五翻译成本几乎没变（仍占 34%），是未来最大优化点。
+> **Baseline comparison**: in the D0-D3 manual era, ~6 h/post — main bottlenecks were translation (~2 h) + Hugo theme config (~1 h) + multilingual SEO (~0.5 h). After introducing Claude Code, Stages 3/4/5 each shortened 50-67%, but Stage 5 translation cost barely moved (still 34%) — that's the biggest future optimisation target.
 
-### §1.6 工具对比表（Claude Code vs Cursor vs 纯手动）
+### §1.6 Tool comparison (Claude Code vs Cursor vs pure-manual)
 
-| 维度 | Claude Code（本文主线） | Cursor | 纯手动 handbook |
+| Dimension | Claude Code (this article's main line) | Cursor | Pure-manual handbook |
 |---|---|---|---|
-| **单篇耗时** | **~2 h**（D11 实测） | ~4 h（行业估算，无实测） | ~6 h（D0-D3 实测基线） |
-| **主要瓶颈** | 翻译成本（阶段五 34%）+ mock-reader 反馈消化 | 编辑器适应成本 | Hugo 主题 + 多语言 SEO |
-| **上手成本** | skills + SOP 学习（CLAUDE.md §3.8 + docs SOP） | 编辑器迁移 + 习惯重塑 | 0（无 AI 依赖） |
-| **first-person 风险** | 高（**D4 撤销事件**） | 中（编辑器内 AI 不直接写 .md） | 无 |
-| **维护成本** | CLAUDE.md + docs SOP 同步 / mock-reader 报告归档 | 编辑器升级 / 订阅续费 | Hugo theme 升级 |
-| **适用规模** | solo dev + 重度 AI 协作 | solo dev + IDE 重度使用 | 任意 |
-| **退出成本** | 中（skill 文件重写 + SOP 迁移） | 中（编辑器习惯重建） | 0 |
+| **Time per post** | **~2 h** (measured at D11) | ~4 h (industry estimate, no first-hand measurement) | ~6 h (D0-D3 measured baseline) |
+| **Main bottleneck** | Translation cost (Stage 5 at 34%) + mock-reader feedback digestion | Editor acclimation cost | Hugo theme + multilingual SEO |
+| **Onboarding cost** | skills + SOP learning (CLAUDE.md §3.8 + docs SOP) | Editor migration + habit rebuild | 0 (no AI dependency) |
+| **first-person risk** | High (**D4 revert incident**) | Medium (in-editor AI does not write .md directly) | None |
+| **Maintenance cost** | CLAUDE.md + docs SOP sync / mock-reader report archiving | Editor upgrades / subscription renewal | Hugo theme upgrades |
+| **Applicable scale** | Solo dev + heavy AI collaboration | Solo dev + heavy IDE usage | Any |
+| **Exit cost** | Medium (skill file rewrite + SOP migration) | Medium (editor habit rebuild) | 0 |
 
-> **选型建议**：如果你已经会用 Hugo + 愿意写 CLAUDE.md 维护 SOP、追求 6 h → 2 h 的 67% 时间节省 → Claude Code。如果只想要 IDE 内 AI 辅助、不想维护 SOP → Cursor。如果在 D4 撤销事件类风险下不想碰 AI → 纯手动基线 6 h 可接受。
+> **Selection recommendation**: If you already know Hugo + are willing to maintain CLAUDE.md / SOP, and want the 6h → 2h 67% time savings → Claude Code. If you only want IDE-native AI assistance without SOP maintenance → Cursor. If the D4 revert-style risk makes you not want to touch it → the pure-manual 6h baseline is acceptable.
 
 ---
 
-## §2 演进史（核心章节）：4 个迭代节点
+## §2 Evolution history (core section): 4 iteration nodes
 
-### §2.1 D0-D3：纯人工时代，Stack Overflow 排错
+### §2.1 D0-D3: Pure-manual era, Stack Overflow debugging
 
-#### 2.1.1 起点：D0 域名抢注 + D3 首篇长文上线
+#### 2.1.1 Origin: D0 domain grab + D3 first long-form publish
 
-2026-08-11 21:36（`8cf52ea` first commit）我抢注 heimaeden.com 域名。3 天后 2026-08-13 22:50（`504d0d1` "feat: complete图文并茂hugo deployment traps guide with elite screenshots"）Hugo + Cloudflare Pages 流水线 + 首篇英文长文上线。中间做的事：DNS / Cloudflare Pages 后台 / Hugo theme 配置 / 主题切换 SVG 渲染 / 字体优化 / 部署 hook — 全手工。
+At 2026-08-11 21:36 (`8cf52ea` first commit) I grabbed the heimaeden.com domain. Three days later, at 2026-08-13 22:50 (`504d0d1` "feat: complete (with rich illustrations) hugo deployment traps guide with elite screenshots"), the Hugo + Cloudflare Pages pipeline + first English long-form post went live. The work in between: DNS / Cloudflare Pages dashboard / Hugo theme config / theme-switch SVG rendering / font optimisation / deploy hook — all manual.
 
-2026-08-11（D0）21:36 我抢注了 heimaeden.com——当时只想搭一个 Hugo + Cloudflare Pages 流水线，没想太多。中间 3 天里（D0 → D3 = 2026-08-11 → 2026-08-13），DNS / Cloudflare NS 移交 / Hugo 主题挂载 / PaperMod 模板配置 / Cloudflare Pages 后台 / HUGO_VERSION 锁版 / Legal 四件套 / About/Archives/Search/Contact 实页化…… 一个一个手工配齐。D3 凌晨把首篇图文长文推上线那一刻，回看 git log —— 从 first commit `8cf52ea` 到 first long-form `504d0d1` 只隔了 3 个日历日，成就感直接爆表。
+At 2026-08-11 (D0) 21:36 I grabbed heimaeden.com — at that moment I only wanted to set up a Hugo + Cloudflare Pages pipeline, I wasn't thinking too far ahead. Over the next 3 days (D0 → D3 = 2026-08-11 → 2026-08-13), DNS / Cloudflare NS handoff / Hugo theme mounting / PaperMod template config / Cloudflare Pages dashboard / HUGO_VERSION pinning / Legal four-piece set / About / Archives / Search / Contact page-ification… I configured each one by hand. That moment at D3 dawn when I pushed the first long-form post live, looking back at git log — from first commit `8cf52ea` to first long-form `504d0d1` was only 3 calendar days apart, and the sense of achievement just exploded.
 
-#### 2.1.2 6 小时/篇：当时最耗时 / 最痛苦的环节
+#### 2.1.2 6 hours/post: the most time-consuming / painful parts back then
 
-D0-D3 期间 + 之后一段时间，每篇文章平均耗时 ~6 小时：查 Hugo / PaperMod 文档 + Stack Overflow 排错 + 写 + 截图 + 中文→英文翻译 + 多语言 SEO 设置。这 6 小时分散在我所有 daily 清醒时段，没有 AI 加速，只有 github issue 和 self-debug。
+During D0-D3 and for a while after, each article averaged ~6 hours: looking up Hugo / PaperMod docs + Stack Overflow debugging + writing + screenshots + Chinese → English translation + multilingual SEO setup. These 6 hours were scattered across all my daily waking time, with no AI acceleration — just github issue trawling and self-debugging.
 
-6 小时里最耗时间的是**翻译 + 多语言 SEO 设置 + Hugo 主题切换时的 SVG 渲染 / 字体优化**——这三块都不属于「写文章」本身，但每一项都能单独卡半天。D0-D3 那段时间没有 AI 加速，我唯一能做的就是 github issue 翻页 + 自己 stack overflow 排错 + 一遍遍本地 `hugo --gc` + 浏览器反复刷预览图。
+What ate the most time within those 6 hours was **translation + multilingual SEO setup + Hugo theme-switch SVG rendering / font optimisation** — these three pieces are not "writing the article" itself, but each one could single-handedly eat half a day. During D0-D3 there was no AI acceleration, and the only thing I could do was flip through github issues + self-debug on stack overflow + run `hugo --gc` over and over locally + refresh the browser preview again and again.
 
 ![Hugo Cloudflare Pages dashboard from the manual era (D0-D3) before Claude Code automation. Shows DNS, Hugo theme, and Cloudflare Pages settings before the editorial pipeline existed.](/images/ai-agent/claude-code-editorial-pipeline/d3-manual-era-hugo-cf.png)
 
-### §2.2 D4：第一次引入 AI + commit bc9a369 撤销事件
+### §2.2 D4: First time introducing AI + commit bc9a369 revert incident
 
-#### 2.2.1 起因
+#### 2.2.1 Origin
 
-D4 上午，我决定用 AI 代笔 A 系列第一篇英文长文。任务交接给 AI 时，我给的不是「我的真实实操笔记」，而是**主题关键词 + 期望字数 + 一句文案框架**。
+On D4 morning, I decided to have AI ghostwrite the first English long-form post in the A series. When handing the task off to AI, what I gave was not "my real hands-on notes" but **topic keywords + expected word count + a single-sentence copy frame**.
 
-AI 输出一篇 1787 词英文 troubleshooting 长文，commit `4b8a8ea`（2026-08-15 22:00:49 +0800）：
+AI output a 1787-word English troubleshooting long-form post, commit `4b8a8ea` (2026-08-15 22:00:49 +0800):
 
 ```
 D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide
 ... 10 H2 sections ... 3 trap write-ups sourced from real config drift I hit ...
 ```
 
-注意 commit message 末尾的 "I hit" 字样——**AI 已经污染了对自己工作的描述**，这是 self-contamination 现象，不只是正文。
-我起初想尝试一下完全让AI来为我编写一遍文章，一开始我默认 AI 会比照我之前三篇的 style进行编写，以此来快速填充线上博客中的文章数量，但最后的结果很差。
+Notice the "I hit" wording at the end of the commit message — **AI had already polluted its description of its own work**, which is a self-contamination phenomenon, not just the body text.
+My original intent was to try having AI write the article entirely for me. At first I assumed AI would mirror the style of my previous three posts to quickly fill up the article count on the live blog, but the final result was terrible.
 
-#### 2.2.2 published 后自检触发
+#### 2.2.2 Self-check triggered after publish
 
-晚间文章已经上线 Cloudflare Pages。我开始重读自己刚发的文章...
+In the evening the article was already live on Cloudflare Pages. I started re-reading the article I had just posted…
 
-当我读到【For my first two weeks of running heimaeden.com ...】时意识到了不对劲，写这篇文章的时间离我刚开始搭建博客根本不到两周，文章中ai站在我的角度杜撰了这部分内容，这引起的我的警惕，等我将整篇文章阅读完成之后，发现事情远比我想的严重，文章中ai杜撰了许多内容与实际不符。
+When I got to the passage "For my first two weeks of running heimaeden.com ..." I realised something was off — the time of writing this article was less than two weeks from when I had just started building the blog, and AI had fabricated that section from my perspective, which set off my alarm bells. Once I finished reading the whole article, I found things were far worse than I had thought — AI had fabricated a lot of content that did not match reality.
 
-#### 2.2.3 撤销
+#### 2.2.3 Revert
 
-我立刻执行 `git revert 4b8a8ea` → commit `bc9a369`（2026-08-15 22:03:43 +0800）：
+I immediately ran `git revert 4b8a8ea` → commit `bc9a369` (2026-08-15 22:03:43 +0800):
 
 ```
 Revert "D4: B1 long-form #1 — Cloudflare Pages Preview Branches guide"
 This reverts commit 4b8a8ea9858a55637c9f0388badfcc832fa4b40b.
 ```
 
-revert完成，检查线上确保没有这边文章之后，手指离开键盘的那一刻，我的冷汗才冒出来。处理完当前最紧急的事情，脑中想的内容还很多，有警觉，有失望，而更多的是考虑到如何避免后续类似的问题发生，我必须对claude新增一些铁律。
+Revert done, I checked online to confirm the article was gone, and only when my fingers left the keyboard did the cold sweat break out. After handling the most urgent things at hand, my mind was full of thoughts — alert, disappointment, and more than anything else the consideration of how to prevent similar problems going forward. I had to add some hard rules for Claude.
 
-#### 2.2.4 当晚不补 SOP，冷处理一夜
+#### 2.2.4 That night: don't patch SOP, cool down overnight
 
-当晚我没动 `CLAUDE.md` ，由于现场已经保留下来了，线上博客处于初始阶段，基本不会有读者看到那篇失败的文章，于是我决定先退出 Claude 会话冷处理一夜，制定哪些铁律需要仔细的思考，我需要平复一下自己的心情，并在得到充足的休息之后才能够完成更精准的判断与决策。
+That night I did not touch `CLAUDE.md`. Since the scene was preserved and the live blog was at its initial stage with basically no readers likely to see the failed article, I decided to first quit the Claude session and cool down overnight — deciding which hard rules needed careful thought. I needed to calm down, and only after getting enough rest could I make more precise judgement and decisions.
 
-#### 2.2.5 D5 下午：系统化 6 条 rule
+#### 2.2.5 D5 afternoon: systematised 6 rules
 
-D5 2026-08-16（次日）下午，我系统化 6 条 rule 进 `CLAUDE.md §3.8`：以 D4 撤销事件为 lessons-learned 锚点，逐条梳「AI 写 first-person / 选题 context / 截图真实 / affiliate 初稿标 / 翻译字面对应 / cross-ref 锚点」6 条铁律。同日补 `docs/article-writing-workflow.md §附 E`「D4 教训」作为详细案例。
+On D5 2026-08-16 (the next day) afternoon, I systematised 6 rules into `CLAUDE.md §3.8`: using the D4 revert incident as the lessons-learned anchor, I worked through "AI writes first-person / topic context / real screenshots / affiliate draft marker / translation word-for-word / cross-ref anchor" as the 6 hard rules. Same day I added `docs/article-writing-workflow.md Appendix E` "D4 lessons" as the detailed case study.
 
-#### 2.2.6 自检三问（呼应 §5.4）
+#### 2.2.6 Three self-check questions (echoing §5.4)
 
-D4 事件能及时 revert，是因为三个客观条件同时满足：
+The D4 incident could be reverted in time because three objective conditions held simultaneously:
 
-1. ✅ 我代笔时转交的是「题材 + 文案框架」，**不是真实 first-person 经验** —— 我没给素材，所以 AI 必须编造（这是我能 audit 出错原因的前提）
-2. ✅ 我能在 git history 上 audit 4b8a8ea 是否真有来源
-3. ✅ AI 输出是 intermediate commit，可 revert 撤销 —— D4 的"侥幸"全在于这点
+1. ✅ When I delegated the writing I handed off "topic + copy frame", **not real first-person experience** — I didn't give source material, so AI had to fabricate (this is the premise that let me audit the cause)
+2. ✅ I could audit `4b8a8ea` against git history to check whether it had a real source
+3. ✅ AI output was an intermediate commit, revertible — D4's "luck" came entirely from this point
 
-如果任一条件不满足（比如 AI 直接 push 到 main，比如我在私有仓库），revert 时间会大幅拉长。**D4 教训的核心**：把 AI 输出圈在 intermediate commit 内、让我拥有 revert 权限，是这条人工边界成立的物理前提。
+If any condition had not held (for example AI pushed directly to main, or I was in a private repo), revert time would have stretched out significantly. **The core of the D4 lesson**: keeping AI output bounded inside intermediate commits, where I hold the revert right, is the physical prerequisite for this human boundary to hold.
 
 ![git log -p output showing bc9a369 reverting commit 4b8a8ea. Two minutes fifty-four seconds between the AI-generated post landing at 22:00:49 and the human-driven revert at 22:03:43 on 2026-08-15.](/images/ai-agent/claude-code-editorial-pipeline/d4-revert-commit-diff.png)
 
-### §2.3 D5：双篇并行 + lint_allow 临时方案
+### §2.3 D5: Dual-post in parallel + lint_allow temporary workaround
 
-#### 2.3.1 三件套 commit 上下文
+#### 2.3.1 Three-commit context
 
-D5 2026-08-16 我做了 3 个相互独立的 commit：
+On D5 2026-08-16 I made 3 mutually independent commits:
 
-- `800d460` 22:30:52 — D5: infra（cover assets lookup + external link rel=noopener + img responsive CSS）
-- `a5bb839` 22:31:01 — D5: content（A2/A3 long-form polish，covers / captions / alt text / blockquote cleanup）
+- `800d460` 22:30:52 — D5: infra (cover assets lookup + external link rel=noopener + img responsive CSS)
+- `a5bb839` 22:31:01 — D5: content (A2/A3 long-form polish, covers / captions / alt text / blockquote cleanup)
 - `b751bdb` 22:50:39 — Translate A2 + A3 to English (final)
 
-三个 commit 在 ~20 分钟内连发。这是 D4 `bc9a369` 撤销事件后第一次对全 content cluster 的批量 polish / publish 尝试。
+The three commits landed in succession within ~20 minutes. This was the first bulk polish / publish attempt on the full content cluster after the D4 `bc9a369` revert incident.
 
-不是「batch 出版策略」也不是「安全感」——是 D5 那天我刚把 `cover.html` / `render-link.html` / 响应式 CSS 三块基础设施一次性补齐，正好 A2 + A3 都缺这些，索性双篇同时推。如果只上一篇，下一篇还是要重新跑一遍这三条 hook 的兼容性测试；两篇同期上线，一次验证双篇都对，反而节省总工时。算下来 ~20 分钟内 3 commit 全部 push 完成。
+It was neither a "batch publishing strategy" nor "sense of safety" — on D5 I had just filled in three pieces of infrastructure at once: `cover.html` / `render-link.html` / responsive CSS, and both A2 + A3 needed these. So I shipped both posts simultaneously. If I had only shipped one, the next post would still need to re-run compatibility tests for these three hooks; launching both at once validated that both worked in one pass, saving total work time. In the end all 3 commits landed within ~20 minutes.
 
-#### 2.3.2 lint_allow 临时方案
+#### 2.3.2 lint_allow temporary workaround
 
-11 处 HTML 注释内 CJK 保留 —— 当时为什么用 `lint_allow = ["cjk-body"]` 折中而不是立刻修 `lint-post.sh` 让 HTML 注释豁免 CJK？
+11 HTML-comment CJK entries kept — why did I use `lint_allow = ["cjk-body"]` as the compromise rather than immediately modifying `lint-post.sh` to exempt HTML comments from CJK checks?
 
-11 处全是 dev-internal 截图位标记（`<!-- 📸 截图位 #N ... -->`），Hugo 不渲染注释到页面，dev-trace 只在源码层可见。改脚本触及 CLAUDE.md §3.2 硬约束，等 D10 触发再统一修更稳妥；`lint_allow = ["cjk-body"]` 是「保 lint pass + 不动 SOP」的最小代价选择。
+All 11 entries were dev-internal screenshot-position markers (`<!-- 📸 screenshot-marker #N ... -->`); Hugo does not render comments to the page, and the dev-trace is only visible at the source level. Modifying the script touches CLAUDE.md §3.2 hard constraints, and waiting for D10 to trigger then fixing them in one batch was more stable; `lint_allow = ["cjk-body"]` was the minimum-cost choice to "keep lint passing + leave SOP untouched."
 
 ![Git log graph showing three D5 commits 800d460, a5bb839, b751bdb pushed within twenty minutes. Two infrastructure commits plus the content polish commit, then the English translation commit at 22:50:39.](/images/ai-agent/claude-code-editorial-pipeline/d5-three-commit-graph.png)
 
-### §2.4 D10：mock-reader-feedback skill 引入（commit 7d2cdee）
+### §2.4 D10: mock-reader-feedback skill introduced (commit 7d2cdee)
 
-#### 2.4.1 mock-reader skill 的 trigger
+#### 2.4.1 mock-reader skill trigger
 
-D10 2026-08-20 我意识到「AI 选 + AI 写」还缺第三方视角 —— AI 不会对自己的输出反向 audit，需要一个人格模拟读者。D10 当晚 17 分钟内连发 3 commit：
+On D10 2026-08-20 I realised "AI picks + AI writes" still lacked a third-party perspective — AI does not audit its own output in reverse, so a persona-simulated reader was needed. On D10 that evening I landed 3 commits within 17 minutes:
 
 - `7d2cdee` 22:24:14 mock-reader-feedback skill MVP + GSC wiring
 - `8dedff0` 22:33:57 add 3 P5-driven selection backlog entries (S10-S12)
-- `ee25372` 22:41:16 archive 4 mock-reader reports（P1/P3/P5 + P1-vs-P3）
+- `ee25372` 22:41:16 archive 4 mock-reader reports (P1/P3/P5 + P1-vs-P3)
 
-4 份报告归档：`docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`。关键发现：定位漂移（dev-internal marker 泄漏）/ 首屏错位 / 标题 AI 农场味。
+4 reports archived at `docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`. Key findings: positioning drift (dev-internal marker leakage) / above-the-fold misalignment / title AI-farm smell.
 
-5 persona 不是凭空设计——是 Claude Code 的 5 类典型用户：强华陆 dev / 西方 indie hacker / 选型决策者 / 内容农场嗅探者 / 海外 mentor。AI 选 + AI 写之后还缺第三方视角，AI 不会反向 audit 自己的输出，需要人格化读者跑一遍。这是我把 `mock-reader-feedback` 做成 skill 而不是脚本的原因：人格化才有 audit 价值，单纯「让 AI 再读一遍」等于零增量。
+The 5 personas are not designed out of thin air — they are the 5 typical user types of Claude Code: strong-China-mainland dev / Western indie hacker / selection decision-maker / content-farm sniffer / overseas mentor. After AI picks + AI writes, a third-party perspective is still missing — AI does not audit its own output in reverse, so a persona-driven reader needs to run through it. This is why I built `mock-reader-feedback` as a skill rather than a script: persona-driven has audit value; simply "having AI re-read once" is zero incremental value.
 
-#### 2.4.2 P1/P3/P5 跑过的最反直觉反馈
+#### 2.4.2 Most counter-intuitive feedback from P1/P3/P5
 
-P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三个 persona 反馈出 4 份报告。最大的盲点之一是「dev-internal marker 泄漏」——我以为写在 background description 里就 self-evident 不影响，对 P3 来说完全反觉。
+P1 (strong-China-mainland dev) / P3 (Western indie hacker) / P5 (selection decision-maker) three personas generated 4 reports of feedback. One of the biggest blind spots was "dev-internal marker leakage" — I thought notes written into the background description were self-evident and harmless, but for P3 this was completely counter-intuitive.
 
-P3 反馈里最触动的不是「标题农场味」也不是「首屏错位」——而是 **「dev-internal marker 泄漏」**。我以为写在 background description 里的 self-evident 备注（什么字段自填 / 配置占位 / 阶段标识）读者看不到，对 P3 来说完全反直觉：他们从描述里读出「作者明显还在搭建期」，瞬间信任感掉档。P1 那边反而给了一个反向确认：「命令行 EACCES 那段太短，应再补 2-3 张具体报错截图」——这是我 mock 之前自己没意识到的盲点。
+What struck me most in the P3 feedback was neither "title farm smell" nor "above-the-fold misalignment" — it was **"dev-internal marker leakage."** I thought self-evident notes in the background description (such as "field-self-fill" / "config placeholder" / "phase marker") were invisible to readers, but for P3 this was completely counter-intuitive: they read from the description that "the author is clearly still in build phase," and trust drops instantly. P1, on the other hand, gave a counter-confirmation: "the command-line EACCES section is too short — should add 2-3 more concrete error screenshots" — this was a blind spot I had not been aware of before running mock.
 
 ![ls docs/feedback/ output listing four mock-reader reports for claude-code-cli-setup-indie-blog: P1, P3, P5, and P1-vs-P3. Three commits on 2026-08-20 within 17 minutes archived the persona-driven feedback trail.](/images/ai-agent/claude-code-editorial-pipeline/d10-mock-reader-reports.png)
 
 ---
 
-## §3 当前已知问题：3-5 个痛点
+## §3 Known issues: 3-5 pain points
 
-1. **`lint-post.sh` 未豁免 HTML 注释内 CJK** —— 11 处 dev-internal 截图位标记反复误报，每次都要手动加 `lint_allow`，未来 M5 阶段产出 ≥15 篇后会被 lint 噪音拖累节奏。
-2. **mock-reader 反馈「定位漂移」尚未根治** —— `claude-code-cli-setup-indie-blog` 一文曾试图同时服务 P1 + P3 + P5 三类，导致两边深度都不够。X1 必须从叙事架构上硬切割，单 persona 服务到底。
-3. **翻译 commit 无前缀** —— A2/A3 的 `b751bdb` 没有 `[translate]` / `[zh→en]` 标识，git log 上看不出翻译阶段节点，跨会话追溯成本高。
-4. **CLAUDE.md §3 与 docs SOP 同步滞后** —— D5 新增的 4 条硬约束（`cover.html` / `render-link.html` / 翻译 commit 无前缀 / dev server baseURL）+ D10 mock-reader SOP + 11 处 HTML 注释豁免 都还没写进 §3.8 之后的新章节。
-5. **Y1 / Y2 系列单篇延后决策** —— 集群首发节奏受 X1 完成状态拖累，mock-reader / pre-commit gates / redact-image PII 三篇都暂存为待选。
-
----
-
-## §4 未来 6 个月方向：2-3 个待调整
-
-1. **CLAUDE.md §3 SOP 大版本同步** —— 把 D5 / D10 沉淀的 6 条硬约束（`cover.html` override / `render-link` hook / 翻译 commit 无前缀 / dev server baseURL 约定 / lint_allow HTML 注释豁免 / mock-reader SOP）一次性补齐 §3.8 之后的新章节，避免硬约束散落多处导致后续会话误读。
-2. **`lint-post.sh` 增强 + cross-ref 自动验证** —— 增加 `<!-- ... -->` 注释内 CJK 豁免（CLAUDE.md §3.2 扩展），把 `verify-cross-refs` skill 集成进 lint-post.sh 作为 §3.8 rule 6 的硬校验步骤，杜绝「无锚点 cross-reference 凭空结论」再次发生。
-3. **主题迁移 PaperMod → Hugo Modules** —— 现行 `themes/PaperMod/` 整目录跟踪是上游 deprecation 三处（`.Language.LanguageDirection` / `.Language.LanguageCode` / 内置 minify 顶级配置）的硬卡点，必须改成 Hugo Modules 形式（CLAUDE.md §6 已禁改主题源码），解耦主题升级路径。
+1. **`lint-post.sh` does not exempt HTML-comment CJK** — 11 dev-internal screenshot-position markers repeatedly false-positive; every time I have to manually add `lint_allow`; future M5-phase output of ≥15 posts will be slowed by lint noise.
+2. **mock-reader feedback "positioning drift" not yet rooted out** — the `claude-code-cli-setup-indie-blog` post once tried to serve P1 + P3 + P5 simultaneously, leaving neither side deep enough. X1 must hard-cut at the narrative architecture, single-persona served all the way.
+3. **Translation commit has no prefix** — A2/A3's `b751bdb` lacks `[translate]` / `[zh→en]` markers; git log cannot easily identify translation-stage nodes; cross-session traceability cost is high.
+4. **CLAUDE.md §3 / docs SOP sync lagging** — D5-added 4 hard constraints (`cover.html` / `render-link.html` / translation commit no-prefix / dev server baseURL) + D10 mock-reader SOP + 11 HTML-comment exemptions are all not yet written into a new section after §3.8.
+5. **Y1 / Y2 series single-post decisions deferred** — cluster first-release cadence is dragged by X1 completion status; mock-reader / pre-commit gates / redact-image PII three posts all sit in the pending backlog.
 
 ---
 
-## §5 方法论边界：AI 做什么 / 我做什么
+## §4 Next 6 months direction: 2-3 to-be-adjusted items
 
-一句话口诀：**AI 是助理，不是替身**。
+1. **CLAUDE.md §3 SOP major-version sync** — pull the 6 hard constraints accumulated at D5 / D10 (`cover.html` override / `render-link` hook / translation commit no-prefix / dev server baseURL convention / lint_allow HTML-comment exemption / mock-reader SOP) into a new section after §3.8 in one pass; avoid hard constraints scattered across multiple places causing future session misreads.
+2. **`lint-post.sh` enhancement + cross-ref automatic verification** — add `<!-- ... -->` HTML-comment CJK exemption (CLAUDE.md §3.2 extension); integrate the `verify-cross-refs` skill into lint-post.sh as the §3.8 rule 6 hard validation step; prevent "anchor-less cross-reference phantom conclusions" from happening again.
+3. **Theme migration PaperMod → Hugo Modules** — current `themes/PaperMod/` whole-directory tracking hits 3 upstream deprecations (`.Language.LanguageDirection` / `.Language.LanguageCode` / built-in minify top-level config) as hard blockers; must convert to Hugo Modules form (CLAUDE.md §6 already forbids editing theme source), decoupling the theme-upgrade path.
 
-凡是带 first-person 实操经验、对外可见身份信息、最终发布决策的内容，由我把关；凡是「过程性、可 revert、可校验」的中间产物，由 AI 起草。这是 D4 撤销事件之后沉淀下来的 ratchet，不可降级。
+---
 
-### 5.1 人工把控（4 项，硬约束）
+## §5 Methodology boundary: what AI does / what I do
 
-1. **first-person 实操经验**：所有「我...」句子必须本人写。AI 起草可生成 step-by-step 框架，但不替我杜撰主观经历。（依据：D4 撤销事件，详见 §2.2 + CLAUDE.md §3.8 rule 1）
-2. **截图选择**：哪张截图进正文由本人挑。AI 可以建议「这里需要图」，具体哪一帧由我看实图决定。
-3. **截图脱敏**：含账户 / 邮箱 / ID / 卡尾的截图，必须经 `./scripts/redact-image.sh` 处理。本人是脱敏决策者，AI 只识别候选坐标（CLAUDE.md §3.3.4）并不替你拍板。
-4. **commit push ack**：任何 `git push` 都等本人 `git log -1 --stat` 亲自看完再 ack。AI 永远 hold push（CLAUDE.md §6）。
+One-line mantra: **AI is the assistant, not the replacement**.
 
-### 5.2 决策权归属（3 项拍板事项）
+Anything that carries first-person hands-on experience, externally visible identity information, or final-publish-decision content, I gate; anything that is "process-bound, revertible, verifiable" intermediate output, AI drafts. This is the ratchet settled after the D4 revert incident, not degradable.
 
-| 决策 | 谁拍板 | 原因 |
+### 5.1 Human-gated items (4 items, hard constraints)
+
+1. **first-person hands-on experience**: all "I ..." sentences must be written by me personally. AI drafts may generate the step-by-step framework, but does not fabricate subjective experiences on my behalf. (Basis: D4 revert incident; see §2.2 + CLAUDE.md §3.8 rule 1)
+2. **Screenshot selection**: which screenshot goes into the article body is decided by me. AI can suggest "a screenshot is needed here"; the specific frame is chosen by me after seeing the real image.
+3. **Screenshot redaction**: screenshots containing account / email / ID / card-tail must pass `./scripts/redact-image.sh`. I am the redaction decision-maker; AI only identifies candidate coordinates (CLAUDE.md §3.3.4) and does not make the final call for you.
+4. **commit push ack**: any `git push` waits for me to personally run `git log -1 --stat` and read it through before acking. AI always holds push (CLAUDE.md §6).
+
+### 5.2 Decision-rights attribution (3 decision items)
+
+| Decision | Who decides | Why |
 |---|---|---|
-| 选题（topic-pool 推荐哪个） | 用户 | narrative 终点是人，不是流量 |
-| commit push ack | 用户（必 ack） | 公开 CDN 不可 recall |
-| Y1/Y2 标题延后 | 用户 | 集群首发节奏服从 X1 完成状态 |
+| Topic pick (which one from topic-pool recommendations) | User | The narrative endpoint is the person, not traffic |
+| commit push ack | User (must ack) | Public CDN is not recallable |
+| Y1/Y2 title deferral | User | Cluster first-release cadence submits to X1 completion state |
 
-### 5.3 AI 协助产出（默认 OK，但需审计）
+### 5.3 AI-assisted output (default OK, but needs audit)
 
-- 初稿结构（step-by-step 框架 + 标注位 + 实操前搜索任务）
-- 英文翻译（字面对应，不增删事实 — CLAUDE.md §3.8 rule 5）
-- cross-reference 锚点验证（避免 phantom conclusion — CLAUDE.md §3.8 rule 6）
-- mock-reader 报告结构化（mock-reader 不是真读者，可以 AI 跑，但是 audit walk）
-- 文档归档（think-*.md / topic-pool.md 等结构化记忆）
+- Draft structure (step-by-step framework + annotation slots + pre-flight search task)
+- English translation (word-for-word, no fact addition/removal — CLAUDE.md §3.8 rule 5)
+- cross-reference anchor verification (avoid phantom conclusions — CLAUDE.md §3.8 rule 6)
+- mock-reader report structuring (mock-reader is not a real reader, AI may run it, but it is an audit walk)
+- Documentation archiving (think-*.md / topic-pool.md and other structured memory)
 
-### 5.4 灰色地带的回归测试
+### 5.4 Grey-zone regression test
 
-遇 AI 输出不确定该归 5.1 还是 5.3 时，问三个问题：
+When AI output is uncertain whether it belongs in 5.1 or 5.3, ask three questions:
 
-1. 这条内容出错，**我愿不愿公开负责？**
-2. 这条内容能不能通过**第三方读者**（非 mock-reader）反向验证？
-3. AI 输出能不能**无损回退**？
+1. If this content is wrong, **am I willing to publicly take responsibility?**
+2. Can this content be **reverse-verified by a third-party reader** (not mock-reader)?
+3. Can the AI output be **rolled back without loss**?
 
-任一答否 → 落 5.1 人工把控。本人随时可一行 chat 暂停全流程，AI 不会绕过本人 commit push。这一条没有"对话结束自动执行"的免 ack 例外。
+Any "no" answer → falls into 5.1 human-gated. I can pause the entire flow with a single chat message at any time; AI will not bypass me to commit push. This item has no "dialogue-end auto-execute" ack-exception.
 
 ---
 
-## §6 结语 + 系列预告（指向 Y1 / Y2）
+## §6 Conclusion + series preview (pointing to Y1 / Y2)
 
-11 天、4 次主迭代、从 6 小时到 2 小时/篇 —— 这条流水线至今没让我失望过。**AI 是助理，不是替身**。这是 D4 撤销事件之后沉淀下来的 ratchet，不可降级。
+11 days, 4 major iterations, from 6 hours to 2 hours per post — this pipeline has not disappointed me yet. **AI is the assistant, not the replacement.** This is the ratchet settled after the D4 revert incident, not degradable.
 
-本文是 X1 —— 编辑流水线框架的外化版。下一阶段拆两篇系列单篇（标题延后敲定，**Y1 启动 metric = X1 [zh-final] + 翻译 + push 完成 + mock-reader 报告 ≥3 篇 + 翻译 commit 加 `[translate]` 前缀已落地**）：
+This article is X1 — the externalised form of the editorial-pipeline framework. The next stage splits into two series single-posts (titles deferred; **Y1 launch metric = X1 [zh-final] + translation + push complete + mock-reader reports ≥3 + translation commit with `[translate]` prefix in place**):
 
-| 候选 | 启动 metric（全部满足） | 优先级 | 预计工时 | 主要依赖 |
+| Candidate | Launch metric (all must hold) | Priority | Estimated effort | Main dependency |
 |---|---|---|---|---|
-| **Y1** mock-reader-feedback skill deep dive（persona 实现 + 报告结构 + 集成 commit gate） | X1 已发布 + mock-reader 报告归档 ≥3 篇 + 5 persona 数据接入 | ★★★ | ~3 天 | translate 完成 / persona-data.json V1.1+ |
-| **Y2a** pre-commit gates 拆解（verify-image-paths / verify-cross-refs / lint-post.sh / hugo --gc 四件套独立成文） | Y1 完成后 + 至少 1 次 gate 失败救回经验 | ★★ | ~2 天 | verify-cross-refs 集成进 lint-post.sh（M4 阶段 §4） |
-| **Y2b** redact-image PII 脱敏流程 deep dive（坐标识别 + script 调用 + 验证） | mock-reader 报告有 PII 误报 ≥1 次 + Pillow 已装 | ★ | ~1 天 | 已存在 `scripts/redact-image.sh` |
+| **Y1** mock-reader-feedback skill deep dive (persona implementation + report structure + integrate commit gate) | X1 published + mock-reader reports archived ≥3 + 5 persona data wired in | ★★★ | ~3 days | translation complete / persona-data.json V1.1+ |
+| **Y2a** pre-commit gates breakdown (verify-image-paths / verify-cross-refs / lint-post.sh / hugo --gc four-piece set each as its own article) | After Y1 done + at least 1 gate-failure recovery experience | ★★ | ~2 days | verify-cross-refs integrated into lint-post.sh (M4 phase §4) |
+| **Y2b** redact-image PII workflow deep dive (coordinate identification + script invocation + verification) | mock-reader reports have ≥1 PII false-positive + Pillow installed | ★ | ~1 day | existing `scripts/redact-image.sh` |
 
-如果你也在搭自己的出海博客 + AI 工具链，希望本文能帮你避开 D4 撤销事件那一刀。Solo developer 的 editorial pipeline 不需要花哨功能 —— 守住「first-person 经验本人写 + AI 起草中间产物 + commit push 永远等 ack」这三条底线，其余都是优化空间。
+If you are also building your own overseas blog + AI toolchain, I hope this article helps you avoid the D4 revert-incident knife. A solo developer's editorial pipeline does not need flashy features — hold onto these three bottom lines: "first-person experience written by the author + AI drafts intermediate output + commit push always waits for ack" — everything else is optimisation space.
