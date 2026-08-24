@@ -64,13 +64,13 @@ lint_allow = ["cjk-body"]
 
 2026-08-11 21:36（`8cf52ea` first commit）我抢注 heimaeden.com 域名。3 天后 2026-08-13 22:50（`504d0d1` "feat: complete图文并茂hugo deployment traps guide with elite screenshots"）Hugo + Cloudflare Pages 流水线 + 首篇英文长文上线。中间做的事：DNS / Cloudflare Pages 后台 / Hugo theme 配置 / 主题切换 SVG 渲染 / 字体优化 / 部署 hook — 全手工。
 
-<留空 first-person 实操段：你当时为什么想开始做 heimaeden.com？3 天内完成上线怎么做到的 / 最卡哪？≤150 字>
+2026-08-11（D0）21:36 我抢注了 heimaeden.com——当时只想搭一个 Hugo + Cloudflare Pages 流水线，没想太多。中间 3 天里（D0 → D3 = 2026-08-11 → 2026-08-13），DNS / Cloudflare NS 移交 / Hugo 主题挂载 / PaperMod 模板配置 / Cloudflare Pages 后台 / HUGO_VERSION 锁版 / Legal 四件套 / About/Archives/Search/Contact 实页化…… 一个一个手工配齐。D3 凌晨把首篇图文长文推上线那一刻，回看 git log —— 从 first commit `8cf52ea` 到 first long-form `504d0d1` 只隔了 3 个日历日，成就感直接爆表。
 
 #### 2.1.2 6 小时/篇：当时最耗时 / 最痛苦的环节
 
 D0-D3 期间 + 之后一段时间，每篇文章平均耗时 ~6 小时：查 Hugo / PaperMod 文档 + Stack Overflow 排错 + 写 + 截图 + 中文→英文翻译 + 多语言 SEO 设置。这 6 小时分散在我所有 daily 清醒时段，没有 AI 加速，只有 github issue 和 self-debug。
 
-<留空 first-person 实操段：6 小时里最浪费时间的具体环节是？查文档 / 排错 / 截图 / 翻译 / 多语言切换？≤120 字>
+6 小时里最耗时间的是**翻译 + 多语言 SEO 设置 + Hugo 主题切换时的 SVG 渲染 / 字体优化**——这三块都不属于「写文章」本身，但每一项都能单独卡半天。D0-D3 那段时间没有 AI 加速，我唯一能做的就是 github issue 翻页 + 自己 stack overflow 排错 + 一遍遍本地 `hugo --gc` + 浏览器反复刷预览图。
 
 📸 **截图标注位**（§2.1 D0-D3）：
 - **位置**：Hugo Cloudflare Pages 后台截图（D3.5 之前的版本）
@@ -147,13 +147,13 @@ D5 2026-08-16 我做了 3 个相互独立的 commit：
 
 三个 commit 在 ~20 分钟内连发。这是 D4 `bc9a369` 撤销事件后第一次对全 content cluster 的批量 polish / publish 尝试。
 
-<留空 first-person 实操段：你为什么选择「双篇同期上线」而不是「一篇一篇」？是 batch 出版策略 vs 安全感？≤120 字>
+不是「batch 出版策略」也不是「安全感」——是 D5 那天我刚把 `cover.html` / `render-link.html` / 响应式 CSS 三块基础设施一次性补齐，正好 A2 + A3 都缺这些，索性双篇同时推。如果只上一篇，下一篇还是要重新跑一遍这三条 hook 的兼容性测试；两篇同期上线，一次验证双篇都对，反而节省总工时。算下来 ~20 分钟内 3 commit 全部 push 完成。
 
 #### 2.3.2 lint_allow 临时方案
 
 11 处 HTML 注释内 CJK 保留 —— 当时为什么用 `lint_allow = ["cjk-body"]` 折中而不是立刻修 `lint-post.sh` 让 HTML 注释豁免 CJK？
 
-<留空 first-person 实操段：≤100 字>
+11 处全是 dev-internal 截图位标记（`<!-- 📸 截图位 #N ... -->`），Hugo 不渲染注释到页面，dev-trace 只在源码层可见。改脚本触及 CLAUDE.md §3.2 硬约束，等 D10 触发再统一修更稳妥；`lint_allow = ["cjk-body"]` 是「保 lint pass + 不动 SOP」的最小代价选择。
 
 📸 **截图标注位**（§2.3 D5）：
 - **位置**：3 commit 序列的 git log graph
@@ -173,13 +173,13 @@ D10 2026-08-20 我意识到「AI 选 + AI 写」还缺第三方视角 —— AI 
 
 4 份报告归档：`docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`。关键发现：定位漂移（dev-internal marker 泄漏）/ 首屏错位 / 标题 AI 农场味。
 
-<留空 first-person 实操段：你怎么想到 mock-reader、为什么 5 persona 而不是其他设计？≤120 字>
+5 persona 不是凭空设计——是 Claude Code 的 5 类典型用户：强华陆 dev / 西方 indie hacker / 选型决策者 / 内容农场嗅探者 / 海外 mentor。AI 选 + AI 写之后还缺第三方视角，AI 不会反向 audit 自己的输出，需要人格化读者跑一遍。这是我把 `mock-reader-feedback` 做成 skill 而不是脚本的原因：人格化才有 audit 价值，单纯「让 AI 再读一遍」等于零增量。
 
 #### 2.4.2 P1/P3/P5 跑过的最反直觉反馈
 
 P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三个 persona 反馈出 4 份报告。最大的盲点之一是「dev-internal marker 泄漏」——我以为写在 background description 里就 self-evident 不影响，对 P3 来说完全反觉。
 
-<留空 first-person 实操段：哪一条反馈让你最没想到、最触动了？≤150 字>
+P3 反馈里最触动的不是「标题农场味」也不是「首屏错位」——而是 **「dev-internal marker 泄漏」**。我以为写在 background description 里的 self-evident 备注（什么字段自填 / 配置占位 / 阶段标识）读者看不到，对 P3 来说完全反直觉：他们从描述里读出「作者明显还在搭建期」，瞬间信任感掉档。P1 那边反而给了一个反向确认：「命令行 EACCES 那段太短，应再补 2-3 张具体报错截图」——这是我 mock 之前自己没意识到的盲点。
 
 📸 **截图标注位**（§2.4 D10）：
 - **位置**：4 份 mock-reader 报告文件列表（`ls docs/feedback/`）
@@ -191,25 +191,19 @@ P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三�
 
 ## §3 当前已知问题：3-5 个痛点
 
-<留空，列出当前 SOP 未解决的痛点>
-
-预期痛点方向（待用户实操确认）：
-- 翻译 commit 无前缀 → git log 难以快速识别
-- commit message 长度爆炸 → 多文件改动时 body 过长
-- lint_allow 历史 11 errors 仍未根治 → lint-post.sh 未豁免 HTML 注释内 CJK
-- mock-reader P3 一致反馈「标题农场味」→ 标题措辞需要持续打磨
-- Y1/Y2 系列单篇延后决策 → 集群首发速度受拖累
+1. **`lint-post.sh` 未豁免 HTML 注释内 CJK** —— 11 处 dev-internal 截图位标记反复误报，每次都要手动加 `lint_allow`，未来 M5 阶段产出 ≥15 篇后会被 lint 噪音拖累节奏。
+2. **mock-reader 反馈「定位漂移」尚未根治** —— `claude-code-cli-setup-indie-blog` 一文曾试图同时服务 P1 + P3 + P5 三类，导致两边深度都不够。X1 必须从叙事架构上硬切割，单 persona 服务到底。
+3. **翻译 commit 无前缀** —— A2/A3 的 `b751bdb` 没有 `[translate]` / `[zh→en]` 标识，git log 上看不出翻译阶段节点，跨会话追溯成本高。
+4. **CLAUDE.md §3 与 docs SOP 同步滞后** —— D5 新增的 4 条硬约束（`cover.html` / `render-link.html` / 翻译 commit 无前缀 / dev server baseURL）+ D10 mock-reader SOP + 11 处 HTML 注释豁免 都还没写进 §3.8 之后的新章节。
+5. **Y1 / Y2 系列单篇延后决策** —— 集群首发节奏受 X1 完成状态拖累，mock-reader / pre-commit gates / redact-image PII 三篇都暂存为待选。
 
 ---
 
 ## §4 未来 6 个月方向：2-3 个待调整
 
-<留空，列出未来调整方向>
-
-预期方向（待用户实操确认）：
-- CLAUDE.md §3 / docs SOP 同步：D5 新增硬约束（cover.html / render-link / 翻译无前缀 / dev server baseURL）+ D10 mock-reader SOP 入档
-- lint-post.sh 增强：豁免 HTML 注释内 CJK / 增加 cross-ref 验证
-- 主题迁移：PaperMod → Hugo Modules（CLAUDE.md §6 已禁用改 `themes/PaperMod/`）
+1. **CLAUDE.md §3 SOP 大版本同步** —— 把 D5 / D10 沉淀的 6 条硬约束（`cover.html` override / `render-link` hook / 翻译 commit 无前缀 / dev server baseURL 约定 / lint_allow HTML 注释豁免 / mock-reader SOP）一次性补齐 §3.8 之后的新章节，避免硬约束散落多处导致后续会话误读。
+2. **`lint-post.sh` 增强 + cross-ref 自动验证** —— 增加 `<!-- ... -->` 注释内 CJK 豁免（CLAUDE.md §3.2 扩展），把 `verify-cross-refs` skill 集成进 lint-post.sh 作为 §3.8 rule 6 的硬校验步骤，杜绝「无锚点 cross-reference 凭空结论」再次发生。
+3. **主题迁移 PaperMod → Hugo Modules** —— 现行 `themes/PaperMod/` 整目录跟踪是上游 deprecation 三处（`.Language.LanguageDirection` / `.Language.LanguageCode` / 内置 minify 顶级配置）的硬卡点，必须改成 Hugo Modules 形式（CLAUDE.md §6 已禁改主题源码），解耦主题升级路径。
 
 ---
 
@@ -256,13 +250,14 @@ P1（强华陆 dev）/ P3（西方 indie hacker）/ P5（选型决策者）三�
 
 ## §6 结语 + 系列预告（指向 Y1 / Y2）
 
-<留空，预告后续系列文章>
+11 天、4 次主迭代、从 6 小时到 2 小时/篇 —— 这条流水线至今没让我失望过。**AI 是助理，不是替身**。这是 D4 撤销事件之后沉淀下来的 ratchet，不可降级。
 
-预期内容：
-- X1 = 编辑流水线框架（本文）
-- Y1 候选：mock-reader-feedback deep dive（具体 skill 实现）
-- Y2 候选：pre-commit gates / redact-image PII 流程
-- Y1/Y2 标题延后决策（待 X1 完成）
+本文是 X1 —— 编辑流水线框架的外化版。下一阶段拆两篇系列单篇（标题延后敲定，等 X1 完成后再讨论）：
+
+- **Y1 候选**：mock-reader-feedback skill deep dive（具体 persona 实现 + 报告结构 + 集成到 commit gate）
+- **Y2 候选**：pre-commit gates 拆解 / redact-image PII 脱敏流程 deep dive
+
+如果你也在搭自己的出海博客 + AI 工具链，希望本文能帮你避开 D4 撤销事件那一刀。Solo developer 的 editorial pipeline 不需要花哨功能 —— 守住「first-person 经验本人写 + AI 起草中间产物 + commit push 永远等 ack」这三条底线，其余都是优化空间。
 
 ---
 
