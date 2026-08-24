@@ -242,6 +242,7 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 | "How do I write a new long-form post?" | `docs/article-writing-workflow.md` (8-step collaboration SOP) |
 | "Is this hard rule?" | this file (§3) |
 | "Is this preference?" | `README.md §5 Operational Precautions` |
+| "Local `hugo server` shows 404 for newly-added images?" | `docs/dev-server-baseurl.md` — `--baseURL http://localhost:1313/` override required |
 
 ### Pre-action checklist (every time you produce or modify a `.md`)
 
