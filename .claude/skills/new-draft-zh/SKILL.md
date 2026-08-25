@@ -63,7 +63,13 @@ lint_allow = ["cjk-body"]
 
 ### 3. 章节骨架（**只结构，无正文**）
 
-按 article-writing-workflow §1.1 + §5.2 推荐结构：
+#### 3.0 文章类型判定（先选 prompt，再套骨架）
+
+**反 AI-farm 硬规矩**：每篇文章必须先判定类型，从 `docs/writing-prompts.md` 5 种 prompt（A 纯排障 / B 方案对比 / C 踩坑叙事 / D 原理深挖 / E 方法论 retrospective）中选 1 种。**不允许 5 篇文章同结构**（触发 Scaled Content 识别信号）。详见 `docs/writing-prompts.md` §一速查表。
+
+判定时机：在套章节骨架模板之前。判定依据 = 文章主要服务哪种读者需求。
+
+按 article-writing-workflow §1.1 + §5.2 推荐结构 + `docs/writing-prompts.md`（5 种 prompt 库）：
 
 ```markdown
 ## 引言：<问题定义，100 词>

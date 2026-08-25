@@ -202,6 +202,12 @@
 
 ### 5.2 推荐结构
 
+**先选 prompt，再套结构**（详见 `docs/writing-prompts.md`）：
+
+每篇文章先判定 5 种 prompt 类型之一（A 纯排障 / B 方案对比 / C 踩坑叙事 / D 原理深挖 / E 方法论 retrospective），再按对应 prompt 的 output structure 套骨架。**禁止 5 篇文章同结构**——这是 Scaled Content Abuse 识别信号（参考 `docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 1）。
+
+**默认结构**（仅在文章不属于 A-E 任意一种时使用，极少情况）：
+
 1. **引言**（100 词）：本文解决什么问题
 2. **前提条件**：环境 / 工具 / 账号要求
 3. **步骤 1-N**：主线操作（合并初稿 + 实操反馈）
