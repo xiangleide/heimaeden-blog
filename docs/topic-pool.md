@@ -212,6 +212,50 @@
 - **AI 推荐理由**：S9/S11 的反向视角（已用 CF Pages 的人什么时候需要回到 VPS）；差异化角度——流量超 100k req/day 或定制 build pipeline 时的迁移阈值；P5 "real-world flipping criterion" 关键词匹配
 - **状态**：待选 · 优先级 ★★（D6 P5 反馈）
 
+#### S13. Cloudflare Workers vs Pages: when each wins (6-dimension comparison)
+- **来源**：本次会话 D14 决策（B 方案）+ A1 `hugo-cloudflare-pages-pitfalls` §Trap 1 浅讲 UI 误导衍生
+- **关键词**：cloudflare workers vs pages, when to use cloudflare workers, when to use cloudflare pages, cloudflare hosting choice 2026
+- **预计字数**：1,400
+- **分类**：Static-Site（选型类）
+- **联盟预留**：是（CF Pages / Workers 双向联盟，按场景分）
+- **AI 推荐理由**：A1 §Trap 1 只讲 UI 误导，未深入"我该用哪个 CF 产品"；本文深挖 6 维度选型矩阵（适用场景 / 部署复杂度 / 计费模型 / 配额 / 迁移成本 / Cold Start）；CF 官方文档分散，无一站式对比；与 S9 / S10 / S11 形成"工具层 + 平台层"全选型矩阵闭环；P5 选型决策者 top search query "cloudflare workers vs pages 2026"
+- **prompt_type**：B 方案对比（D12 SOP）
+- **状态**：🎯 推荐中（D14 决策 · 用户决定先做）
+
+#### S14. Hugo front matter complete guide: TOML vs YAML vs JSON
+- **来源**：本次会话 D14 决策 + A1 `hugo-cloudflare-pages-pitfalls` §Trap 3 浅讲 unmarshal failed 衍生
+- **关键词**：hugo front matter, hugo toml vs yaml vs json, hugo front matter error, hugo ++ syntax, hugo unmarshal failed
+- **预计字数**：1,200
+- **分类**：Static-Site（原理深挖类）
+- **联盟预留**：否
+- **AI 推荐理由**：A1 §Trap 3 只讲 "YAML 写 `:` 报错"；本文讲透三种语法对比 + Hugo 解析优先级 + 错误码全表 + YAML → TOML 迁移指南；用户亲历 + Hugo 官方文档分散在多个版本页；D12 SOP prompt_type D 原理深挖
+- **prompt_type**：D 原理深挖（D12 SOP）
+- **状态**：待选 · 优先级 ★★★（D14 入库）
+
+#### S16. PaperMod dark mode toggle: a 48-hour debug story
+- **来源**：本次会话 D14 决策 + A1 `hugo-cloudflare-pages-pitfalls` §Trap 7 衍生（叙事化改写）
+- **关键词**：papermod dark mode not working, papermod theme toggle not responding, disableThemeToggle, papermod dark mode fix, papermod dark mode css
+- **预计字数**：1,500
+- **分类**：Static-Site（踩坑叙事类）
+- **联盟预留**：否
+- **AI 推荐理由**：A1 §Trap 7 是技术冷叙述（4 段并列 root cause）；本文改写为**第一人称 48 小时 debug 时间线叙事**（disableThemeToggle / SRI / minify / selector 4 个 false culprit + 1 个 real culprit，按时间顺序展开）；用户亲历 EEAT 强；D12 SOP prompt_type C 踩坑叙事；与 S14 D 原理深挖形成"叙事 + 原理"互补，覆盖同一主题不同维度
+- **prompt_type**：C 踩坑叙事（D12 SOP）
+- **状态**：待选 · 优先级 ★★★（D14 入库）
+
+#### S17. Hugo URL resolution demystified: baseURL, relURL, absURL, and the trailing slash
+- **来源**：本次会话 D14 决策 + A1 `hugo-cloudflare-pages-pitfalls` §Trap 6 浅讲"加前导斜杠"衍生
+- **关键词**：hugo url resolution, hugo relurl vs absurl, hugo trailing slash, hugo baseurl, hugo url 404, hugo url localhost loop
+- **预计字数**：1,200
+- **分类**：Static-Site（原理深挖类）
+- **联盟预留**：否
+- **AI 推荐理由**：A1 §Trap 6 只讲"加前导斜杠"；本文讲透 Hugo 路径解析算法（absURL / relURL 差异 + 字符串拼接 vs Page Resource lookup）+ trailing slash 行为表 + PaperMod relativeURL 行为 + localhost 循环根因；D12 SOP prompt_type D 原理深挖
+- **prompt_type**：D 原理深挖（D12 SOP）
+- **状态**：待选 · 优先级 ★★★（D14 入库）
+
+> **D14 决策注释（2026-08-25）**：用户决定**保留 A1 `hugo-cloudflare-pages-pitfalls` 长文作长尾综述 + E-E-A-T 资产**，**不按"7 trap 拆 7 篇"原思路**（拆分会触发 D12 SOP Scaled Content Abuse 红线：7 篇同 prompt_type A 纯排障 + 内容重复风险 + 原文 inbound link 损失）。替代策略：在 7 trap 基础上**深挖未讲透的角度**，新增 S13/S14/S16/S17 共 4 篇，每篇用独立 prompt_type（B/D/C/D），4 篇 3 种 prompt_type 混合合规。
+> - **S15 / S18 留空 slot**——本次会话决策为"减到 4 篇"，留待 D15+ 按需按本文档 §「交叉验证落地决策」E2 行规则补位
+> - **覆盖 gap**：S13/S14/S16/S17 不与 topic-pool.md 现有 S1-S12 任何一条重复（关键词 + 主题双重独立）；与 S9/S10/S11/S12 选型类互补，与 S1-S3 排错类互补
+
 #### Java-Advanced 子集群（CRUD → Intermediate 进阶路径）— **新增 (2026-08-16 D5)**
 
 > **战略意义**：用户 6 年 Java CRUD 经验，下一步实操升级路径；EEAT 独家壁垒（vs AI 农场站）
@@ -470,9 +514,10 @@
 | 决策点 | 选择 | 落地点 | 状态 |
 |---|---|---|---|
 | **A1**：第一篇 GEO 试点选题 | B2 P1 WorldFirst 实战 | 本周（2026-08-25 ~ D14）按 GEO 写作模板落地 | 🎯 选题已升推荐中（见 §B2 行 322） |
-| **B2**：Hugo 排错 hub 页 | 新建 `content/posts/static-site/hugo-troubleshooting-hub/index.md` | 整合 S1 + S2（按"报错簇"思维） | ⏳ 待新建文件 |
+| **B2**：Hugo 排错 hub 页 | 新建 `content/posts/static-site/hugo-troubleshooting-hub/index.md` | 整合 S1 + S2（按"报错簇"思维） | ✅ **已完成**（D12 期间 commit `b751bdb` 系列落地；状态行 ⏳ 为 D12 时遗漏，已 D14 修正） |
 | **C2**：自动化评估时点 | D29（第 4 周末） | 不在 D0-D14 评估，避免过早工程化 | ⏳ 见维护规则 §9 |
 | **D2**：about 页升级 | 与 P1 WorldFirst 同步落地 | 内容：build-in-public + GitHub/X 关联 + commit 历史 | ⏳ 见 content/about.md 升级草案 |
+| **E2**：A1 7 trap 长文拆分策略（**D14 新增**） | **B 方案**：保留原文 + 加 4 篇深坑单文（S13/S14/S16/S17）| 见 §Static-Site / Build 末尾 S13-S17 条目 + 决策注释 | ✅ 选题已入池（S13 标推荐中 · 用户 D14 决策先做）|
 
 **关联文档**：
 - 完整交叉验证报告：`docs/heimaeden.com运营方案与交叉验证文档.md`
