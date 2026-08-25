@@ -121,7 +121,7 @@ hugo --gc
 # 必须 0 errors
 ```
 
-**V1 关键检查**：必须确认 `lint_allow = ["cjk-body"]` 已从 front matter 移除。否则 lint 会绕过 CJK 检查（CLAUDE.md §3.2 写死）。
+**V1 关键检查**：确认 `lint_allow = ["cjk-body"]` 已从 front matter 移除（CLAUDE.md §3.2），否则 lint 绕过 CJK 检查。
 
 ### 6. commit 边界
 

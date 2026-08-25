@@ -59,7 +59,7 @@ lint_allow = ["cjk-body"]
 +++
 ```
 
-**lint_allow 是中文初稿的硬性标记**——CLAUDE.md §3.2 写死「中文初稿可以声明此 token 跳过 lint CJK 检查」。阶段 7 英文版 commit 前必须删除。
+**lint_allow**（CLAUDE.md §3.2）——中文初稿用，英文版 commit 前必删。
 
 ### 3. 章节骨架（**只结构，无正文**）
 

@@ -105,7 +105,7 @@ lint_allow = ["cjk-body"]
 +++
 ```
 
-**lint_allow 必须保留**——CLAUDE.md §3.2 + §3.8 [zh-final] 仍是中文。
+**lint_allow**（CLAUDE.md §3.2）——[zh-final] 仍是中文，必保留。
 
 ### 6. 跑验证（**任一失败不 commit**）
 
