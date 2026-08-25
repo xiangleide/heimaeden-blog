@@ -19,6 +19,7 @@ HeimaEden 中文定稿生成器（TCM 阶段 4）。**核心职责**：把初稿
 - ❌ **"优化"用户原话**——保留中文口语化真实感（"我曾经遇到..." 这种是用户原话，不是 AI 该润色的）
 - ❌ **添加无锚点 cross-reference**——CLAUDE.md §3.8 rule 6（"AdSense 收款可直接复用 PayPal 通道" 这种凭空结论）
 - ❌ **删 `lint_allow = ["cjk-body"]`**——仍是中文版，保留 token
+- ❌ **删/改 `prompt_type`**——`docs/writing-prompts.md` §七强制字段（结构多样性追踪），定稿必须保留；若初稿缺失，定稿阶段必须补上（判定算法见 `new-draft-zh/SKILL.md` §3.0）
 - ❌ **跳到英文翻译**——那是阶段 7
 
 ## 工作流（6 步）

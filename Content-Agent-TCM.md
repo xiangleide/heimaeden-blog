@@ -20,6 +20,7 @@
     ```text
     在 content/posts/ 对应的子目录下，为这个选题全自动创建一个合规的 Markdown 文件。先用中文输出包含硬核步骤的初稿。
     ```
+*   **第 4.5 步**：【结构类型判定 · D12 SOP 集成】Claude Code 会根据 `docs/writing-prompts.md` 5 种 prompt 类型（A 纯排障 / B 方案对比 / C 踩坑叙事 / D 原理深挖 / E 方法论 retrospective）选 1 种，并在 front matter 加 `prompt_type = "A-E"` 字段。**禁止 5 篇文章同结构**——Scaled Content Abuse 识别信号（`docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 1）。判定算法详见 `.claude/skills/new-draft-zh/SKILL.md` §3.0。
 *   **第 5 步**：Claude Code 会在本地**全自动创建 `.md` 文件**。
     *   它会根据根目录下 `CLAUDE.md` 的约束，自动格顶写出完美的 `+++` TOML 头部元数据。
     *   自动在文中埋伏好 `📸 [此处必须强行插入你在电脑上看到的 XXX 后台截图，图片重命名为 xxxx.png]` 和 `🎁 [联盟变现链接占位符]`。

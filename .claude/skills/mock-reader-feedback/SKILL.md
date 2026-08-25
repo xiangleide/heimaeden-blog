@@ -156,6 +156,7 @@ verdict: stay
 - ✅ rating < 5？（避免全赞人设）
 - ✅ YAML 严格遵循 schema？
 - ✅ 写到了 docs/feedback/？
+- ✅ **多样性自检（D12 SOP）**：跑 `grep -h '^prompt_type' content/posts/**/*.md | tail -5`（最近 5 篇 prompt_type 分布）；若 ≥ 4 篇同类型 → 在 persona 反馈里加一句「近 N 篇同 prompt_type，Scaled Content 风险」警告（参考 `docs/writing-prompts.md` §一）
 
 输出到用户：
 - 简短的 1-2 句话总评（如 "P4 觉得报错部分太薄，需要补 stack trace"）

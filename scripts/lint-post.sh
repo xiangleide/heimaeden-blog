@@ -171,6 +171,16 @@ PY
         fi
     done
 
+    # ---- §3.1.1 prompt_type (docs/writing-prompts.md §七 — warning-only) ----
+    # Soft requirement: front matter should declare prompt_type for structure-diversity tracking.
+    # Warning-only so existing pre-rule posts are grandfathered (no immediate breakage).
+    PROMPT_TYPE="$(grep -E '^prompt_type[[:space:]]*=' <<< "$FM" | head -n1 | sed -E 's/^prompt_type[[:space:]]*=[[:space:]]*//; s/^"//; s/"$//')"
+    if [[ -z "$PROMPT_TYPE" ]]; then
+        add_warn "$FILE" 0 "front matter missing recommended field: prompt_type (docs/writing-prompts.md §七 — 用 A/B/C/D/E)"
+    elif [[ ! "$PROMPT_TYPE" =~ ^[A-E]$ ]]; then
+        add_warn "$FILE" 0 "prompt_type invalid: '$PROMPT_TYPE' (must be A/B/C/D/E — docs/writing-prompts.md §一)"
+    fi
+
     # ---- §3.2 body must be English (no CJK chars) ----
     # Allow per-file exemptions via `lint_allow = ["cjk-body"]` in TOML front matter.
     ALLOW="$(grep -E '^lint_allow[[:space:]]*=' <<< "$FM" | sed -E 's/^lint_allow[[:space:]]*=[[:space:]]*//; s/[][]//g' | grep -oE '"[^"]+"' | tr -d '"' | tr '\n' ' ' || true)"

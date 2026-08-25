@@ -46,6 +46,11 @@ draft = false
 tags = ["<tag1>", "<tag2>"]
 categories = ["<Category>"]
 
+# 文章结构类型（docs/writing-prompts.md §七）——5 选 1
+# A=纯排障 / B=方案对比 / C=踩坑叙事 / D=原理深挖 / E=方法论 retrospective
+# 判定算法见 §3.0 / docs/writing-prompts.md §一
+prompt_type = "<A|B|C|D|E>"
+
 showToc = true
 TocOpen = true
 
@@ -68,6 +73,29 @@ lint_allow = ["cjk-body"]
 **反 AI-farm 硬规矩**：每篇文章必须先判定类型，从 `docs/writing-prompts.md` 5 种 prompt（A 纯排障 / B 方案对比 / C 踩坑叙事 / D 原理深挖 / E 方法论 retrospective）中选 1 种。**不允许 5 篇文章同结构**（触发 Scaled Content 识别信号）。详见 `docs/writing-prompts.md` §一速查表。
 
 判定时机：在套章节骨架模板之前。判定依据 = 文章主要服务哪种读者需求。
+
+**判定算法**（3 步）：
+
+1. **看选题描述**：从 `docs/topic-pool.md` 该条的「AI 推荐理由」+ 「关键词」2 段定位主目的
+2. **匹配主目的 → prompt 类型**：
+
+| 主目的关键词 | 选 prompt |
+|---|---|
+| 报错 / error / fix / deploy failing / 错误码 / 排查 / trap / pitfall | **A 纯排障型** |
+| vs / comparison / best / 横评 / 选型 / 哪个好 / 选择 | **B 方案对比型** |
+| war story / 调试马拉松 / why took me / 撤销 / 多日调试 | **C 踩坑叙事型** |
+| explained / 原理 / 概念 / why / architecture / how it works | **D 原理深挖型** |
+| how I built / methodology / workflow / 11 days / retrospective | **E 方法论 retrospective** |
+
+3. **多样性校验**（warning，不强制）：从 `docs/topic-pool.md` 「已完成」区取最近 5 篇 `prompt_type`，若新选题与 ≥ 3 篇同类型 → 警告「考虑换 prompt 类型或写配套内容」
+
+**front matter 强制字段**（`docs/writing-prompts.md` §七）：
+
+```toml
+prompt_type = "A"  # A-E 之一（docs/writing-prompts.md §一）
+```
+
+`lint-post.sh` 当前对 prompt_type 是 warning 而非 error（避免旧文章 grandfather 爆雷）；但缺字段触发 §七「反 AI-farm 共性原则」违规。
 
 按 article-writing-workflow §1.1 + §5.2 推荐结构 + `docs/writing-prompts.md`（5 种 prompt 库）：
 

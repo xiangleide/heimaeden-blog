@@ -22,6 +22,7 @@ HeimaEden 英文翻译生成器（TCM 阶段 7）。**核心职责**：把 [zh-f
 - ❌ **添加无锚点 cross-reference**——CLAUDE.md §3.8 rule 6
 - ❌ **保留 `lint_allow`**——这是英文版，必须移除
 - ❌ **翻译技术名词、代码块、文件路径、commit message**——保持原样（CLAUDE.md §3.9 技术名词规则）
+- ❌ **删 `prompt_type`**——`docs/writing-prompts.md` §七强制字段（结构多样性追踪），必须原样保留 `prompt_type = "A-E"` 进 front matter
 
 ## 工作流（6 步）
 
