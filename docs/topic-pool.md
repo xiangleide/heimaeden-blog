@@ -318,7 +318,8 @@
 - **分类**：Remote-Payment（部署类）
 - **联盟预留**：否（WorldFirst 无公开英文联盟；仅知识普及）
 - **AI 推荐理由**：B2 阶段 β 第一 Money Hook；你本人有 USD 账户开通完整实操（D4 第四次）
-- **状态**：待选 · 优先级 ★★★（B2 必做）
+- **GEO 试点**（**A1 决策 · D12**）：第一篇按 GEO 写作模板落地（结论前置 + FAQ 区块 + Schema + 代码块语义完整）。详见 `docs/geo-writing-module.md`。发布后用 mock-reader P5 跑反馈，对比 EEAT 评分
+- **状态**：🎯 **推荐中（B2 候选 · A1 GEO 试点 · 2026-08-25 升）** · 优先级 ★★★
 
 #### P2. How to fill W-8BEN form for Chinese blog affiliate publisher (complete 2026 walkthrough)
 - **来源**：`think-payment.md` #9
@@ -455,3 +456,26 @@
 3. **状态机**：待选 → 推荐中 → 初稿（commit `[draft]`）→ 第二版（commit `[zh-final]`）→ 英文版 → 已完成
 4. **撤销/废弃**：在「已完成」保留 entry 但状态改为 ⚠️ 已废弃 + commit hash（参考 A 系列占位）
 5. **pool size 上限**：保持 ≤40 条（多了选择疲劳）；归档到 `docs/topic-pool-archive-YYYY.md`
+6. **熔断线**（新增 · D12 交叉验证落地）：上月 GSC 收录率 < 40% **或** 质检不合格 → 当月停发新文，转做旧文优化（内容更新本身也是排名信号，且比新增安全）。来源：`docs/heimaeden.com运营方案与交叉验证文档.md` §四 修正后里程碑
+7. **节奏随机性**（新增 · D12 交叉验证落地）：避免"每天雷打不动 1 篇 + 每篇结构一致"被 Scaled Content 识别信号命中。允许 ±1 天波动，篇幅在 800~2500 词之间拉开差异；至少准备 3~4 种结构变体（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型）轮换
+8. **"宁可不发"硬规矩**（新增 · D12 交叉验证落地）：没有真实 log + 验证过的修复命令，宁可不发不凑数。10 分钟/篇只够成文，不够保证每条报错真实复现过；断更一天的代价远小于一批薄内容被整体降权的代价
+9. **自动化评估时点**（新增 · D12 交叉验证落地 · **C2 决策**）：**D29（第 4 周末）** 评估 n8n / GitHub Actions / Cloudflare Worker 的具体自动化方案，**不在 D0-D14 评估**（避免过早工程化拖垮发文节奏）。评估口径：能否把 6 小时压到 2 小时（X1 实测基线）
+
+---
+
+## 📅 交叉验证落地决策（D12 · 2026-08-25）
+
+> **背景**：用户新增 `docs/heimaeden.com运营方案与交叉验证文档.md`，经多 AI 交叉验证 + 与现有 SOP 对比后，做出 4 项决策如下（用户 ack `A1 B2 C2 D2`）。
+
+| 决策点 | 选择 | 落地点 | 状态 |
+|---|---|---|---|
+| **A1**：第一篇 GEO 试点选题 | B2 P1 WorldFirst 实战 | 本周（2026-08-25 ~ D14）按 GEO 写作模板落地 | 🎯 选题已升推荐中（见 §B2 行 322） |
+| **B2**：Hugo 排错 hub 页 | 新建 `content/posts/static-site/hugo-troubleshooting-hub/index.md` | 整合 S1 + S2（按"报错簇"思维） | ⏳ 待新建文件 |
+| **C2**：自动化评估时点 | D29（第 4 周末） | 不在 D0-D14 评估，避免过早工程化 | ⏳ 见维护规则 §9 |
+| **D2**：about 页升级 | 与 P1 WorldFirst 同步落地 | 内容：build-in-public + GitHub/X 关联 + commit 历史 | ⏳ 见 content/about.md 升级草案 |
+
+**关联文档**：
+- 完整交叉验证报告：`docs/heimaeden.com运营方案与交叉验证文档.md`
+- GEO 写作模板（待新建）：`docs/geo-writing-module.md`
+- Hugo 排错 hub 页（待新建）：`content/posts/static-site/hugo-troubleshooting-hub/index.md`
+- about 升级（待新建）：见本仓 conversation 历史
