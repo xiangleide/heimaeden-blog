@@ -255,8 +255,18 @@
 - **状态**：待选 · 优先级 ★★★（D14 入库）
 
 > **D14 决策注释（2026-08-25）**：用户决定**保留 A1 `hugo-cloudflare-pages-pitfalls` 长文作长尾综述 + E-E-A-T 资产**，**不按"7 trap 拆 7 篇"原思路**（拆分会触发 D12 SOP Scaled Content Abuse 红线：7 篇同 prompt_type A 纯排障 + 内容重复风险 + 原文 inbound link 损失）。替代策略：在 7 trap 基础上**深挖未讲透的角度**，新增 S13/S14/S16/S17 共 4 篇，每篇用独立 prompt_type（B/D/C/D），4 篇 3 种 prompt_type 混合合规。
-> - **S15 / S18 留空 slot**——本次会话决策为"减到 4 篇"，留待 D15+ 按需按本文档 §「交叉验证落地决策」E2 行规则补位
-> - **覆盖 gap**：S13/S14/S16/S17 不与 topic-pool.md 现有 S1-S12 任何一条重复（关键词 + 主题双重独立）；与 S9/S10/S11/S12 选型类互补，与 S1-S3 排错类互补
+> - **S15 留空 slot**——本次会话决策为"减到 4 篇"，留待 D15+ 按需按本文档 §「交叉验证落地决策」E2 行规则补位
+> - **S18 已填（D17）**：基于 D10 事故复盘的 draft 暴露排错文。详见下方 S18 条目
+> - **覆盖 gap**：S13/S14/S16/S17/S18 不与 topic-pool.md 现有 S1-S12 任何一条重复（关键词 + 主题双重独立）；与 S9/S10/S11/S12 选型类互补，与 S1-S3 排错类互补
+
+#### S18. Hugo draft still showing after move to _drafts/: a 3-layer fallback trap
+- **来源**：本次会话 D17 决策 + D10 事故复盘（README §6 D10）+ commit `581555b`
+- **预计字数**：1,000-1,200（**A 档硬上限 1200**，per `writing-prompts.md` Prompt A · D16）
+- **分类**：Static-Site（排错类）
+- **联盟预留**：否（排错类不插联盟，per `article-writing-workflow.md` §1.3）
+- **AI 推荐理由**：D10 事故（2026-08-21）暴露 Hugo 设计陷阱的 3 层叠加（`hugo --gc` 不清 public/ + dev server fallback + taxonomy 不 rebuild）；GitHub Issues / Hugo Discourse 搜不到完整答案；用户亲历 + commit hash + 当前 stale tags 残留（公开复盘）构成独家 EEAT；填补 S1-S3 之外的「dev workflow 排错」细分空白
+- **prompt_type**：A 纯排错（D12 SOP）
+- **状态**：🎯 **推荐中（D17 入库 · [draft] 已启）**
 
 #### Java-Advanced 子集群（CRUD → Intermediate 进阶路径）— **新增 (2026-08-16 D5)**
 
@@ -521,6 +531,7 @@
 | **D2**：about 页升级 | 与 P1 WorldFirst 同步落地 | 内容：build-in-public + GitHub/X 关联 + commit 历史 | ⏳ 见 content/about.md 升级草案 |
 | **E2**：A1 7 trap 长文拆分策略（**D14 新增**） | **B 方案**：保留原文 + 加 4 篇深坑单文（S13/S14/S16/S17）| 见 §Static-Site / Build 末尾 S13-S17 条目 + 决策注释 | ✅ 选题已入池（S13 标推荐中 · 用户 D14 决策先做）|
 | **F1**：文章篇幅分档硬约束（**D16 新增 · 2026-08-27**）| 存量文章不变（含 `editorial-pipeline` 4064 词唯一例外）+ 新文按 prompt_type 分档（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）| `article-writing-workflow.md` §5.2.1 表格 + 例外备注 / `writing-prompts.md` 一、速查表 + 五种 Prompt 各加字数硬上限声明 / `topic-pool.md` 顶部 D16 注释 + S10/J3 字数下调 | ✅ **已完成**（S10 1,500-2,000 → 1,400-1,800 / J3 1,200-1,500 → 1,000-1,200）|
+| **G1**：S18 draft 暴露排错文入库（**D17 新增 · 2026-08-27**）| 新增 `content/posts/static-site/hugo-draft-stale-dev-server-fix/index.md`（A 档 ≤ 1200 词）| S18 选题条目 + `topic-pool.md` S15/S18 注释更新（"S15 留空" + "S18 已填"）| ✅ **已完成**（[draft] 已启）|
 
 **关联文档**：
 - 完整交叉验证报告：`docs/heimaeden.com运营方案与交叉验证文档.md`
