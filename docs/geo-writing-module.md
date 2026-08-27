@@ -2,9 +2,9 @@
 
 > **目的**：让 HeimaEden 文章在 2026 年 Google AI Overviews / ChatGPT / Perplexity 三类生成式引擎中**被引用**，而非仅被点击。GEO = Generative Engine Optimization，与 SEO 同权重。
 >
-> **触发决策**：D12（2026-08-25）A1 —— 第一篇按 GEO 模板落地：选题 = **B2 P1 WorldFirst 实战**（`docs/topic-pool.md` §B2 行 322）。
+> **触发决策**：D12（2026-08-25）A1 —— 第一篇按 GEO 模板落地：选题 = **B2 P1 WorldFirst 实战**（`docs/archive/topic-pool-2026-08-27-archive.md` §B2 行 322）。
 >
-> **数据来源**：`docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 2（AI Overviews > 25% / 零点击 83% / CTR 1%）。
+> **数据来源**：`docs/archive/运营方案与交叉验证文档-2026-08-27.md` §二 风险 2（AI Overviews > 25% / 零点击 83% / CTR 1%）。
 
 ---
 
@@ -116,4 +116,4 @@
 
 **一句话总结**：SEO 是给爬虫看结构，GEO 是给 AI 看可摘录段落。
 
-**参考 / 待办**：详细数据 → `docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 2；选题详情 → `docs/topic-pool.md` §B2；CLAUDE.md §3.1（tone 同源）/ §3.8 rule 5（不增删事实）；FAQ Schema shortcode 待新建。
+**参考 / 待办**：详细数据 → `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §二 风险 2；选题详情 → `docs/archive/topic-pool-2026-08-27-archive.md` §B2；CLAUDE.md §3.1（tone 同源）/ §3.8 rule 5（不增删事实）；FAQ Schema shortcode 待新建。

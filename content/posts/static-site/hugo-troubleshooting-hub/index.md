@@ -18,9 +18,9 @@ TocOpen = true
 lint_allow = ["cjk-body"]
 +++
 
-> **本文件性质**：Hub 索引页（非单主题文章）。按"报错簇"思维（见 `docs/heimaeden.com运营方案与交叉验证文档.md` §一 1. 微调逻辑）把高频 Hugo + Cloudflare Pages 报错集中到一个 cluster anchor page，互链到各子问题详细文。
+> **本文件性质**：Hub 索引页（非单主题文章）。按"报错簇"思维（见 `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §一 1. 微调逻辑）把高频 Hugo + Cloudflare Pages 报错集中到一个 cluster anchor page，互链到各子问题详细文。
 >
-> **D12 决策**：B2 落地（`docs/topic-pool.md` §「📅 交叉验证落地决策（D12 · 2026-08-25）」B2 行）。
+> **D12 决策**：B2 落地（`docs/archive/topic-pool-2026-08-27-archive.md` §「📅 交叉验证落地决策（D12 · 2026-08-25）」B2 行）。
 >
 > **当前进度**：[draft] 阶段（骨架 + 占位）。§S1 / §S2 是 hub 内详写内容；§S3-S12 是 TBD 占位（待各子文章落地后陆续填充）。
 
@@ -143,7 +143,7 @@ hugo server --baseURL http://localhost:1313/
 
 ### 关联 S 系列
 
-- **S1**：Hugo image path broken after publish to Cloudflare Pages solution（`docs/topic-pool.md` §S1 行 107）
+- **S1**：Hugo image path broken after publish to Cloudflare Pages solution（`docs/archive/topic-pool-2026-08-27-archive.md` §S1 行 107）
 - S1 详细文落地后，互链到本簇 §Step 1.4
 
 ---
@@ -200,7 +200,7 @@ hugo server --baseURL http://localhost:1313/
 
 ### 关联 S 系列
 
-- **S2**：Cloudflare ERR_TOO_MANY_REDIRECTS custom domain fix for Hugo blog（`docs/topic-pool.md` §S2 行 116）
+- **S2**：Cloudflare ERR_TOO_MANY_REDIRECTS custom domain fix for Hugo blog（`docs/archive/topic-pool-2026-08-27-archive.md` §S2 行 116）
 - S2 详细文落地后，互链到本簇 §Step 2.1
 
 ---
@@ -226,7 +226,7 @@ Error: build failed: signal: killed (out of memory)
 ### 修复路径（占位）
 
 > 本簇在 [zh-final] 阶段由用户实操填入。当前为占位。
-> 关联 S3：`docs/topic-pool.md` §S3 行 125。
+> 关联 S3：`docs/archive/topic-pool-2026-08-27-archive.md` §S3 行 125。
 
 ---
 
@@ -243,7 +243,7 @@ Error: build failed: signal: killed (out of memory)
 ### 修复路径（占位）
 
 > 本簇在 [zh-final] 阶段由用户实操填入。
-> 关联 S7 / S8：`docs/topic-pool.md` §S7 / §S8。
+> 关联 S7 / S8：`docs/archive/topic-pool-2026-08-27-archive.md` §S7 / §S8。
 
 ---
 
@@ -259,7 +259,7 @@ PR 触发的 CF Pages Preview URL（`https://<branch>.<project>.pages.dev`）访
 ### 修复路径（占位）
 
 > 本簇在 [zh-final] 阶段由用户实操填入。
-> 关联 S2：`docs/topic-pool.md` §S2 行 116。
+> 关联 S2：`docs/archive/topic-pool-2026-08-27-archive.md` §S2 行 116。
 
 ---
 
@@ -301,7 +301,7 @@ Hub 索引页面的价值不在于"覆盖所有 Hugo 报错"——而在于**给
 
 | 决策点 | 选择 | 关联文档 |
 |---|---|---|
-| **B2**：Hugo 排错 hub 页 | 新建本文件 | `docs/topic-pool.md` §「📅 交叉验证落地决策」B2 行 |
+| **B2**：Hugo 排错 hub 页 | 新建本文件 | `docs/archive/topic-pool-2026-08-27-archive.md` §「📅 交叉验证落地决策」B2 行 |
 | 关联决策 | **A1** B2 P1 WorldFirst 按 GEO 写作模板落地 | `docs/geo-writing-module.md` |
-| 关联决策 | **C2** 自动化评估时点 = D29 | `docs/topic-pool.md` §维护规则 §9 |
+| 关联决策 | **C2** 自动化评估时点 = D29 | `docs/archive/topic-pool-2026-08-27-archive.md` §维护规则 §9 |
 | 关联决策 | **D2** about 页升级与 B2 P1 同步落地 | `content/about.md` 升级草案 |

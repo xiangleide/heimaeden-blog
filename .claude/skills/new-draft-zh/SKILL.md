@@ -76,7 +76,7 @@ lint_allow = ["cjk-body"]
 
 **判定算法**（3 步）：
 
-1. **看选题描述**：从 `docs/topic-pool.md` 该条的「AI 推荐理由」+ 「关键词」2 段定位主目的
+1. **看选题描述**：从 `docs/archive/topic-pool-2026-08-27-archive.md` 该条的「AI 推荐理由」+ 「关键词」2 段定位主目的
 2. **匹配主目的 → prompt 类型**：
 
 | 主目的关键词 | 选 prompt |
@@ -87,7 +87,7 @@ lint_allow = ["cjk-body"]
 | explained / 原理 / 概念 / why / architecture / how it works | **D 原理深挖型** |
 | how I built / methodology / workflow / 11 days / retrospective | **E 方法论 retrospective** |
 
-3. **多样性校验**（warning，不强制）：从 `docs/topic-pool.md` 「已完成」区取最近 5 篇 `prompt_type`，若新选题与 ≥ 3 篇同类型 → 警告「考虑换 prompt 类型或写配套内容」
+3. **多样性校验**（warning，不强制）：从 `docs/archive/topic-pool-2026-08-27-archive.md` 「已完成」区取最近 5 篇 `prompt_type`，若新选题与 ≥ 3 篇同类型 → 警告「考虑换 prompt 类型或写配套内容」
 
 **front matter 强制字段**（`docs/writing-prompts.md` §七）：
 

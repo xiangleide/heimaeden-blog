@@ -4,7 +4,7 @@
 >
 > **触发决策**：D12（2026-08-25）扩展方案 —— `new-draft-zh` SOP 阶段 3（章节骨架）应先判定文章类型，再选 prompt，再套模板。
 >
-> **数据来源**：`docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 1（"页面数量短期暴增、结构措辞高度相似"是 Scaled Content 识别信号）+ 第一轮复核 §1 微调 1（"匀速本身就是信号"）。
+> **数据来源**：`docs/archive/运营方案与交叉验证文档-2026-08-27.md` §二 风险 1（"页面数量短期暴增、结构措辞高度相似"是 Scaled Content 识别信号）+ 第一轮复核 §1 微调 1（"匀速本身就是信号"）。
 >
 > **前置 SOP**：`docs/article-writing-workflow.md` §5.2（推荐结构） + `docs/geo-writing-module.md`（GEO 5 段骨架）+ `docs/blog-writing-prompt.md`（已并入 Prompt A，下线）。
 
@@ -244,7 +244,7 @@
 
 ## 八、参考
 
-- `docs/heimaeden.com运营方案与交叉验证文档.md` §二 风险 1（Scaled Content 识别信号）
+- `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §二 风险 1（Scaled Content 识别信号）
 - `docs/article-writing-workflow.md` §5.2（推荐结构）+ §5.1（措辞分类）
 - `docs/geo-writing-module.md`（GEO 5 段骨架 + 指纹段定义）
 - `CLAUDE.md` §3.1（tone）+ §3.8（AI 不写 first-person + cross-reference 锚点）

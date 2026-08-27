@@ -186,7 +186,7 @@
     * **推后动作**：
         1. **线上验证窗口**（push 后 5 分钟）：浏览器访问 `https://heimaeden.com/categories/payment/`，期望 301 跳到 `/categories/remote-payment/` 且页面显示 1 篇文章。
         2. **GSC 索引**（3-7 天）：新分类 URL 重新抓取 + 旧 URL 301 迁移权重。
-    * **D5 解锁**：B1（写第二/第三篇图文长文）不再被 nav 结构阻塞，可按 docs/topic-pool.md 选题推进。AI Agent 集群首篇是关键——出文即关闭「空分类 404」UX 坑。
+    * **D5 解锁**：B1（写第二/第三篇图文长文）不再被 nav 结构阻塞，可按 docs/archive/topic-pool-2026-08-27-archive.md 选题推进。AI Agent 集群首篇是关键——出文即关闭「空分类 404」UX 坑。
 
 *   **2026-08-16 状态校准 / D5 第二次（A2/A3 双篇全链路收尾：模板加固 → 内容润色 → 英文翻译上线）**：
     * ⭐ **A2/A3 双篇英文版上线**：3 commit 全部 push 至 origin/main。CF Pages rebuild 已触发，英文版全球可访问；中文原始版本永久保存在 git 历史。
@@ -274,7 +274,7 @@
     * 📂 **同步落地的 4 个文件**：
         * `docs/article-writing-workflow.md` §5.2.1：表格行"篇幅区间"改为分档硬约束 + 新增「D16 例外备注」段
         * `docs/writing-prompts.md` 一、速查表新增「字数硬上限」列 + 五种 Prompt（A-E）各加字数硬上限声明段
-        * `docs/topic-pool.md` 顶部加 D16 注释段 + §交叉验证落地决策 加 F1 行 + **S10 字数 1,500-2,000 → 1,400-1,800**（B 档收口）+ **J3 字数 1,200-1,500 → 1,000-1,200**（A 档收口）
+        * `docs/archive/topic-pool-2026-08-27-archive.md` 顶部加 D16 注释段 + §交叉验证落地决策 加 F1 行 + **S10 字数 1,500-2,000 → 1,400-1,800**（B 档收口）+ **J3 字数 1,200-1,500 → 1,000-1,200**（A 档收口）
         * `README.md` §6 本条状态校准
     * 🔍 **诊断数据**（决策前字数盘点）：
         * `editorial-pipeline` 4064 词（C+D 档内 +63-85%）
@@ -322,7 +322,7 @@
         * 用户实操重截（Finder 滚顶含 index.json）+ 精确 caption 后 commit `47c9a01` 落地
     * 🟢 **生产安全确认**：D10 commit `581555b` 已发布（推 origin/main），CF Pages 部署走 `hugo` 无 flag 默认排除 draft + 从 source 重建 `public/`——线上无暴露风险。本地 dev 残留 5 处 stale 已 D17 完整清理 + dev server 已停。
     * 📂 **同步落地**：
-        * `docs/topic-pool.md` S18 选题入库（commit `451e0c3`）
+        * `docs/archive/topic-pool-2026-08-27-archive.md` S18 选题入库（commit `451e0c3`）
         * `docs/writing-prompts.md` Prompt A 字数硬上限（D16 已含）
         * `docs/article-writing-workflow.md` §5 推荐结构（待加「强版 grep」SOP 行）
         * `README.md` §6 本条 D17 状态校准

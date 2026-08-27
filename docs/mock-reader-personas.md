@@ -8,7 +8,7 @@
 
 ## 设计原则
 
-1. **画像来自内容而非凭空**：P1-P5 全部分布在 HeimaEden 已发布 / 计划中的内容集群（`static-site` / `remote-payment` / `ai-agent`），对应 `docs/topic-pool.md` 已有选题。
+1. **画像来自内容而非凭空**：P1-P5 全部分布在 HeimaEden 已发布 / 计划中的内容集群（`static-site` / `remote-payment` / `ai-agent`），对应 `docs/archive/topic-pool-2026-08-27-archive.md` 已有选题。
 2. **可被数据覆盖**：每个 persona 的"行为锚点"（搜索词、地区、设备）都可由 GSC / CF Analytics / Plausible 真实数据替换。skill 默认读 JSON cache（`docs/persona-data.json`），prompt 角色为 fallback。
 3. **不写真实读者**：避免把"具体用户"或"我自己"作为画像——画像是角色模板，不指向任何人。
 4. **反馈风格对应文章目的**：

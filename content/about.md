@@ -8,7 +8,7 @@ hidemeta = true
 showToc = false
 
 # Per-file exemption (grandfather clause per CLAUDE.md §3.2):
-# about.md references docs/heimaeden.com运营方案与交叉验证文档.md (literal CJK filename).
+# about.md references docs/archive/运营方案与交叉验证文档-2026-08-27.md (literal CJK filename).
 # Other 2 lines of CJK are minimal cross-references (状态校准 + 交叉验证落地决策) to that doc.
 # Future about.md rewrites should still avoid new CJK body text where possible.
 lint_allow = ["cjk-body"]
@@ -100,4 +100,4 @@ If you spot an inaccuracy in any post, the fastest fix is a GitHub Issue linking
 
 ---
 
-*Last reviewed: 2026-08-25 (D12) — D2 build-in-public upgrade landed alongside GEO pilot (B2 P1 WorldFirst) per `docs/heimaeden.com运营方案与交叉验证文档.md` §「📅 交叉验证落地决策」.*
+*Last reviewed: 2026-08-25 (D12) — D2 build-in-public upgrade landed alongside GEO pilot (B2 P1 WorldFirst) per `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §「📅 交叉验证落地决策」.*
