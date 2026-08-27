@@ -258,6 +258,42 @@
         * dev server 已稳定运行（task `bc7f4c3`, port 1313）—— 可继续视觉 QA / 部署验证
         * 13 commit 待 push（含本次 `581555b`）—— 用户 ack 后推 origin/main
 
+*   **2026-08-27 状态校准 / D16（文章篇幅分档硬约束落地）**：
+    * 🎯 **核心决策**：用户要求「调整文章长度，最近几篇文章考虑缩短篇幅」，经 3 轮 AskUserQuestion 收敛为「存量文章不变，仅约束即将完成的几篇文章」+「按 prompt_type 分档」+「editorial-pipeline 留作例外」。
+    * 📐 **分档硬约束（D16 即时生效）**：
+
+        | Prompt 类型 | 字数硬上限 | 甜区 |
+        |---|---|---|
+        | **A** 纯排错 | ≤ **1200** 词 | 1100-1200 |
+        | **B** 方案对比 | ≤ **1800** 词 | 1500-1800 |
+        | **C** 踩坑叙事 | ≤ **2200** 词 | 1800-2200 |
+        | **D** 原理深挖 | ≤ **2500** 词 | 2000-2500 |
+        | **E** 方法论 retrospective | ≤ **2500** 词 | 2000-2500 |
+
+    * ⚠️ **唯一例外**：`content/posts/ai-agent/claude-code-editorial-pipeline/index.md`（4064 词，commit `4225a6e` 已发布）—— 留作 D12 落地资产，不重写不压缩。下次重审时点 = 该文累计 inbound link ≥ 30 个外部引用后评估。
+    * 📂 **同步落地的 4 个文件**：
+        * `docs/article-writing-workflow.md` §5.2.1：表格行"篇幅区间"改为分档硬约束 + 新增「D16 例外备注」段
+        * `docs/writing-prompts.md` 一、速查表新增「字数硬上限」列 + 五种 Prompt（A-E）各加字数硬上限声明段
+        * `docs/topic-pool.md` 顶部加 D16 注释段 + §交叉验证落地决策 加 F1 行 + **S10 字数 1,500-2,000 → 1,400-1,800**（B 档收口）+ **J3 字数 1,200-1,500 → 1,000-1,200**（A 档收口）
+        * `README.md` §6 本条状态校准
+    * 🔍 **诊断数据**（决策前字数盘点）：
+        * `editorial-pipeline` 4064 词（C+D 档内 +63-85%）
+        * `beginners-practical-guide` 2145 词（B 档内 +14%）
+        * `hugo-cloudflare-pages-pitfalls` 1830 词（A 档内 OK）
+        * `static-blog-setup-guide` 1671 词（B 档内 OK）
+        * `claude-code-cli-setup-indie-blog` 1655 词（[draft] 暂存 OK）
+        * `hugo-troubleshooting-hub` 1200 词（[draft] 骨架 OK）
+    * 🔒 **未来约束**：
+        * 即将完成的文章（Hub §簇 3-5 填充 + S13 / S14 / S16 / S17 + P1 + J1 / J3 + A1-A3 等推荐选题）严格按分档硬约束
+        * `[draft]` commit 时由 AI 自检字数，超档立即警告并要求重写
+        * topic-pool.md 任何新入选选题必须带 prompt_type + 字数 ≤ 上限标注
+    * 📋 **历史脉络**：原 §5.2.1 篇幅约束为"800~2500 词之间拉开差异"，区间过宽导致唯一超长文章（editorial-pipeline 4064 词）逃脱 SOP 检测。D16 决策将单档收窄为分档硬上限，使 SOP 可机械化校验。
+    * 🔓 **下一步解锁**：
+        * S13 启 draft —— 首篇按分档硬约束（B 档 ≤ 1800，已规划 1400 词 OK）
+        * Hub §簇 3 / 4 / 5 占位填充 —— A 档 ≤ 1200，每个簇不超过 1100 词
+        * P1 WorldFirst —— GEO 试点 + 字数按 E 档 ≤ 2500
+        * J3 OOM MAT —— 排错 A 档 ≤ 1200（已下调）
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）

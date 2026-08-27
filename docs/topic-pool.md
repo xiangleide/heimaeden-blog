@@ -8,6 +8,8 @@
 > - **AI-Agent**：Claude Code / MiniMax / MCP 实操
 > - **Remote-Payment**：大陆个人开发者境外收款
 > - **Side-Project**：MVP / SaaS / Indie 工具
+>
+> **📐 D16 字数分档硬约束（2026-08-27）**：每条选题"预计字数"必须 ≤ `writing-prompts.md` 一、速查表分档上限（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）。**存量文章不变**，所有新选题严格执行。唯一例外：`ai-agent/claude-code-editorial-pipeline`（4064 词），详见 `article-writing-workflow.md` §5.2.1。
 
 ---
 
@@ -188,7 +190,7 @@
 #### S10. Hugo vs Astro vs Next.js for team blog 2026: feature parity and cold-start TCO
 - **来源**：2026-08-20 mock-reader-feedback P5 反馈催生（docs/feedback/hugo-cloudflare-pages-pitfalls-P5.md）
 - **关键词**：hugo vs astro vs nextjs, static site generator 2026, cold start tco team blog, astro vs nextjs for blog
-- **预计字数**：1,500-2,000
+- **预计字数**：1,400-1,800（**B 档硬上限 1800**，per `writing-prompts.md` Prompt B · D16 已下调）
 - **分类**：Static-Site（选型类）
 - **联盟预留**：是（Hetzner / DO / CF Pages / Vercel — 多 hosting 联盟，按平台属性分）
 - **AI 推荐理由**：**Money Hook 候选**；P5 选型决策者读完 A1 反馈："缺 2026 选型对比" + 排名 `best static site generator 2026` 是 P5 top search query；3 个 generator 全对比可填空白区
@@ -284,7 +286,7 @@
 ##### J3. OutOfMemoryError troubleshooting: heap dump + Eclipse MAT for Spring Boot
 - **来源讨论**：Eclipse MAT 官方教程 + 经典 OOM 排错案例（HeapHero / fastthread.io 生态）
 - **目标关键词**：outofmemoryerror spring boot, heap dump eclipse mat, java memory leak troubleshooting, OOM killer analysis
-- **预计字数**：1,200-1,500
+- **预计字数**：1,000-1,200（**A 档硬上限 1200**，per `writing-prompts.md` Prompt A · D16 已下调）
 - **分类**：Static-Site / Java-Advanced（排错类）
 - **联盟预留**：否
 - **AI 推荐理由**：经典 OOM 排错，英文长尾"hands-on heap dump MAT"角度稀缺；用户亲历 EEAT 强；与 J1/J2 形成 Java-Advanced 首发三件套
@@ -518,6 +520,7 @@
 | **C2**：自动化评估时点 | D29（第 4 周末） | 不在 D0-D14 评估，避免过早工程化 | ⏳ 见维护规则 §9 |
 | **D2**：about 页升级 | 与 P1 WorldFirst 同步落地 | 内容：build-in-public + GitHub/X 关联 + commit 历史 | ⏳ 见 content/about.md 升级草案 |
 | **E2**：A1 7 trap 长文拆分策略（**D14 新增**） | **B 方案**：保留原文 + 加 4 篇深坑单文（S13/S14/S16/S17）| 见 §Static-Site / Build 末尾 S13-S17 条目 + 决策注释 | ✅ 选题已入池（S13 标推荐中 · 用户 D14 决策先做）|
+| **F1**：文章篇幅分档硬约束（**D16 新增 · 2026-08-27**）| 存量文章不变（含 `editorial-pipeline` 4064 词唯一例外）+ 新文按 prompt_type 分档（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）| `article-writing-workflow.md` §5.2.1 表格 + 例外备注 / `writing-prompts.md` 一、速查表 + 五种 Prompt 各加字数硬上限声明 / `topic-pool.md` 顶部 D16 注释 + S10/J3 字数下调 | ✅ **已完成**（S10 1,500-2,000 → 1,400-1,800 / J3 1,200-1,500 → 1,000-1,200）|
 
 **关联文档**：
 - 完整交叉验证报告：`docs/heimaeden.com运营方案与交叉验证文档.md`
