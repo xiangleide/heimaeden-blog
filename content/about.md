@@ -1,7 +1,7 @@
 +++
 title = "About"
 date = 2026-08-14T20:00:00Z
-lastmod = 2026-08-25T22:00:00Z
+lastmod = 2026-08-27T22:00:00Z
 draft = false
 layout = "single"
 hidemeta = true
@@ -38,6 +38,7 @@ I track everything — every commit, every revert, every mock-reader report — 
 **Open artifacts**:
 
 - **Source repo** (this blog, full commit history): [github.com/xiangleide/heimaeden-blog](https://github.com/xiangleide/heimaeden-blog)
+- **Commit feed (live counter)**: [github.com/xiangleide/heimaeden-blog/commits/main](https://github.com/xiangleide/heimaeden-blog/commits/main)
 - **Published site**: [heimaeden.com](https://heimaeden.com)
 
 **What you'll find in the commit log**:
@@ -96,8 +97,11 @@ No analytics beyond Cloudflare's built-in (no Google Analytics, no Plausible, no
 
 🐙 **GitHub**: [github.com/xiangleide](https://github.com/xiangleide) — issues / PRs / public commit history
 
+- 📝 **Factual correction**: [open an issue](https://github.com/xiangleide/heimaeden-blog/issues/new?template=factual-correction.yml)
+- 💡 **Topic suggestion**: [open an issue](https://github.com/xiangleide/heimaeden-blog/issues/new?template=topic-suggestion.yml)
+
 If you spot an inaccuracy in any post, the fastest fix is a GitHub Issue linking the post + the offending sentence. I'll patch it within a week.
 
 ---
 
-*Last reviewed: 2026-08-25 (D12) — D2 build-in-public upgrade landed alongside GEO pilot (B2 P1 WorldFirst) per `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §「📅 交叉验证落地决策」.*
+*Last reviewed: 2026-08-27 (D18) — D18 仓库公开化 + commit feed live counter + Issue 模板上线.*

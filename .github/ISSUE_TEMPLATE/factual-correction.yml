@@ -1,0 +1,71 @@
+name: Factual Correction
+description: Report an inaccuracy in an existing post on heimaeden.com.
+title: "[correction] <short summary of the inaccuracy>"
+labels: ["correction", "needs-review"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep this blog accurate. Please fill in the fields below — the more specific you are, the faster I can verify and patch.
+
+  - type: input
+    id: post-url
+    attributes:
+      label: Post URL
+      description: Full URL of the affected post on heimaeden.com (e.g. https://heimaeden.com/posts/static-site/hugo-cloudflare-pages-pitfalls/).
+      placeholder: https://heimaeden.com/posts/<category>/<slug>/
+    validations:
+      required: true
+
+  - type: textarea
+    id: offending-sentence
+    attributes:
+      label: Offending sentence(s)
+      description: Quote the exact sentence(s) you believe are inaccurate. Include the paragraph context if possible.
+      placeholder: |
+        > "Original sentence here."
+        > (from the §<section> section)
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Suggested rewrite
+      description: What would you change the sentence(s) to? If you have a verifiable source for the fix, paste it here.
+      placeholder: |
+        "Rewritten sentence with the correction."
+        Source: <link to docs / blog post / official documentation>
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source / verification
+      description: Link or reference that backs up your correction (official docs, your own experiment, a thread, etc.).
+      placeholder: https://example.com/your-source
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How serious is the inaccuracy? (cosmetic = typo/grammar; minor = wrong version flag but not misleading; major = factually misleading)
+      options:
+        - cosmetic (typo / grammar / wording)
+        - minor (slightly wrong but not misleading)
+        - major (factually misleading)
+      validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I've checked this is not already addressed in the post's `Last updated` line or a follow-up commit.
+          required: false

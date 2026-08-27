@@ -1,0 +1,75 @@
+name: Topic Suggestion
+description: Suggest a topic for a future heimaeden.com post (technical how-to, debugging story, or tooling comparison).
+title: "[topic] <short summary of the topic>"
+labels: ["topic-suggestion", "needs-review"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Before opening, please skim `docs/archive/topic-pool-2026-08-27-archive.md` (currently in this repo's archive/ folder) to see what's already on the roadmap — duplicates will be closed quickly.
+
+  - type: input
+    id: topic-title
+    attributes:
+      label: Topic title (draft)
+      description: One-line title for the post you'd like to see. Aim for something a real developer would search for.
+      placeholder: How to fix <specific error> when deploying <specific stack>
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cluster
+    attributes:
+      label: Which content cluster?
+      description: Pick the closest match — this helps me decide if it fits the blog's focus.
+      options:
+        - Static-Site (Hugo / Cloudflare Pages / Java deploy / troubleshooting)
+        - AI-Agent (Claude Code / MCP / AI coding workflow)
+        - Remote-Payment (cross-border payment / AdSense / affiliate payout)
+        - Side-Project (MVP / SaaS / indie tool)
+        - Other (explain in the description)
+      validations:
+      required: true
+
+  - type: textarea
+    id: search-intent
+    attributes:
+      label: Search intent / why this matters
+      description: Who would search for this? What's the underlying pain point? What would a reader walk away able to do?
+      placeholder: |
+        Audience: <e.g. solo devs deploying Spring Boot on a $5 VPS>
+        Pain point: <what's frustrating / blocked / unclear today>
+        Outcome: <what the reader can do after reading the post>
+    validations:
+      required: true
+
+  - type: textarea
+    id: differentiation
+    attributes:
+      label: Differentiation from existing posts
+      description: How would this post differ from what heimaeden.com already covers? Link 1-2 closest existing posts or external articles.
+      placeholder: |
+        Existing closest post on this blog: https://heimaeden.com/...
+        External reference: https://example.com/...
+        Why a new post is justified: <1-2 sentences>
+    validations:
+      required: true
+
+  - type: input
+    id: depth-target
+    attributes:
+      label: Target depth / length
+      description: Approximate target word count (the blog caps most posts at 800-2500 words depending on type).
+      placeholder: ~1200 words (A-tier troubleshooting)
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I'm willing to share hands-on experience (logs / screenshots / repro steps) if you decide to write this post.
+          required: false
