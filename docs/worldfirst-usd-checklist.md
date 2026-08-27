@@ -1,23 +1,25 @@
-# WorldFirst 美元账户申请 Checklist（worldfirst-usd-checklist.md）
+# 跨境收款 USD 账户申请 Checklist（worldfirst-usd-checklist.md）
 
-> **用途**：移动端按部就班执行 WorldFirst USD 收款账户开通的现场操作手册。
-> **配套**：`docs/think-payment.md` §五-3（WorldFirst 个人收款完整流程）+ `docs/think-strategy.md` §五（万里汇方案）。
-> **节奏**：D4 末 → D5 前完成 USD 账户 + 截图保存 + hugo.toml 本地段写入 → A2 全部完成。
-> **承诺**：完成本 checklist 100% 后，README §1 M3 由 95% → 100%。
+> **用途**：移动端按部就班执行 USD 收款账户开通的现场操作手册（适用 WorldFirst / 类似平台）。
+> **配套**：`docs/think-payment.md` §五（跨境收款平台选择通用指引）。
+> **承诺**：完成本 checklist Phase 1-3 后即可向海外平台收款；Phase 4-5 视商业化阶段触发。
 
 ---
 
-## 进度概览
+## 进度概览（个人完成状态 = 本地记录，不入库）
 
-| Phase | 动作 | 状态 |
+> ⚠️ **公开化精简（2026-08-27）**：本节原为个人完成时间表（含 ✅ 状态 + 具体日期 + 本地路径），公开化前删除。读者使用本 checklist 时，按自己节奏勾选下表即可，无需复刻任何时序。
+
+| Phase | 动作 | 你的状态 |
 |---|---|---|
-| ✅ 已完成 | 实名认证（身份证 + 支付宝人脸 KYC）| 2026-08-15 |
-| ✅ 已完成 | 绑定支付宝用于人民币收款 | 2026-08-15 |
-| ✅ 已完成 | WorldFirst 控制台申请 USD 收款账户（业务类型「数字内容创作」，仅绑定 AdSense）| **2026-08-15** |
-| ✅ 已完成 | 拿到 Routing/Account Number/SWIFT/Bank Name 4 字段 + 截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png` | **2026-08-15** |
-| ⏸ 已跳过 | `hugo.local.toml` 写入 4 字段（**可选**，仅为未来 shortcode 复用，不阻塞收款） | **2026-08-15** |
-| ⏸ Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证 | **推迟到 M5 阶段**（需先满足 AdSense 审核通过 + 累计收益 ≥ $100） |
-| ⏸ Phase 5 | 各联盟平台 USD 账户（**WorldFirst 一户一平台**，按需申请，30s/账户） | **延后至 M5 商业化收割阶段，按需申请** |
+| Phase 1 | 实名认证（身份证 + 平台人脸 KYC）| ⬜ 待完成 |
+| Phase 1 | 绑定用于人民币提现的收款工具 | ⬜ 待完成 |
+| Phase 1 | 控制台申请 USD 收款账户（业务类型「数字内容创作」）| ⬜ 待完成 |
+| Phase 2 | 拿到 Routing / Account Number / SWIFT / Bank Name 4 字段 | ⬜ 待完成 |
+| Phase 3 | 4 字段截图保存至本地保密目录 | ⬜ 待完成 |
+| Phase 3 | `hugo.local.toml` 写入 4 字段（可选，仅为未来 shortcode 复用）| ⬜ 可选 |
+| Phase 4 | AdSense 后台绑定 USD 收款账户 + 测试款到账验证 | ⬜ 推迟到商业化阶段 |
+| Phase 5 | 各联盟平台 USD 账户（按需申请，30s/账户） | ⬜ 商业化阶段按需触发 |
 
 ---
 
@@ -70,19 +72,21 @@ WorldFirst 主控台 → 「收款账户」或「多币种账户」→ 「申请
 
 ### 3.1 截图保存（4 张 PNG，文件名规范化）
 
-建议路径：`~/Documents/heimaeden-payout/worldfirst-usd-2026-08-XX/`
+> ⚠️ **公开化精简（2026-08-27）**：本节原含个人本地路径示例（`~/Documents/heimaeden-payout/worldfirst-usd-2026-08-XX/`）——该路径暴露账户持有者本人机器 + 命名习惯。公开化后改为通用「截图保存至本地保密目录」指引，文件名规范保留作为 SOP 参考。
 
-| 文件名 | 内容 |
+**路径约定**（请按自己习惯命名，本文档不指定具体路径）：
+
+| 文件名（参考规范） | 内容 |
 |---|---|
 | `01-account-number.png` | 含完整 Account Number |
 | `02-routing-number.png` | 含完整 Routing Number |
 | `03-swift-code.png` | 含完整 SWIFT/BIC |
 | `04-bank-name.png` | 含合作行英文名 |
 
-📸 截图要求：
+📸 截图要求（通用）：
 - 包含账户持有人姓名拼音（核对与 AdSense 一致）
 - 包含账户开通时间戳
-- 不要发到云相册（防止泄露）
+- **不要发到云相册 / 公开 GitHub / 团队共享盘**（防止泄露，公开后无法撤回）
 
 ### 3.2 写入 hugo.local.toml override 文件（**不进 git**）
 
@@ -93,23 +97,25 @@ Hugo `--config` 只识别 `.toml/.yaml/.json` 后缀，所以 override 文件必
 
 **操作步骤**：
 
-1. 在 repo 根创建 `hugo.local.toml`（**不要 commit**，已在 `.gitignore`）
+1. 在 repo 根创建 `hugo.local.toml`（**不要 commit**，确保已在 `.gitignore`）
 
-2. 复制以下完整模板，填入 Phase 2 拿到的 4 字段真实值：
+2. **参数名列表**（具体值由你从平台控制台复制粘贴，不在本节示例化——避免示例值被误填使用）：
 
 ```toml
 # hugo.local.toml — PRIVATE override, NEVER commit
 # Usage: hugo --config hugo.toml,hugo.local.toml
 
-[params.payout.adsense]
-provider       = "WorldFirst"
-accountHolder  = "XIANG LEIDE"  # MUST match AdSense payout name exactly (pinyin)
-accountNumber  = "123456789012"  # 9-12 digits, no spaces, no dashes
-routingNumber  = "021000021"     # 9-digit ABA / Routing Number
-swift          = "BOFAUS3N"      # 11-char BIC (8 letters + 3 alphanumerics)
-bankName       = "Bank of America, N.A."  # WorldFirst partner bank
-lastUpdated    = "2026-08-15"    # YYYY-MM-DD, update every refresh
+[params.payout.<platform-slug>]
+provider       = "<平台名 e.g. WorldFirst / Payoneer / Wise 等>"
+accountHolder  = "<收款人姓名英文 / 拼音，必须与上游平台 payout name 完全一致>"
+accountNumber  = "<9-12 位纯数字>"
+routingNumber  = "<9 位 ABA / Routing Number>"
+swift          = "<11 字符 BIC (8 字母 + 3 字母数字)>"
+bankName       = "<合作行英文全称>"
+lastUpdated    = "<YYYY-MM-DD，每次刷新更新>"
 ```
+
+> ⚠️ **公开化精简（2026-08-27）**：原模板含 `accountHolder = "XIANG LEIDE"` 等真实示例值（拼写 = 账户持有人本人姓名拼音）+ Routing/SWIFT/Account Number 真实格式占位数字——这些示例值即使带 `# comment` 也属于「不应公开」的 PII（账号持有者可被反查）。**公开化后此处改为参数名列表，具体值由你从平台控制台复制，不在此文档出现任何真实数字 / 姓名示例**。
 
 3. 验证 Hugo 能加载双 config：
 
@@ -153,52 +159,38 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 ---
 
-## Phase 5：各联盟平台 WorldFirst USD 账户（**延后至 M5，按需申请**）
+## Phase 5：各联盟平台 USD 账户（**按需申请，商业化阶段触发**）
 
-> **实测结论（2026-08-15）**：WorldFirst 一个 USD 收款账户 = 绑定一个**指定**收款平台，不能跨平台共用。
-> - 已开通：AdSense 专用 USD 账户（Phase 1）
-> - 后续每个联盟对接时 → WorldFirst 控制台再单独申请一个 USD 账户（**约 30 秒/账户**）
-> - 战略意义：无需提前批量开通，刚需时再开，零复杂度
+> ⚠️ **公开化精简（2026-08-27）**：本节原含具体平台名单（Hetzner / DigitalOcean / Porkbun / WildCard）+ 个人本地路径 + WorldFirst 实测结论。公开化后改为「多账户管理通用框架」，具体平台名由你商业化时按实际联盟伙伴填充。
 
-### M5 阶段（商业化收割）执行清单（**D30+ 触发**）
+### 多账户管理通用原则
 
-按相同模式逐个申请 + 绑定：
+- 一个 USD 收款账户通常对应一个**指定**收款平台（业内常识，以平台官方文档为准）。
+- 后续每个联盟对接时 → 在平台控制台单独申请一个新 USD 账户。
+- 战略意义：无需提前批量开通，刚需时再开，零复杂度。
 
-| 联盟平台 | 申请时机 | 操作 |
-|---|---|---|
-| **Hetzner Affiliate** | D30 后申请联盟资格后 | WorldFirst 控制台 → 申请新 USD 账户（业务类型「联盟佣金」） |
-| **DigitalOcean Referral** | D30+ | 同上 |
-| **Porkbun Affiliate** | 域名续费时顺便 | 同上 |
-| **WildCard 推广** | 订阅 SaaS 工具推荐时 | 同上 |
-| **其他** | 按需 | 同上 |
+### 多账户管理建议（公开版）
 
-### 多账户管理建议
-
-- WorldFirst 控制台会给每个 USD 账户起名（建议格式：`USD-AdSense`、`USD-Hetzner-Aff` 便于识别）
-- 每个账户单独保存 4 字段截图到 `~/Documents/heimaeden-payout/worldfirst-<platform>-<date>/`
-- `hugo.toml` `[params.payout.<platform>]` 段按需扩展，不挤一个段里
+- 平台控制台会给每个 USD 账户起名（建议格式：`USD-<Platform>` 便于识别）
+- 每个账户单独保存 4 字段截图到**本地保密目录**（按自己命名习惯，不公开具体路径）
+- `hugo.toml` `[params.payout.<platform-slug>]` 段按需扩展，不挤一个段里
 
 ---
 
-## ⚠️ Phase 3 决策记录（2026-08-15 跳过）
+## ⚠️ Phase 3 决策记录（可选步骤的取舍）
 
-**Phase 3 的原始设计**：把 4 字段写入 `hugo.local.toml` override 文件，便于未来 Money Page 文章用 `.Site.Params.Payout.Adsense.*` 复用数据。
+**Phase 3 的设计**：把 4 字段写入 `hugo.local.toml` override 文件，便于未来 Money Page 文章用 `.Site.Params.Payout.<platform>.*` 复用数据。
 
-**跳过的理由**：
-- Phase 3 的真实价值是**前端展示 + 模板复用**（不改也不阻塞收款链路）
-- Phase 4（AdSense 后台绑定）才是收款通路的硬卡点
-- 直接进 Phase 4 可以更快触发 7-14 天的测试款等待期
-
-**跳过的代价**：
-- 未来 Money Page 文章展示「本博客收款走 WorldFirst USD / 合作行 BOA」类信任标识时，需要**手抄硬编码**（每篇文章贴一次）
-- 万一 WorldFirst 政策变了、合作行变更 → 需要 grep 替换 N 篇文章
+**省略的代价**（当 Phase 3 跳过时）：
+- 未来 Money Page 文章展示「本博客收款走 USD / 合作行 X」类信任标识时，需要**手抄硬编码**（每篇文章贴一次）
+- 收款政策变了、合作行变更 → 需要 grep 替换 N 篇文章
 
 **何时回补 Phase 3**：
-- M5 阶段产出 ≥ 3 篇 Money Page 文章后，如果发现硬编码重复成为负担 → 重启此 Phase
+- 商业化阶段产出 ≥ 3 篇 Money Page 文章后，如果发现硬编码重复成为负担 → 重启此 Phase
 
-**脚手架已就位（无需重建）**：
-- `.gitignore` 第 11 行已加 `hugo.local.toml`（未来启用只需 `cp` + 填值）
-- §3.2 完整模板保留在文档中（删模板需同步清理本节警告）
+**脚手架已就位**：
+- 确保 `hugo.local.toml` 在 `.gitignore` 中（避免误 commit）
+- §3.2 参数名列表保留在文档中（具体值由你从平台控制台复制）
 
 ---
 
@@ -206,45 +198,43 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 > 与 `docs/think-payment.md` §六 一致。
 
-1. **拼音一致性**：WorldFirst 注册的拼音必须与 AdSense 后台 `收款人姓名` **完全一致**（颠倒字母、错大小写、空格差异 = 拒收或退回）
+1. **拼音 / 英文姓名一致性**：平台注册的收款人姓名必须与上游平台 payout name **完全一致**（颠倒字母、错大小写、空格差异 = 拒收或退回）
 2. **不要选电商类型**：审核会以「实物贸易」为由要你提供物流单据（数字服务无单 = 失败）
 3. **不要大额突然到账**：首次单笔 >$1000 会触发复审，可能冻结 7-15 天
-4. **5 万 USD 年度便利化额度**：每年累计结汇超 5 万美元需主动申报，WorldFirst 可代为服务贸易申报（参考 `think-payment.md` §五-3 步骤 5）
+4. **当地年度便利化额度**：每年累计结汇超过当地年度便利化额度需主动申报；具体口径以平台服务贸易代申报逻辑为准
 5. **8-12 个月复核**：USD 账户政策会变，每年至少复核一次 Routing/SWIFT 是否仍有效
 
 ---
 
-## 🔄 冗余备份（WorldFirst 故障时的应急通道）
+## 🔄 冗余备份（主平台故障时的应急通道）
 
-> 此前版本建议同时开通 Payoneer / Wise 作为冗余。
-> **2026-08-15 修正**：WorldFirst 单账户 30s 申请、多账户并行无额外成本 → **WorldFirst 一家足以覆盖**主需求，备份通道仅在 WorldFirst 服务整体不可用时启用。
+> **公开化精简（2026-08-27）**：本节原推荐 WorldFirst 多账户为主 + Payoneer/Wise/PingPong/PayPal 备用，含具体启用条件。公开化后改为通用「冗余备份决策框架」——具体平台选择以你主用平台 + 当地合规要求为准。
 
-| 通道 | 启用时机 |
-|---|---|
-| **WorldFirst 多账户** | 主方案；按需申请，每账户绑定 1 平台 |
-| **Payoneer** | 仅当 WorldFirst 整体服务异常时启用（如平台倒闭/账号冻结） |
-| **Wise** | 仅当出境/有护照后启用（需地址证明） |
-| **PingPong** | 不推荐（电商导向） |
-| **PayPal** | 不推荐作主通道（5 万 USD 限制、汇率差） |
+**通用原则**：
+- 主平台故障 ≠ 主平台临时审核慢 → 前者可启动冗余，后者建议等待
+- 冗余通道应在主平台运行良好时预先开通并 idle（避免主平台真故障时两手空空）
+- 选择冗余通道时优先考虑：跨平台 KYC 资料是否可复用、币种账户开通成本、提现费率
 
 ---
 
-## ✅ 完成定义（M3 = 100% 收官标志）— **激进型边界（2026-08-15 重新校准）**
+## ✅ 完成定义参考（公开版）
 
-> **背景**：2026-08-15 用户指出关键事实——现在还没接入广告与营销联盟 → AdSense 测试款机制无法触发 → 把"AdSense 绑定 + 测试款到账"作为 M3 收官门槛会让 M3 永远卡在 99%。
->
-> **新边界（激进型方案 A）**：M3 = 100% **仅需 WorldFirst USD 账户开通 + 4 字段截图保存** 即可。AdSense 绑定 + 测试款到账 → 推迟至 M5 阶段（商业化收割），需先满足：(a) AdSense 申请审核通过；(b) 累计收益 ≥ $100 支付阈值；(c) 真实流量基础。
+> ⚠️ **公开化精简（2026-08-27）**：原 §「完成定义（M3 = 100% 收官标志）」含个人完成日期 + M3 状态 + 本地路径——公开化前删除。本节改为通用「完成度定义参考」。
 
-满足以下 **2 项** 即达 M3 = 100%：
+**Phase 1-2（必做，账户上线）**：
+- [ ] USD 收款账户开通成功（控制台状态正常）
+- [ ] 4 字段全部记录 + 截图保存至本地保密目录
 
-1. [x] WorldFirst AdSense USD 账户开通（Phase 1 ✅，2026-08-15）
-2. [x] 4 字段全部截图保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/`（Phase 2 ✅，2026-08-15）
+**Phase 3（可选，前端展示复用）**：
+- [ ] `hugo.local.toml` 写入 4 字段（仅在需要 Money Page 信任标识时做）
 
-**M3 收官状态**：✅ **已达成 2026-08-15**（详见 README §1 + §7.3 阶段 α 全部勾选）。
+**Phase 4（推迟到商业化阶段）**：
+- [ ] 上游平台（AdSense / 联盟）后台绑定 USD 收款账户
+- [ ] 测试款到账验证
+- [ ] 首次实际款到账
 
-**Phase 3（hugo.local.toml 写入）**：⏸ 跳过（见上文「Phase 3 决策记录」节）。
-**Phase 4（AdSense 绑定 + 测试款）**：⏸ 推迟到 M5 阶段（见上文进度概览表 + README §7.3 阶段 δ D4）。
-**Phase 5（联盟 USD 账户）**：⏸ 按需在 M5 阶段触发（不阻塞 M3 → M4 推进）。
+**Phase 5（按需触发）**：
+- [ ] 各联盟平台 USD 账户（按对接顺序逐个申请）
 
 ---
 
@@ -252,7 +242,7 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 如遇以下情况，先记录具体报错截图，再问 Claude：
 
-- WorldFirst 控制台看不到 USD 申请入口 → 可能账号类型不对
-- AdSense 拒绝绑定 → 检查拼音一致性 + Routing 格式
+- 控制台看不到 USD 申请入口 → 可能账号类型不对
+- 上游平台拒绝绑定 → 检查姓名拼音一致性 + Routing 格式
 - 测试款超过 14 天未到账 → 检查 Routing Number 是否填写正确
 - 提现时弹出「需补充材料」→ 一般是首次大额触发，按指引补提交即可
