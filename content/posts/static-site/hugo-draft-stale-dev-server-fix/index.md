@@ -103,11 +103,11 @@ Hugo 的 taxonomy 列表页（`/categories/` + `/tags/`）rebuild 触发条件�
 
 ## Step-by-step 修复
 
-### Step 1：列出 draft 文章关联的 public/ 路径
-
-> 📸 *Figure 1：Step 1 启动前 `public/` 目录的 Finder 截图，含 `posts/ai-agent/claude-code-cli-setup-indie-blog/` + `tags/{tutorial,ai-coding-agent,claude-code,indie-blogger}/` 4 个 stale 子目录 + `index.json`，全部标红待清理。*
+> 📸 **截图标注位**（Step 1）：Terminal 输出 + Finder `public/` 目录。命名：`step-1-public-dir-before-cleanup.png`
 >
-> ![Terminal output and Finder sidebar showing stale public/ subdirectories containing the draft article HTML and 4 stale tag directories before cleanup.](/images/static-site/hugo-draft-stale-dev-server-fix/step-1-public-dir-before-cleanup.png)
+> 📸 **截图标注位**（Step 6）：Terminal `hugo server` 启动日志 + 浏览器 `/categories/`。命名：`step-6-dev-server-restart.png`
+
+### Step 1：列出 draft 文章关联的 public/ 路径
 
 ```bash
 # 列出所有 draft 文章
@@ -139,10 +139,6 @@ hugo server --baseURL http://localhost:1313 \
             --buildDrafts=false \
             --disableFastRender
 ```
-
-> 📸 *Figure 2：Step 6 完成后的 `hugo server` 启动日志（0 warnings, 0 errors）+ 浏览器 `/categories/ai-agent/` 截图，已不再列出 stale draft 文章。*
->
-> ![Hugo dev server restarted successfully with --buildDrafts=false --disableFastRender flags; browser screenshot of /categories/ai-agent/ no longer shows the previously leaked draft article.](/images/static-site/hugo-draft-stale-dev-server-fix/step-6-dev-server-restart.png)
 
 ---
 
