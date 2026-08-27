@@ -294,6 +294,44 @@
         * P1 WorldFirst —— GEO 试点 + 字数按 E 档 ≤ 2500
         * J3 OOM MAT —— 排错 A 档 ≤ 1200（已下调）
 
+*   **2026-08-27 状态校准 / D17（D10 修复完整性复盘 + 强版 grep SOP 升级 + S18 启 draft）**：
+    * 🎯 **核心复盘**：D10 commit `581555b` 修复**不完整**——清理时漏了 4 个 tag 子目录（`public/tags/{tutorial, ai-coding-agent, claude-code, indie-blogger}/`）+ `public/index.json`；验证命令 `grep -r "claude-code-cli\|Set Up Claude Code" public/` 因缺失 `grep -v editorial-pipeline` 排除而误报「全站 0 匹配」。**D17 复盘触发**：基于 D10 事故写 S18 排错长文时为还原现场扫描 `public/`，发现 5 处仍在 stale 状态。
+    * 🚨 **D10 vs D17 修复对比**：
+
+        | 维度 | D10（`581555b`）| D17（本次）|
+        |---|---|---|
+        | 物理清理 | 3 处（post + claude-code tag + cover img）| **6 处**（1 post + 4 tags + index.json）|
+        | 验证 grep | `grep -r "..." public/`（误报 0 匹配）| 强版 grep + `grep -v editorial-pipeline`（精确）|
+        | sitemap.xml 扫描 | ❌ 未做 | ✅ 0 命中 |
+        | 修复完整度 | ❌ 不完整 | ✅ 完整 |
+
+    * 🔧 **强版 grep SOP 升级**（待写入 `docs/article-writing-workflow.md` §5 推荐结构）：
+        ```bash
+        grep -rl "<draft-title-substring>" public/ \
+          | grep -v "editorial-pipeline"   # 排除合法 cross-reference
+        ```
+        * 必须覆盖 5 类目录：`posts/` + `tags/` + `categories/` + `index.json` + `sitemap.xml`
+        * Hugo 重建后 2 个 tag 目录（claude-code / indie-blogger）由 Hugo 合法重建——其他已发布文章也用这 2 个 tag。**关键判断**：重建后目录 ≠ stale，需 `grep` 内容验证不含 draft 引用
+    * 🆕 **S18 [draft] 启**（commit `451e0c3`）+ 截图入库（commit `47c9a01`）：
+        * 文章：`content/posts/static-site/hugo-draft-stale-dev-server-fix/index.md`（996 词，A 档 ≤ 1200 ✓，prompt_type=A）
+        * 标题：*Why My Hugo Draft Still Shows Up After I Moved It to `_drafts/`*
+        * 截图：2 张真实还原（Finder 视图 6 项 stale + terminal/browser 单图拼接，step-6 自 3070×1190 优化至 1440×558）
+    * 🐛 **截图入库教训**（D17 第二次踩坑）：
+        * commit `0200161` 因截图与文字不符被 `fafac94` revert——AI 未在入库前 Read 截图比对内容
+        * **新规矩**：截图入库前 AI 必须用 Read 工具读图 + 与 caption/alt 比对，不一致即禁止 commit（D4 教训同源——事实造假风险）
+        * 用户实操重截（Finder 滚顶含 index.json）+ 精确 caption 后 commit `47c9a01` 落地
+    * 🟢 **生产安全确认**：D10 commit `581555b` 已发布（推 origin/main），CF Pages 部署走 `hugo` 无 flag 默认排除 draft + 从 source 重建 `public/`——线上无暴露风险。本地 dev 残留 5 处 stale 已 D17 完整清理 + dev server 已停。
+    * 📂 **同步落地**：
+        * `docs/topic-pool.md` S18 选题入库（commit `451e0c3`）
+        * `docs/writing-prompts.md` Prompt A 字数硬上限（D16 已含）
+        * `docs/article-writing-workflow.md` §5 推荐结构（待加「强版 grep」SOP 行）
+        * `README.md` §6 本条 D17 状态校准
+    * 🔓 **下一步解锁**：
+        * S18 → [zh-final] 流程触发（需用户实操后）
+        * Hub §簇 3 / 4 / 5 填充（A 档 ≤ 1200）
+        * S13 Cloudflare Workers vs Pages（[draft] 启，B 档 ≤ 1800）
+        * P1 WorldFirst GEO 试点（[draft] 启，E 档 ≤ 2500）
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
