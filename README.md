@@ -332,6 +332,20 @@
         * S13 Cloudflare Workers vs Pages（[draft] 启，B 档 ≤ 1800）
         * P1 WorldFirst GEO 试点（[draft] 启，E 档 ≤ 2500）
 
+*   **2026-08-27 状态校准 / D18（仓库公开化 + S18 [zh-final] 待办锚定）**：
+    * 🎯 **核心进展**：仓库公开化前置全部完成 — 6 commits 落地（`c8c9f89` 敏感文件归档 + `bb678ff` / `f3fce7e` / `19e10c8` think-* 精简 + `f1a3832` about + .github/ + `d725102` think-* 归档）。公开 docs/ 现仅 9 个 SOP / 方法论文档，敏感讨论 / 选题库 / PII 全部入 archive/。下一步：用户执行 O1（GitHub Settings → Make public）+ O2（启用 Issues / PRs）+ O3（CF Pages rebuild 验证）。
+    * 📋 **S18 [zh-final] 待办锚定**：详细 TODO 已存为 `docs/pending/S18-zh-final-todo.md`（**用户决定**：实操足够 + first-person 混合 intro/结尾 + 加 cover 复用 step-6 截图）。下次会话 trigger：「继续 S18 zh-final」。
+    * 🗂️ **文档重分类总结**：
+        * docs/ 公开区（9 个）：article-writing-workflow / dev-server-baseurl / geo-writing-module / gsc-setup-guide / mock-reader-personas / persona-data / seo-setup-checklist / worldfirst-usd-checklist / writing-prompts
+        * docs/archive/（9 个）：blog-writing-prompt（用户 pending）+ topic-pool-2026-08-27-archive / 运营方案与交叉验证文档-2026-08-27 + think-{strategy,payment,templates}-2026-08-27 / think-2026-08-27-index / think-x1-claude-code-pipeline / think-issue-rejected-2026-08-19
+        * docs/feedback/（13 个 tracked 文件）：用户决定保留 mock-reader 流程证据
+        * docs/cover-prompts/（10.6 KB）：纯设计方法论
+        * docs/pending/S18-zh-final-todo.md：**新增**工作区目录，承载未来 [zh-final] / [en-final] 阶段 TODO
+    * 🔓 **下次会话 trigger**：
+        * 「继续 S18 zh-final」→ 直接读 `docs/pending/S18-zh-final-todo.md`，进入 TCM 阶段四
+        * 「执行 O1」→ 用户手动 push + GitHub UI 操作
+        * 「继续 Hub 簇 3/4/5」→ A 档 ≤ 1200 词补全
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
