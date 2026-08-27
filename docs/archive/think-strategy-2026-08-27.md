@@ -1,7 +1,7 @@
 # 综合战略纪要（think-strategy.md）
 
 > **来源**：境内 AI 在 2026-08-14 首次产出。
-> **作用**：博客整体战略与节奏总纲。模块深度展开见 `think-templates.md`（选题模板）与 `think-payment.md`（境外收款模块）。
+> **作用**：博客整体战略与节奏总纲。模块深度展开见 `docs/archive/think-templates-2026-08-27.md`（选题模板）与 `docs/archive/think-payment-2026-08-27.md`（境外收款模块）。
 > **约定**：本文为 Claude 跨会话读取所用，与 Claude 当下反馈互补，不冲突。
 
 ---
@@ -109,8 +109,8 @@
 
 ### 2. 首批可直接使用内容库
 
-- 30个VPS/建站/排错英文长尾关键词（见 think-templates.md）
-- 30个海外收款英文长尾关键词（见 think-payment.md）
+- 30个VPS/建站/排错英文长尾关键词（见 `docs/archive/think-templates-2026-08-27.md`）
+- 30个海外收款英文长尾关键词（见 `docs/archive/think-payment-2026-08-27.md`）
 - 全套AI Agent实操选题体系（待补充）
 
 ## 五、跨境收款平台选择通用指引

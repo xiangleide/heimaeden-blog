@@ -185,7 +185,7 @@ Any screenshot containing UI that surfaces account-level data MUST pass `./scrip
 Hard rules when writing English long-form posts (≥800 words). Violation = content-farming anti-pattern (Google HCU risk).
 
 1. **AI does not write first-person experience in 初稿**. First-draft tone must be step-by-step 操作清单 ("步骤 1：打开 X..."), NOT "I went through this debugging marathon...". First-person ONLY appears in 第二版, AND only when user has hands-on fact basis to back it up.
-2. **Topic recommendation is context-driven**. AI 不凭空选题. Before recommending, must scan: (a) existing `content/posts/*` distribution by category; (b) `think-templates.md` / `think-payment.md` topic coverage; (c) recent 3 posts (avoid consecutive same-topic); (d) Money Hook density vs README §7.3 E1 (≥15 篇长文 → AdSense). 题目库协作产生于 `docs/archive/topic-pool-2026-08-27-archive.md` (TBD by separate session).
+2. **Topic recommendation is context-driven**. AI 不凭空选题. Before recommending, must scan: (a) existing `content/posts/*` distribution by category; (b) `docs/archive/think-templates-2026-08-27.md` / `docs/archive/think-payment-2026-08-27.md` topic coverage; (c) recent 3 posts (avoid consecutive same-topic); (d) Money Hook density vs README §7.3 E1 (≥15 篇长文 → AdSense). 题目库协作产生于 `docs/archive/topic-pool-2026-08-27-archive.md` (TBD by separate session).
 3. **Real content screenshots only**. AI does NOT use Unsplash/Pexels as content screenshots (those are for cover images only, per §3.3). Content screenshots MUST come from user's hands-on operation. 初稿必须标注截图位（位置 + 脱敏 + 文件命名规范）。
 4. **Affiliate placeholders in 初稿, not translation**. 初稿阶段就标 `[联盟-占位 platform]` + 推荐用语模板（按 README §五-3 双向互惠）。不延迟到翻译阶段。
 5. **Translation is 字面对应, not 改写**. 第三阶段翻译：AI 不增删任何事实, 不改写用户原话, 仅做字面对应 + 地道英语表达 + SEO 结构。

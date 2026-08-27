@@ -1,7 +1,7 @@
 # 跨境收款 USD 账户申请 Checklist（worldfirst-usd-checklist.md）
 
 > **用途**：移动端按部就班执行 USD 收款账户开通的现场操作手册（适用 WorldFirst / 类似平台）。
-> **配套**：`docs/think-payment.md` §五（跨境收款平台选择通用指引）。
+> **配套**：`docs/archive/think-payment-2026-08-27.md` §五（跨境收款平台选择通用指引）。
 > **承诺**：完成本 checklist Phase 1-3 后即可向海外平台收款；Phase 4-5 视商业化阶段触发。
 
 ---
@@ -196,7 +196,7 @@ hugo server --config hugo.toml,hugo.local.toml --buildDrafts
 
 ## ⚠️ 避坑提醒（5 条硬约束）
 
-> 与 `docs/think-payment.md` §六 一致。
+> 与 `docs/archive/think-payment-2026-08-27.md` §六 一致。
 
 1. **拼音 / 英文姓名一致性**：平台注册的收款人姓名必须与上游平台 payout name **完全一致**（颠倒字母、错大小写、空格差异 = 拒收或退回）
 2. **不要选电商类型**：审核会以「实物贸易」为由要你提供物流单据（数字服务无单 = 失败）

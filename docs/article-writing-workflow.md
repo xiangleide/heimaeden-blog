@@ -35,7 +35,7 @@
    - `remote-payment`：M 篇
    - `side-project`：K 篇
    - ratio = N / (N+M+K)
-2. **话题覆盖度**：对照 `think-templates.md`（30 条）+ `think-payment.md`（35 条）
+2. **话题覆盖度**：对照 `docs/archive/think-templates-2026-08-27.md`（30 条）+ `docs/archive/think-payment-2026-08-27.md`（35 条）
    - 已写过的话题列表
    - 高 SEO 价值空白话题
 3. **最近 3 篇 topics**：避免连续同话题

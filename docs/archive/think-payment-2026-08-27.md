@@ -2,7 +2,7 @@
 
 > **来源**：境内 AI 多次讨论 + Claude 整合订正（2026-08-15）。
 > **作用**：博客 `remote-payment/` 内容集群完整规划，含定位、模板、35 标题、风险规避、收益预期。
-> **配套**：基础战略见 `think-strategy.md` §三-2 与 §五；通用选题模板见 `think-templates.md`。
+> **配套**：基础战略见 `docs/archive/think-strategy-2026-08-27.md` §三-2 与 §五；通用选题模板见 `docs/archive/think-templates-2026-08-27.md`。
 
 ---
 

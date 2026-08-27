@@ -121,7 +121,7 @@
     * **A3** README §6 追加「M3 = 100%」状态行 — ✅ 2026-08-15 完成（D4 第六次）
 
 *   **2026-08-15 状态校准 / D4 第一次**：WorldFirst dev 账号已完成实名认证（身份证 + 支付宝人脸 KYC）+ 绑定支付宝用于人民币收款。万里汇链路已具备完整人民币端通路。
-    * **关键缺口**：**美元收款账户（Routing Number + Account Number）尚未开通**——按 `docs/think-payment.md` §五-3 步骤3，这是 AdSense / 海外联盟绑定的硬前提，M3 = 100% 前必须补齐。
+    * **关键缺口**：**美元收款账户（Routing Number + Account Number）尚未开通**——按 `docs/archive/think-payment-2026-08-27.md` §五-3 步骤3，这是 AdSense / 海外联盟绑定的硬前提，M3 = 100% 前必须补齐。
     * M3 进度：90% → **95%**（仅 USD 账户待开）
     * §1 状态行 / §7.1 校准行 / §7.3 阶段 α 勾选 同步更新
     * 📋 **下一步**：参考下方 WorldFirst USD 账户申请 checklist（按需移动到独立 docs 备忘）
@@ -138,7 +138,7 @@
     * M3 = 100% 收官门槛**降低**：Phase 5（联盟账户绑定）从「收官必备」调整为「M5 阶段按需触发」，M3 闭环只需 Phase 1-4（即 AdSense 单账户完整链路）
     * 备份通道方案简化：WorldFirst 多账户即可覆盖主需求，Payoneer / Wise 仅在 WorldFirst 整体异常时启用
     * 📂 **更新文档**：
-        * [`docs/think-payment.md`](../docs/think-payment.md) §一-5 新增账户结构说明
+        * [`docs/archive/think-payment-2026-08-27.md`](../docs/archive/think-payment-2026-08-27.md) §一-5 新增账户结构说明
         * [`docs/worldfirst-usd-checklist.md`](../docs/worldfirst-usd-checklist.md) Phase 5 改为 M5 延后 + 备份章节简化
         * §7.3 D2 同步加注
 *   **2026-08-15 状态校准 / D4 第四次（Phase 2 完成 + 安全事件复盘）**：WorldFirst USD 账户 4 字段（Account Number / Routing Number / SWIFT / Bank Name）截图已保存至 `~/Documents/heimaeden-payout/worldfirst-adsense-2026-08-15/account-overview.png`。M3 进度：98% → **99%**。
@@ -414,7 +414,7 @@
 
 #### 📍 子阶段 δ-Payment — 境外收款模块启动（D20 → D40，并行于变金线主轴）
 
-> 完整规划见 [`docs/think-payment.md`](docs/think-payment.md)。本节为 README 内嵌的执行锚点。
+> 完整规划见 [`docs/archive/think-payment-2026-08-27.md`](docs/archive/think-payment-2026-08-27.md)。本节为 README 内嵌的执行锚点。
 > **关键约束**：收款集群不先发，须底盘 30-40 篇部署/排错就位后再启动。
 
 - [ ] **P1** 前 20 篇锁定部署+排错（4:4:2 比例），`remote-payment/` 集群暂不开张
@@ -422,7 +422,7 @@
 - [ ] **P3** 联盟植入：选型对比文章 → Payoneer / Wise / PingPong 联盟链接；排错文章 → 仅广告
 - [ ] **P4** 双向内链：AdSense / 联盟变现文章 ↔ `remote-payment/` 收款文章（互推权重）
 - [ ] **P5** 每 8-12 个月批量复核全部收款文章（KYC 规则、费率、平台名称变更）
-- [ ] ⏸ **冷却自检**：每篇收款文上线前，对照 [`docs/think-payment.md §六`](../docs/think-payment.md) 风险规避5条硬约束逐条打勾
+- [ ] ⏸ **冷却自检**：每篇收款文上线前，对照 [`docs/archive/think-payment-2026-08-27.md §六`](../docs/archive/think-payment-2026-08-27.md) 风险规避5条硬约束逐条打勾
 
 #### 📍 阶段 ε — M5 长跑（D30 → D90）
 

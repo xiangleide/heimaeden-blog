@@ -9,9 +9,9 @@
 
 | 文件 | 来源 | 状态 | 关联文章 / 下游 | 用途 |
 |---|---|---|---|---|
-| `think-strategy.md` | 境内 AI（2026-08-14） | 持续维护 | — | 综合战略纪要：赛道、变现、节奏、最终结论 |
-| `think-templates.md` | 境内 AI（2026-08-15） | 持续维护 | 全部文章 | 博客统一文章模板 + 30 条英文长尾关键词 |
-| `think-payment.md` | 境内 AI + Claude 整合（2026-08-15） | 持续维护 | `remote-payment/` 集群 | 境外收款模块深度展开 + 35 标题 + 风险规避 |
+| `archive/think-strategy-2026-08-27.md` | 境内 AI（2026-08-14） | 持续维护 | — | 综合战略纪要：赛道、变现、节奏、最终结论 |
+| `archive/think-templates-2026-08-27.md` | 境内 AI（2026-08-15） | 持续维护 | 全部文章 | 博客统一文章模板 + 30 条英文长尾关键词 |
+| `archive/think-payment-2026-08-27.md` | 境内 AI + Claude 整合（2026-08-15） | 持续维护 | `remote-payment/` 集群 | 境外收款模块深度展开 + 35 标题 + 风险规避 |
 | `think-x1-claude-code-pipeline.md` | Claude + 用户（2026-08-22, D11） | **已归档**（X1 已发布，2026-08-25 移至 `docs/archive/`） | A2 (X1) ✅ 已发 | Claude Code 编辑流水线选题规划（叙事框架 / 关键词 / 节奏决策）|
 | `think-issue-rejected-2026-08-19.md` | 境内 AI（D8） | 已拒绝（2026-08-25 移至 `docs/archive/`） | — | 任务书违规归档（违反 §3.8 rule 5/6）|
 | `worldfirst-usd-checklist.md` | Claude（2026-08-15） | 持续维护 | M3 收官 / M5 触发 | WorldFirst USD 账户开通现场 checklist（含备份通道、避坑、完成定义）|
