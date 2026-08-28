@@ -2,7 +2,7 @@
 title = "Hugo + Cloudflare Pages 报错集群：5 个常见问题的完整排查路径"
 description = "新站 5 个最高频 Hugo + Cloudflare Pages 报错的集群索引页：image path 404、ERR_TOO_MANY_REDIRECTS、build OOM、cache stale、redirect loop。每条含真实日志、版本环境、验证过的修复命令。"
 date = 2026-08-25T01:00:00Z
-draft = false
+draft = true
 tags = ["Hugo", "Cloudflare Pages", "troubleshooting", "build error"]
 categories = ["Static-Site"]
 
