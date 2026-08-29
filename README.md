@@ -346,6 +346,42 @@
         * 「执行 O1」→ 用户手动 push + GitHub UI 操作
         * 「继续 Hub 簇 3/4/5」→ A 档 ≤ 1200 词补全
 
+*   **2026-08-28 状态校准 / D19（S18 全流程收官 + hub draft 修复 + cover prompt 归档）**：
+    * 🎯 **核心进展**：S18 走完完整 TCM 6 阶段 — `[draft]`（`451e0c3`）+ 截图（`47c9a01`）+ cover 入库（`332918f` AI V1 隐喻抽屉）+ §0 截图（`c1c2b4e`）+ zh-final（`7a06f55` 用户实操整合）+ **en-final push**（`ac5ddce` "Why My Hugo Draft Still Shows Up After I Moved It to `_drafts/`"）。累计 +6 commits 落地。
+    * 🐛 **hub draft 误发布修复**（`3b79cfa`）：D12 commit `c18bbcc` 把 hub 误设 `draft=false` ——会触发 CF Pages 渲染未完成的 S3-S12 TBD 占位。D19 push 前发现并修正回 `draft=true`，本地 `hugo --gc` 验证 62 → 59 pages，hub 文章不再渲染。
+    * 🎨 **cover prompt 归档**（`de5a62d`）：新建 `docs/cover-prompts/` 目录承接各文章的 AI cover 生成 prompt 资产。S18 含 3 variant（V1 隐喻抽屉 + V2 终端风 + V3 极简几何）+ commit 前 checklist + 用户回图替换步骤。后续 S13 / S14 / S16 / S17 生成 cover 时同步建同名前缀。
+    * 📂 **同步落地**：
+        * `content/posts/static-site/hugo-draft-stale-dev-server-fix/index.md` — S18 en-final 已 publish
+        * `docs/cover-prompts/s18-draft-stale-cover-prompt.md` — 配套 prompt 资产
+        * `docs/pending/S18-zh-final-todo.md` — 已无后续动作（S18 走完，可归档）
+    * 🔓 **下一步解锁**：
+        * S13 Cloudflare Workers vs Pages（[draft] 启，B 档 ≤ 1800）
+        * Hub §簇 3 / 4 / 5 填充（A 档 ≤ 1200）
+        * P1 WorldFirst GEO 试点（[draft] 启，E 档 ≤ 2500）
+        * 仓库公开化 O1（用户手动）+ O2 + O3
+
+*   **2026-08-29 状态校准 / D20（image file-size 治理 + 历史 cover 修复 + hugo --gc gotcha）**：
+    * 🎯 **核心进展**：D20 image file-size 治理全程落地 — 共 5 commits（`96a48f2` + `4ef5ecd` + `dce0dd4` + `079b6f5` + `15b982c`）覆盖规则 + 工具 + 历史修复 + 行为备注 + 资产入库。
+    * 🐛 **触发场景**：S18 cover.png 上线后用户抽查发现 production 端 `public/cover.png` 实际响应 1.3MB（srcset 兜底变体），远超 LCP 友好阈值。触发 SOP 治理。
+    * 📜 **规则落地**（`4ef5ecd`）：
+        * 新增 `scripts/check-image-size.sh` — cover ≤ 200KB err / 150KB warn · body ≤ 500KB err / 350KB warn，0 errors 才放 commit
+        * CLAUDE.md §3.3.5 新增 MANDATORY pre-publish file-size audit + PIL palette-quantize 片段
+        * CLAUDE.md §4 FORBIDDEN 加「超过文件大小上限」一条
+        * CLAUDE.md §5 pre-action #4 加 image audit 检查
+        * `docs/article-writing-workflow.md` §4.1 上线前文件大小审计
+        * `.claude/skills/commit-with-prefix/SKILL.md` Gate E 加 file-size audit
+    * 🔧 **历史 cover 治理**（`dce0dd4`）：
+        * `editorial-pipeline` 898KB → 84KB JPEG q85 progressive（-91%）— 摄影合成图 PNG palette 256 色有 banding，强制走 JPEG
+        * `hugo-cloudflare-pages-pitfalls` 215KB → 109KB（-49%）
+        * `static-blog-setup-guide` 204KB → 141KB（-31%）
+    * ⚠️ **hugo --gc stale-file gotcha**（`079b6f5`）：CLAUDE.md §3.3.6 新增 NOTE — `--gc` 清 `resources/` + 指纹派生 public/ 资产，但**不清同名 stale 文件**。本次踩坑：cover.png → cover.jpg rename 后 `public/.../cover.png` 仍 200 OK 898KB。Fix：`rm -rf public/ resources/` 后重建。
+    * 📦 **资产入库**（`15b982c`）：`docs/archive/blog-writing-prompt.md` — D21+ 候选题目（A1-A3 / P1 / J1-J3）的 GEO 友好型英文技术排错博客 prompt 模板（4 字段输入 → 7 段结构）。
+    * 🟢 **线上状态**：CF Pages 自动部署已完成；`check-image-size.sh` 重跑 22 OK / 2 WARN（body > 350KB 但 < 500KB error gate）/ 0 ERR，error gate 干净。2 WARN 文件：S18 step-6 406KB + draft post step-0 354KB，未来会话决策。
+    * 🔓 **下一步解锁**：
+        * D21+ 候选选题：A1 Claude Code CLI setup / S13 Workers vs Pages / P1 WorldFirst
+        * 仓库公开化 O1 / O2 / O3 仍待用户手动执行
+        * 24-48h 后 GSC 复查 5 个新 commits 抓取
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
