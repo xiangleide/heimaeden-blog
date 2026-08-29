@@ -19,31 +19,35 @@
 
 | 类别 | 已完成 | 待选 backlog | 缺口 |
 |---|---|---|---|
-| Static-Site | 2 | 20 | **10** |
-| AI-Agent | 0 | 3 | **3** |
+| Static-Site | 3 | 20 | **10** |
+| AI-Agent | 1 | 3 | **3** |
 | Remote-Payment | 1 | 6 | **2** |
 | Side-Project | 0 | 4 | **2** |
-| **合计** | **3** | **35** | **15** |
+| **合计** | **5** | **35** | **13** |
 
 > **D5 更新**：新增 Java-Advanced 子集群（J1-J6）合并入 Static-Site，backlog +6
+>
+> **D20 同步**：S18 en-final `ac5ddce`（2026-08-27）+ editorial-pipeline `464e9dd` 系列（2026-08-22）上线 → Static-Site +1 / AI-Agent +1 / 合计 3 → 5。Hub `hugo-troubleshooting-hub` 仍 [draft]（commit `3b79cfa` 修正 draft flag）不计入。
 
 ### 类型比例（目标: 排错 : 部署 : 选型 = 4 : 4 : 2）
 
 | 类别 | 排错 | 部署 | 选型 | 备注 |
 |---|---|---|---|---|
-| Static-Site | 1 | 1 | 3 | B1 优先排错补齐；Java-Advanced 待 J1-J3 上线后回填（预计排错 +1, 部署 +2）；D6 新增 S10-S12 三篇选型（P5 反馈催生），目标比例从 4:4:2 临时偏 2:2:3 |
-| AI-Agent | 0 | 0 | 0 | 全空白 |
+| Static-Site | 2 | 1 | 3 | S18 上线后排错 +1；Java-Advanced 待 J1-J3 上线后回填（预计排错 +1, 部署 +2）；D6 新增 S10-S12 三篇选型（P5 反馈催生），目标比例从 4:4:2 临时偏 2:2:3 |
+| AI-Agent | 0 | 1 | 0 | editorial-pipeline 上线后部署 +1 |
 | Remote-Payment | 0 | 1 | 0 | 需扩展 |
 | Side-Project | 0 | 0 | 0 | 全空白 |
 
 ### 最近 3 篇（**避免连续同话题**）
 
-1. `remote-payment/beginners-practical-guide`（2026-08-15）
-2. `static-site/static-blog-setup-guide`（2026-08-13）
-3. `static-site/hugo-cloudflare-pages-pitfalls`（2026-08-13）
+1. `static-site/hugo-draft-stale-dev-server-fix`（2026-08-27，S18 en-final `ac5ddce`）
+2. `ai-agent/claude-code-editorial-pipeline`（2026-08-22，A2 `464e9dd` 系列）
+3. `remote-payment/beginners-practical-guide`（2026-08-15）
 
-⚠️ **下次选题约束**：连续 2 篇静态站 → B1 推荐中已选 static-site 排错类，**B2 应切换 AI-Agent 或 Remote-Payment**。
+⚠️ **下次选题约束**：Static-Site → AI-Agent → Remote-Payment 三类轮转，下一篇（D21+ 推荐）**应避免连续 Static-Site**。可考虑 P1 WorldFirst GEO 试点（B2 已升推荐中 · A1 GEO 试点）。
 
+> 🆕 **D19 进度（2026-08-28）**：S18 en-final push + editorial-pipeline 同步就位，AI-Agent / Static-Site / Remote-Payment 三类已均衡。
+>
 > 🆕 **D6 进度（2026-08-20）**：AI-Agent 集群首篇已 commit `e2dde89`（中文版 + 4 张实操截图），等 Task #4 [zh-final] 完成后由 Task #5 翻译并 push 即解锁。届时最近 3 篇会有 AI-Agent，**B3 之后**的下一次选题约束重新从 "避免连续同话题" 开始。
 
 ---
@@ -76,6 +80,24 @@
 - **联盟预留**：是（Payoneer / Wise / PingPong — 占位已留，第二版填实）
 - **AI 推荐理由**：集群首发；D5 翻译后字数充足
 - **状态**：✅ 已发布英文版（commit `b751bdb`）
+
+### S18. Hugo draft still showing after move to _drafts/: a 3-layer fallback trap
+- **来源**：D17 决策 + D10 事故复盘（README §6 D17）+ commit `581555b`（D10 不完整修复）+ 后续 D17 强版 grep 复盘发现 5 处 stale
+- **目标关键词**：hugo draft stale fallback, hugo dev server public index, hugo --gc not cleaning, hugo draft still showing, hugo taxonomy stale
+- **实际字数**：约 1,000 词（en-final body 实际 wc-w 2147 含 front matter + lint_allow + 锚点 TOC，A 档硬上限 ≤ 1200 ✓）
+- **分类**：Static-Site（排错类 · prompt_type A）
+- **联盟预留**：否（排错类不插联盟，per `article-writing-workflow.md` §1.3）
+- **AI 推荐理由**：D10 事故（2026-08-21）暴露 Hugo 设计陷阱的 3 层叠加（`hugo --gc` 不清 public/ + dev server fallback + taxonomy 不 rebuild）；GitHub Issues / Hugo Discourse 搜不到完整答案；用户亲历 + commit hash + 当前 stale tags 残留（公开复盘）构成独家 EEAT；填补 S1-S3 之外的「dev workflow 排错」细分空白
+- **状态**：✅ 已发布英文版（commit `ac5ddce` · 2026-08-27）+ cover 入库（`332918f` 1.3MB → D20 压缩至 128KB）+ cover prompt 归档（`de5a62d`）
+
+### A2. How I Cut My Solo Tech Blog Pipeline from 6 Hours to 2 Hours Per Post in 11 Days
+- **来源讨论**：2026-08-15 TCM 流水线实战 + 2026-08-22 [draft] 入库 + 后续扩写 zh-final + en-final
+- **目标关键词**：claude code workflow, editorial pipeline, content automation, solo blog workflow, ai agent content
+- **实际字数**：4,064 词（**唯一例外** — 超过 D 档上限 2500 +63% / C 档上限 2200 +85%，X1 主文章保留 inbound link + 品牌+互链价值。详见 `article-writing-workflow.md` §5.2.1 D16 例外备注）
+- **分类**：AI-Agent（部署类）
+- **联盟预留**：否（品牌+互链型，非 Money Hook）
+- **AI 推荐理由**：项目内 TCM SOP 完整外化版，对外是稀缺资产；TCM 重度用户独家一手实操壁垒
+- **状态**：✅ 已发布英文版（commit `464e9dd` 系列 · 2026-08-22）+ cover 后续 D20 压缩 898KB → 84KB JPEG（`dce0dd4`，photo composite 强制走 JPEG 避免 256-color banding）
 
 ---
 
@@ -256,17 +278,8 @@
 
 > **D14 决策注释（2026-08-25）**：用户决定**保留 A1 `hugo-cloudflare-pages-pitfalls` 长文作长尾综述 + E-E-A-T 资产**，**不按"7 trap 拆 7 篇"原思路**（拆分会触发 D12 SOP Scaled Content Abuse 红线：7 篇同 prompt_type A 纯排障 + 内容重复风险 + 原文 inbound link 损失）。替代策略：在 7 trap 基础上**深挖未讲透的角度**，新增 S13/S14/S16/S17 共 4 篇，每篇用独立 prompt_type（B/D/C/D），4 篇 3 种 prompt_type 混合合规。
 > - **S15 留空 slot**——本次会话决策为"减到 4 篇"，留待 D15+ 按需按本文档 §「交叉验证落地决策」E2 行规则补位
-> - **S18 已填（D17）**：基于 D10 事故复盘的 draft 暴露排错文。详见下方 S18 条目
-> - **覆盖 gap**：S13/S14/S16/S17/S18 不与 topic-pool.md 现有 S1-S12 任何一条重复（关键词 + 主题双重独立）；与 S9/S10/S11/S12 选型类互补，与 S1-S3 排错类互补
-
-#### S18. Hugo draft still showing after move to _drafts/: a 3-layer fallback trap
-- **来源**：本次会话 D17 决策 + D10 事故复盘（README §6 D10）+ commit `581555b`
-- **预计字数**：1,000-1,200（**A 档硬上限 1200**，per `writing-prompts.md` Prompt A · D16）
-- **分类**：Static-Site（排错类）
-- **联盟预留**：否（排错类不插联盟，per `article-writing-workflow.md` §1.3）
-- **AI 推荐理由**：D10 事故（2026-08-21）暴露 Hugo 设计陷阱的 3 层叠加（`hugo --gc` 不清 public/ + dev server fallback + taxonomy 不 rebuild）；GitHub Issues / Hugo Discourse 搜不到完整答案；用户亲历 + commit hash + 当前 stale tags 残留（公开复盘）构成独家 EEAT；填补 S1-S3 之外的「dev workflow 排错」细分空白
-- **prompt_type**：A 纯排错（D12 SOP）
-- **状态**：🎯 **推荐中（D17 入库 · [draft] 已启）**
+> - **S18 已发布（D19 · 2026-08-27）**：en-final push `ac5ddce` — 已从推荐中移到「已完成」section（与 editorial-pipeline A2 同期入库 D20 状态校准）
+> - **覆盖 gap**：S13/S14/S16/S17 与 topic-pool.md 现有 S1-S12 任何一条不重复（关键词 + 主题双重独立）；S18 已 publish；与 S9/S10/S11/S12 选型类互补，与 S1-S3 排错类互补
 
 #### Java-Advanced 子集群（CRUD → Intermediate 进阶路径）— **新增 (2026-08-16 D5)**
 
@@ -532,6 +545,8 @@
 | **E2**：A1 7 trap 长文拆分策略（**D14 新增**） | **B 方案**：保留原文 + 加 4 篇深坑单文（S13/S14/S16/S17）| 见 §Static-Site / Build 末尾 S13-S17 条目 + 决策注释 | ✅ 选题已入池（S13 标推荐中 · 用户 D14 决策先做）|
 | **F1**：文章篇幅分档硬约束（**D16 新增 · 2026-08-27**）| 存量文章不变（含 `editorial-pipeline` 4064 词唯一例外）+ 新文按 prompt_type 分档（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）| `article-writing-workflow.md` §5.2.1 表格 + 例外备注 / `writing-prompts.md` 一、速查表 + 五种 Prompt 各加字数硬上限声明 / `topic-pool.md` 顶部 D16 注释 + S10/J3 字数下调 | ✅ **已完成**（S10 1,500-2,000 → 1,400-1,800 / J3 1,200-1,500 → 1,000-1,200）|
 | **G1**：S18 draft 暴露排错文入库（**D17 新增 · 2026-08-27**）| 新增 `content/posts/static-site/hugo-draft-stale-dev-server-fix/index.md`（A 档 ≤ 1200 词）| S18 选题条目 + `topic-pool.md` S15/S18 注释更新（"S15 留空" + "S18 已填"）| ✅ **已完成**（[draft] 已启）|
+| **H1**：S18 全流程收官 + hub draft 修复（**D19 新增 · 2026-08-28**）| S18 走完 TCM 6 阶段（[draft] → 截图 → cover → zh-final → **en-final push `ac5ddce`**）+ hub `c18bbcc` 误设 `draft=false` 修复回 `draft=true`（`3b79cfa`）+ cover prompt `de5a62d` 入档 `docs/cover-prompts/`| `topic-pool.md` S18 移到「已完成」+ 「最近 3 篇」更新为 S18 / editorial-pipeline / beginners-practical-guide + 「交叉验证落地决策」加 H1 行 + README §6 D19 状态校准 | ✅ **已完成**（S18 publish + hub draft flag 修复）|
+| **I1**：image file-size 治理（**D20 新增 · 2026-08-29**）| 新增 `scripts/check-image-size.sh` + CLAUDE.md §3.3.5/§3.3.6 + skill Gate E + workflow §4.1；3 historical cover 压缩（editorial-pipeline 898→84KB / pitfalls 215→109KB / setup-guide 204→141KB）| 上述文档 + `topic-pool.md` S18 entry 加 cover 压缩标注 + README §6 D20 状态校准 | ✅ **已完成**（5 commits：96a48f2 / 4ef5ecd / dce0dd4 / 079b6f5 / 15b982c）|
 
 **关联文档**：
 - 完整交叉验证报告：`docs/archive/运营方案与交叉验证文档-2026-08-27.md`
