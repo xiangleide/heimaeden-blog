@@ -10,7 +10,7 @@ showToc = true
 TocOpen = true
 
 [cover]
-    image = "ai-agent/claude-code-editorial-pipeline/cover.png"
+    image = "ai-agent/claude-code-editorial-pipeline/cover.jpg"
     alt = "Laptop glowing mint-green on a dark developer desk at night, code editor and commit graph on screen, mechanical keyboard in foreground, faded six-stage pipeline loop in background"
 +++
 
