@@ -187,6 +187,21 @@
 - 命名规范：`step-N-描述.png`
 - 放到 Page Bundle 同目录（如 `content/posts/static-site/<slug>/step-1.png`）
 
+### 4.1 上线前文件大小审计（D20 起强制 · CLAUDE.md §3.3.5）
+
+截图入库后、`git add` 前必须跑：
+```bash
+./scripts/check-image-size.sh
+```
+
+阈值（错误阈值 = commit gate 必过）：
+- cover 图 ≤ **200 KB** error / 150 KB warn
+- body 图 ≤ **500 KB** error / 350 KB warn
+
+超过阈值时按 CLAUDE.md §3.3.5 给出的 PIL palette-quantize 片段就地压缩到 ≤ error 阈值，然后重跑 gate 至 0 errors。
+
+> 触发历史：D19 push 的 S18 cover 是 1.3MB PNG（sips resize 没压缩），srcset 兜底变体也是 1.3MB — 1080p 屏幕一次加载浪费 500+ KB。D20 加此铁律 + 自动化脚本防复发。
+
 ---
 
 ## 5. 第二版（AI 整合，中文定稿）

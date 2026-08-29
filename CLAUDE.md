@@ -167,6 +167,45 @@ Any screenshot containing UI that surfaces account-level data MUST pass `./scrip
 
 **Claude Code duty**: when the user says "需要脱敏" / "needs redaction", **automatically** read the image, propose `--box` flags with confidence markers, and wait for user confirmation before they run the script — do not skip the user-review step.
 
+#### 3.3.5 MANDATORY: pre-publish file-size audit (added 2026-08-29, D20)
+
+**Every image committed to `assets/images/` MUST pass `./scripts/check-image-size.sh` before `git push`.** Width (≤1440px, §3.3.2) and file-size are **two separate ceilings**: `sips` can resize a PNG without re-compressing it, leaving a 1440px image weighing 1.3MB — exactly what happened to S18's cover before D20 (`132KB source → 1.3MB after resize-only optimize`).
+
+**Thresholds** (single source of truth — `scripts/check-image-size.sh` enforces the same numbers):
+
+| Asset kind | Warn at | **ERROR at** |
+|---|---|---|
+| `cover.*` (hero / OG image) | 150 KB | **200 KB** |
+| body screenshots | 350 KB | **500 KB** |
+
+**Rationale**:
+
+- **Cover** is loaded eagerly on every page view AND embedded as the OG share card. The PaperMod `cover.html` template (line 37) uses `Resize "%sx"` with **no format flag**, so the srcset fallback is the SOURCE asset — a 1.3MB source produces a 1.3MB largest variant. Affects LCP and Twitter/LinkedIn preview load.
+- **Body** images are lazy-loaded (`render-image.html` line 52 sets `loading="lazy"`), so the budget is higher. 500KB is still painful on 4G; prefer ≤ 350KB when possible.
+- **Hugo's build pipeline does NOT re-compress source PNGs**. Only resizing happens. Compression must happen at the SOURCE asset layer — exactly the layer this rule targets.
+
+**Workflow**:
+
+```bash
+# 1. Run the gate (exit 1 if any image over error threshold)
+./scripts/check-image-size.sh
+
+# 2. If something fails, compress the listed PNG in place:
+python3 -c "from PIL import Image; import sys
+img = Image.open(sys.argv[1])
+img.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE
+    ).save(sys.argv[1], 'PNG', optimize=True, compress_level=9)" path/to/file.png
+
+# 3. Re-run the gate until clean.
+./scripts/check-image-size.sh
+```
+
+256-color palette quantization is **visually lossless** for flat-vector illustrations and AI-generated covers (verified on S18 cover, see `96a48f2`). For dense UI screenshots where 256 colors introduce visible banding, fall back to `lossless=True` optimize + `compress_level=9` (gives ~15-20% reduction) — but this is the exception, not the default.
+
+**Dependencies**: `python3` + Pillow (`pip3 install --user Pillow`). Already required by `redact-image.sh` (§3.3.4), so no new install.
+
+**Claude Code duty**: when adding a new image to `assets/images/`, run `check-image-size.sh` **automatically before staging** — do not wait to be asked. Mirror the same duty for `optimize-image.sh` (§3.3.2). The two scripts are **complementary, not redundant**: `optimize-image.sh` enforces pixel width, `check-image-size.sh` enforces file size.
+
 ### 3.4 Links
 - **Internal**: shortcode `{{< ref "path/to/page" >}}`. Never hand-typed absolute paths between own content.
 - **External** with `target="_blank"`: must include `rel="noopener"`.
@@ -222,6 +261,7 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 - ❌ Future-dated `date` field
 - ❌ Direct image references without leading `/` or with `static/` prefix
 - ❌ Committing a screenshot wider than 1440px (see §3.3.2 — irreversible repo bloat)
+- ❌ Committing an image over the file-size ceiling (cover > 200 KB / body > 500 KB; see §3.3.5)
 - ❌ Putting content screenshots in `static/images/`, or moving `og-default.png` out of it (see §3.3.1)
 - ❌ Hand-written `<img>` tags in Markdown (bypasses the render hook → loses WebP/lazy/dimensions)
 - ❌ Committing a screenshot with visible PII (see §3.3.4 — no recall once public)
@@ -249,7 +289,8 @@ Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see 
 1. Confirm the task belongs to current `README.md §7.3` phase; if missing, propose new bullet there first.
 2. Apply §3 constraints while writing.
 3. Run `/scripts/lint-post.sh <path>` if it exists, or rebuild with `hugo --gc` and verify zero errors.
-4. Report output as a structured diff: files changed / constraints checked / lint result.
+4. **Image audit** (added D20): if the diff includes any `assets/images/...` file, run `./scripts/check-image-size.sh` **before staging**. If a body image exceeds 500 KB or a cover exceeds 200 KB, compress in place with the PIL palette-quantize snippet in §3.3.5 and re-run until clean. This complements `optimize-image.sh` (width ceiling, §3.3.2) — the two scripts are not redundant.
+5. Report output as a structured diff: files changed / constraints checked / lint result.
 
 ---
 

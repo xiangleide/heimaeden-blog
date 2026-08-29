@@ -69,11 +69,18 @@ git diff --stat            # 全部 unstaged
 # Gate D：hugo build 0 errors（CLAUDE.md §5 pre-action #3）
 hugo --gc 2>&1 | tee /tmp/hugo-build.log
 # 必须 0 errors；warning 可接受但需报告
+
+# Gate E：image file-size audit（CLAUDE.md §5 pre-action #4 · §3.3.5）
+# 仅当 diff 含 assets/images/ 时跑
+./scripts/check-image-size.sh
+# cover > 200KB / body > 500KB → exit 1（FAIL, 不能 commit）
+# 压缩后重跑至 0 errors；详 §3.3.5
 ```
 
 **Gate A 失败示例**：
 - 图片不在 `assets/images/<category>/<article-slug>/` → **必须先 mv，不能 commit**
 - 图片 >1440px → 必须先跑 `optimize-image.sh`
+- 图片文件大小超阈值（cover > 200KB / body > 500KB）→ 必须先跑 `check-image-size.sh` 找出来 + PIL palette-quantize 压缩（详 §3.3.5）
 - alt 文本含 CJK → 必须改英文
 
 **Gate B 失败示例**：
