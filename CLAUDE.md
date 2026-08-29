@@ -206,6 +206,29 @@ img.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.N
 
 **Claude Code duty**: when adding a new image to `assets/images/`, run `check-image-size.sh` **automatically before staging** — do not wait to be asked. Mirror the same duty for `optimize-image.sh` (§3.3.2). The two scripts are **complementary, not redundant**: `optimize-image.sh` enforces pixel width, `check-image-size.sh` enforces file size.
 
+#### 3.3.6 NOTE: `hugo --gc` does NOT clean stale files in `public/` (added 2026-08-29, D20)
+
+`hugo --gc` cleans the `resources/` cache AND removes **fingerprint-derived** assets in `public/` that no current page references (e.g. `cover_hu_<oldhash>.png`). It does **NOT** remove **same-named** assets whose URL path is now unused — a file renamed or deleted in `assets/` leaves a stale copy in `public/` that dev server / production will keep serving until manually purged.
+
+**Concrete failure mode** (hit on D20): renamed `cover.png` → `cover.jpg` for the `claude-code-editorial-pipeline` article. After `hugo --gc`, `public/images/.../cover.jpg` was the new 84 KB asset, but `public/images/.../cover.png` (898 KB old) was **still served with HTTP 200** by `hugo server`. Old `cover.png` had no current page referencing it, but it was not fingerprinted — it was a direct copy of the source file — so `--gc` had nothing to garbage-collect on it.
+
+**Symptoms of this gotcha**:
+
+- `curl` to the old asset path returns 200 OK after a rename, even though `assets/` no longer contains the source.
+- `hugo --gc` build log shows zero warnings (it cannot see its own stale output).
+- Production (CF Pages) keeps the old asset on its CDN until the next full rebuild re-syncs `public/` — or never, if your deploy hook doesn't clear stale files.
+
+**Fix** — when renaming or deleting any `assets/` file, **before** running the dev-server / `hugo --gc` validation that gates commit-with-prefix:
+
+```bash
+rm -rf public/ resources/        # clean slate; nothing in git, both are build artifacts
+hugo --gc                          # rebuild from scratch — no stale carry-over
+```
+
+`public/` and `resources/` are `.gitignore`-d build outputs; deleting them is safe and local-only (no remote impact). This is the **same rule as §6** for `rm -rf public` / `rm -rf resources` — the difference is §6 requires explicit user instruction for live deploys, while this §3.3.6 rule is *self-authorized* for local pre-commit validation.
+
+**Trigger history**: D20 cover.png → cover.jpg rename surfaced this; without the explicit `rm -rf public/`, the local smoke test reported a false-positive 200 on the deleted path and would have hidden a CDN-level stale-asset leak on the next CF Pages deploy.
+
 ### 3.4 Links
 - **Internal**: shortcode `{{< ref "path/to/page" >}}`. Never hand-typed absolute paths between own content.
 - **External** with `target="_blank"`: must include `rel="noopener"`.
