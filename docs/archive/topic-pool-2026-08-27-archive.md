@@ -34,7 +34,7 @@
 | 类别 | 排错 | 部署 | 选型 | 备注 |
 |---|---|---|---|---|
 | Static-Site | 2 | 1 | 3 | S18 上线后排错 +1；Java-Advanced 待 J1-J3 上线后回填（预计排错 +1, 部署 +2）；D6 新增 S10-S12 三篇选型（P5 反馈催生），目标比例从 4:4:2 临时偏 2:2:3 |
-| AI-Agent | 0 | 1 | 0 | editorial-pipeline 上线后部署 +1 |
+| AI-Agent | 0 | 2 | 0 | editorial-pipeline + Y1 skill 拆解均算部署；Y1 prompt_type B 方案对比但内容分类仍是部署类（skill 工具教程）|
 | Remote-Payment | 0 | 1 | 0 | 需扩展 |
 | Side-Project | 0 | 0 | 0 | 全空白 |
 
@@ -376,6 +376,18 @@
 - **AI 推荐理由**：AI Agent 赛道选型评测稀缺，联盟转化高
 - **状态**：待选 · 优先级 ★
 
+#### Y1. mock-reader-feedback skill deep dive: 5-persona editorial QA for Claude Code
+- **来源**：本次会话 D21 决策 + `docs/archive/think-x1-claude-code-pipeline.md` §6 Y1 候选（用户 D21 决策 P1 方案：Y1 mock-reader 拆解 / Y2 pre-commit gates OR redact-image）
+- **关键词**：mock reader feedback, claude code skill, AI editorial QA, LLM as judge persona, content review automation, yaml feedback schema
+- **预计字数**：1,400-1,800（**B 档硬上限 1800**，per `writing-prompts.md` Prompt B · D16）
+- **分类**：AI-Agent（部署类）
+- **联盟预留**：否（自身工具）
+- **AI 推荐理由**：225 行 `.claude/skills/mock-reader-feedback/SKILL.md` 全拆解 + 7 步工作流 + 5 persona 横向对比（表格）+ YAML schema 严格遵守 + 5 条反 pattern（对应 §0 5 条社区坑：PersonaEval / 5⭐全赞 / Likert ceiling / 风格刻板 / lizard brain）；用户 12 份真实反馈报告（`docs/feedback/` × 3 篇文章 × P1/P3/P5）+ `fetch-persona-data.sh` 实操构成独家 EEAT；与 X1 形成「流水线总览（4064 词）+ 单 skill 拆解（1800 词）」互补
+- **prompt_type**：B 方案对比（D12 SOP）
+- **状态**：🎯 **推荐中（D21 入库 · [draft] 已启）**
+
+---
+
 ---
 
 ### Remote-Payment（**缺口 2 篇**）
@@ -547,6 +559,7 @@
 | **G1**：S18 draft 暴露排错文入库（**D17 新增 · 2026-08-27**）| 新增 `content/posts/static-site/hugo-draft-stale-dev-server-fix/index.md`（A 档 ≤ 1200 词）| S18 选题条目 + `topic-pool.md` S15/S18 注释更新（"S15 留空" + "S18 已填"）| ✅ **已完成**（[draft] 已启）|
 | **H1**：S18 全流程收官 + hub draft 修复（**D19 新增 · 2026-08-28**）| S18 走完 TCM 6 阶段（[draft] → 截图 → cover → zh-final → **en-final push `ac5ddce`**）+ hub `c18bbcc` 误设 `draft=false` 修复回 `draft=true`（`3b79cfa`）+ cover prompt `de5a62d` 入档 `docs/cover-prompts/`| `topic-pool.md` S18 移到「已完成」+ 「最近 3 篇」更新为 S18 / editorial-pipeline / beginners-practical-guide + 「交叉验证落地决策」加 H1 行 + README §6 D19 状态校准 | ✅ **已完成**（S18 publish + hub draft flag 修复）|
 | **I1**：image file-size 治理（**D20 新增 · 2026-08-29**）| 新增 `scripts/check-image-size.sh` + CLAUDE.md §3.3.5/§3.3.6 + skill Gate E + workflow §4.1；3 historical cover 压缩（editorial-pipeline 898→84KB / pitfalls 215→109KB / setup-guide 204→141KB）| 上述文档 + `topic-pool.md` S18 entry 加 cover 压缩标注 + README §6 D20 状态校准 | ✅ **已完成**（5 commits：96a48f2 / 4ef5ecd / dce0dd4 / 079b6f5 / 15b982c）|
+| **J1**：Y1 mock-reader-feedback skill 拆解（**D21 新增 · 2026-08-30**）| 新增 `content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/index.md`（B 档 ≤ 1800 词）+ topic-pool Y1 入库 | topic-pool.md Y1 entry + 「交叉验证落地决策」加 J1 行 | ✅ **[draft] 已 commit** |
 
 **关联文档**：
 - 完整交叉验证报告：`docs/archive/运营方案与交叉验证文档-2026-08-27.md`
