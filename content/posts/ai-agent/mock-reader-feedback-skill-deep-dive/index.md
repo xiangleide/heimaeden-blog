@@ -98,6 +98,8 @@ grep -c "^## P[1-5]" docs/mock-reader-personas.md
 - **文件命名**：`step-1-personas-p1-section.png`
 - **放哪**：`content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/step-1-personas-p1-section.png`
 
+![P1 persona template from docs/mock-reader-personas.md: strong Chinese mainland dev, deployment-focused reader with direct technical feedback style and specific traps to avoid](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-1-personas-p1-section.png)
+
 ---
 
 ## 步骤 2：触发 skill
@@ -159,6 +161,8 @@ P5: 选型决策者（默认 · TCO 量化 / 退出成本 / 对比矩阵）
 - **文件命名**：`step-3-persona-data-p1-mock.png`
 - **放哪**：同上 Page Bundle
 
+![P1 geo_distribution mock data from docs/persona-data.json showing CN 85 percent, HK TW 5 percent each, SG 3 percent, OTHER 2 percent — labeled MOCK to avoid fabricating real geographic distribution](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-3-persona-data-p1-mock.png)
+
 ---
 
 ## 步骤 4：构造 persona prompt（3 块拼接）
@@ -190,16 +194,26 @@ P5: 选型决策者（默认 · TCO 量化 / 退出成本 / 对比矩阵）
 
 ## 步骤 5：运行 persona + 输出 YAML schema（严格）
 
-**YAML schema**（必须严格遵守）：
+**完整 YAML schema**（必须严格遵守，front matter 12 字段 + body 4 段）：
 
 ```yaml
+---
+schema: mock-reader-feedback/v1
 persona_id: P1
-article_slug: <article-slug>
-read_at: <ISO timestamp>
-intent: <primary_intent>
+persona_label: 强华陆 dev
+article_slug: hugo-cloudflare-pages-pitfalls
+article_path: content/posts/static-site/hugo-cloudflare-pages-pitfalls.md
+article_category: static-site
+read_at: 2026-08-20T22:45:00Z
 data_source: MOCK | GSC | CF | REDDIT | PLAUSIBLE
+intent: deploy-fixing
+feedback_style: direct_technical
 rating: 1-5
 verdict: stay | skim | bounce
+---
+
+<!-- 上面 YAML block + 完整 persona 思考过程 + 关键 quote + 修复建议 -->
+
 key_points:
   - …（3-5 条，正面 + 负面）
 friction_points:
@@ -214,16 +228,34 @@ session_signals:
   - 估算是否订阅
 ```
 
-**真实报告节选**（`docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md`，2026-08-20）：
+**字段说明**：
+- `schema`：固定 `mock-reader-feedback/v1`，用于未来 schema 演进做版本判断
+- `persona_label`：人设中文标签，方便人眼核对（避免 P1/P5 串号）
+- `article_path` + `article_category`：路径冗余（slug 已包含分类），但方便脚本直接读分类不用解析
+- `feedback_style`：在 front matter 显式标注 — 防止 §6 反 pattern #2（"让 P3 写长篇评论"）
+
+**真实报告 front matter**（`docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md`，2026-08-20）：
 
 ```yaml
+---
+schema: mock-reader-feedback/v1
 persona_id: P1
+persona_label: 强华陆 dev
 article_slug: hugo-cloudflare-pages-pitfalls
-read_at: 2026-08-20T22:30:00Z
-intent: deploy-fixing
+article_path: content/posts/static-site/hugo-cloudflare-pages-pitfalls.md
+article_category: static-site
+read_at: 2026-08-20T22:45:00Z
 data_source: MOCK
+intent: deploy-fixing
+feedback_style: direct_technical
 rating: 4
 verdict: stay
+---
+```
+
+**真实报告 body**（front matter 之后）：
+
+```yaml
 key_points:
   - "实测 7 个坑 + 真实复现 — 不像 AI 农场"
   - "ERR_TOO_MANY_REDIRECTS 修复段命令可直接复制"
@@ -239,6 +271,10 @@ friction_points:
 quote_feedback: |
   "如果我是搜 ERR_TOO_MANY_REDIRECTS 进来的，标题已经有命中词。但读到 §3
   之前要点 3 屏 Intro — 建议 Intro 砍到 200 词。"
+session_signals:
+  - 估算停留时长：6 分钟（读完 §3 + §6）
+  - 估算是否收藏：是（§3 ERR_TOO_MANY_REDIRECTS 修复段可直接复制）
+  - 估算是否订阅：否（未到 P1 关注的「国内网络踩坑」部分）
 ```
 
 📸 **截图标注位**（步骤 5）：
@@ -246,6 +282,8 @@ quote_feedback: |
 - **脱敏要求**：不需要（已经是公开仓库内文件）
 - **文件命名**：`step-5-real-report-hugo-pitfalls-p1.png`
 - **放哪**：同上 Page Bundle
+
+![Real P1 mock-reader feedback YAML front matter from docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md with 12 fields including schema mock-reader-feedback/v1, persona_label, article_path, feedback_style, rating 4, verdict stay](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-5-real-report-hugo-pitfalls-p1.png)
 
 ---
 
@@ -306,23 +344,28 @@ verdict: stay
 
 ---
 
-## 反 pattern（5 条已踩坑）
+## 反 pattern（6 条已踩坑）
 
-对应 §0 5 条社区坑，**每个反 pattern 都有真实失败案例**：
+对应 §0 5 条社区坑 + 1 条「跑 skill 之前 vs 之后」对照。**反 pattern #1 是 LLM 默认行为而非 skill 自身问题** — 真实「失败 demo」截图难做（LLM 已内置批判），改为引用 §0 社区坑作反面证据。
 
 | # | 反 pattern | 触发场景 | 修正 |
 |---|---|---|---|
-| 1 | 反馈写得「完美无缺」—— 5⭐ + 0 friction | LLM 默认走 positive bias（§0 第 2 条） | prompt 加「rating 必 < 5 + friction_points 至少 1 条」 |
+| 1 | 反馈写得「完美无缺」—— 5⭐ + 0 friction | LLM 默认走 positive bias（§0 第 2 条 [Field Guide to AI](https://fieldguidetoai.com/scam-watch/fake-ai-reviews) + [Moonlight ceiling](https://www.themoonlight.io/fr/review/the-signal-is-the-ceiling-measurement-limits-of-llm-predicted-experience-ratings-from-open-ended-survey-text)） | prompt 加「rating 必 < 5 + friction_points 至少 1 条」 + 显式 feedback_style |
 | 2 | 让 P3 写「长篇技术评论」 | P3 是 one-liner 人格，不显式 feedback_style 就 stereotype | system prompt 第 3 块显式 `your feedback style: one-liner` |
 | 3 | 反馈里用 testimonial 营销腔 | "Would highly recommend..." 触发 §0 第 5 条 AI 农场味 | system prompt 加「forbid testimonial tone」 |
 | 4 | 反馈报告 commit 进 content/posts/ | 污染文章目录 + git log | 默认 docs/feedback/，用户主动 git add 才入仓库 |
 | 5 | 改动原文后没存档 persona 反馈 | 无法回溯「为什么改」 | 任何 [zh-final] commit 必关联 docs/feedback/ 至少 1 份报告 |
+| 6 | 不调 skill 直接让 LLM 评文章 | 跳 step 1-7 工作流，LLM 用默认风格输出 — 14 词的裸 prompt 触发 §0 第 1 条 surface-level 偏差 | **始终通过 `.claude/skills/mock-reader-feedback/SKILL.md` 调用**；对比 baseline 见下方 |
 
-📸 **截图标注位**（反 pattern）：
-- **位置**：现场跑一次 prompt（rating=5 + 0 friction）生成失败 demo
-- **脱敏要求**：不需要
-- **文件命名**：`anti-pattern-5-star-fail.png`
+📸 **成功对照截图**（跑 skill 后的标准输出）：
+- **位置**：用户实际跑 `mock-reader-feedback` skill 的 terminal 输出（针对 hugo-cloudflare-pages-pitfalls）
+- **特征**：`Impression: 4/5` + Highlights 4-5 条（含 Trap 1-5 段落锚定）+ **Deductions 4-5 条**（具体段落问题）+ Contrast compliance（TOML/lint 检查）+ Path to 5/5 改进建议
+- **意义**：证明 skill 的核心价值 = **强制约束 LLM 默认 positive bias** — 没 skill 跑出来是营销腔 5⭐，有 skill 跑出来是 4/5 + 完整 friction + 段落锚定改进建议
+- **脱敏要求**：不需要（terminal 内容不含 PII）
+- **文件命名**：`skill-working-baseline.png`
 - **放哪**：同上 Page Bundle
+
+![Mock-reader-feedback skill baseline output for hugo-cloudflare-pages-pitfalls: rating 4 out of 5 with structured Highlights covering traps 1-5 plus detailed Deductions pointing to specific paragraphs and a Path to 5/5 improvement list — the value of the skill is forcing LLM away from default positive bias toward substantive critique](/images/ai-agent/mock-reader-feedback-skill-deep-dive/skill-working-baseline.png)
 
 ---
 
