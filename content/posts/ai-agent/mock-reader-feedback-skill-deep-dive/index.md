@@ -10,8 +10,10 @@ showToc = true
 TocOpen = true
 
 [cover]
-    image = "ai-agent/mock-reader-feedback-skill-deep-dive/cover.jpg"
-    alt = "Mock reader feedback skill deep dive cover"
+    # D21 M2 阶段: AI-generated cover (Variant V1 5-persona 镜头) — 替换阶段 4 占位 cover.jpg。
+    # Path format: resources path = images/<category>/<article-slug>/<file>, 前缀 images/ + 去掉 assets/ (PaperMod cover.html line 22 absURL fallback).
+    image = "images/ai-agent/mock-reader-feedback-skill-deep-dive/cover.png"
+    alt = "Flat-vector technical illustration: a central green index.md document surrounded by 5 persona-colored viewer lenses (P1 red direct_technical, P2 orange editor-grade, P3 purple one-liner, P4 gray silent, P5 gold comparison-matrix). Top-left shows a faded ghost smiley with 5 stars crossed out in red, labeled LLM default positive bias. A bright green arrow loops from the ghost back to the central document, labeled mock-reader-feedback/v1."
 
 # E 档 (方法论 retrospective) — per docs/writing-prompts.md §六：commit hash + 撤销事件 + 决策点。
 # 内容含 hugo-pitfalls / claude-code-cli-setup / claude-code-editorial-pipeline 12 份反馈 commit 锚点，
