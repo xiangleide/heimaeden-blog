@@ -3,8 +3,12 @@ title = "How I Cut My Solo Tech Blog Pipeline from 6 Hours to 2 Hours Per Post i
 description = "Solo dev cut blog pipeline from 6h to 2h per post in 11 days with Claude Code. Includes the day AI wrote first-person content and I had to revert it."
 date = 2026-08-22T01:30:00Z
 draft = false
-tags = ["Claude Code", "editorial pipeline", "indie blogger", "content automation", "workflow"]
+tags = ["Claude Code", "editorial pipeline", "indie blogger", "content automation", "workflow", "Claude Code Pipeline"]
 categories = ["AI-Agent"]
+
+# Hugo series (per CLAUDE.md §3.4 + PaperMod taxonomy convention) — cluster with Y1 mock-reader-feedback-skill-deep-dive.
+# Series landing: content/posts/ai-agent/_index.md + ai-agent category page.
+series = ["AI Agent"]
 
 showToc = true
 TocOpen = true
@@ -185,7 +189,7 @@ On D10 2026-08-20 I realised "AI picks + AI writes" still lacked a third-party p
 
 4 reports archived at `docs/feedback/claude-code-cli-setup-indie-blog-{P1,P3,P5,P1-vs-P3}.md`. Key findings: positioning drift (dev-internal marker leakage) / above-the-fold misalignment / title AI-farm smell.
 
-The 5 personas are not designed out of thin air — they are the 5 typical user types of Claude Code: strong-China-mainland dev / Western indie hacker / selection decision-maker / content-farm sniffer / overseas mentor. After AI picks + AI writes, a third-party perspective is still missing — AI does not audit its own output in reverse, so a persona-driven reader needs to run through it. This is why I built `mock-reader-feedback` as a skill rather than a script: persona-driven has audit value; simply "having AI re-read once" is zero incremental value.
+The 5 personas are not designed out of thin air — they are the 5 typical user types of Claude Code: strong-China-mainland dev / Western indie hacker / selection decision-maker / content-farm sniffer / overseas mentor. After AI picks + AI writes, a third-party perspective is still missing — AI does not audit its own output in reverse, so a persona-driven reader needs to run through it. This is why I built `mock-reader-feedback` as a skill rather than a script: persona-driven has audit value; simply "having AI re-read once" is zero incremental value. **See the deep dive on the [Y1 mock-reader-feedback skill structure]({{< ref "posts/ai-agent/mock-reader-feedback-skill-deep-dive" >}}) for persona implementation + YAML schema + 6 anti-patterns.**
 
 #### 2.4.2 Most counter-intuitive feedback from P1/P3/P5
 
@@ -264,7 +268,7 @@ This article is X1 — the externalised form of the editorial-pipeline framework
 
 | Candidate | Launch metric (all must hold) | Priority | Estimated effort | Main dependency |
 |---|---|---|---|---|
-| **Y1** mock-reader-feedback skill deep dive (persona implementation + report structure + integrate commit gate) | X1 published + mock-reader reports archived ≥3 + 5 persona data wired in | ★★★ | ~3 days | translation complete / persona-data.json V1.1+ |
+| **[Y1 mock-reader-feedback skill deep dive]({{< ref "posts/ai-agent/mock-reader-feedback-skill-deep-dive" >}})** (persona implementation + report structure + integrate commit gate) | X1 published + mock-reader reports archived ≥3 + 5 persona data wired in | ★★★ | ~3 days | translation complete / persona-data.json V1.1+ |
 | **Y2a** pre-commit gates breakdown (verify-image-paths / verify-cross-refs / lint-post.sh / hugo --gc four-piece set each as its own article) | After Y1 done + at least 1 gate-failure recovery experience | ★★ | ~2 days | verify-cross-refs integrated into lint-post.sh (M4 phase §4) |
 | **Y2b** redact-image PII workflow deep dive (coordinate identification + script invocation + verification) | mock-reader reports have ≥1 PII false-positive + Pillow installed | ★ | ~1 day | existing `scripts/redact-image.sh` |
 

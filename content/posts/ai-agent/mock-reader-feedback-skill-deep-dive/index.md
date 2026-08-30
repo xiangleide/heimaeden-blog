@@ -3,8 +3,12 @@ title = "How I Built a 5-Persona Mock Reader Skill (with Claude Code)"
 description = "5-persona mock reader feedback skill for Claude Code. 7-step workflow + YAML schema + 6 anti-patterns. Real hugo-pitfalls + TCO math."
 date = 2026-08-30T00:00:00Z
 draft = true
-tags = ["Claude Code", "AI Agent", "Editorial Workflow", "LLM-as-Judge", "Persona Prompt"]
+tags = ["Claude Code", "AI Agent", "Editorial Workflow", "LLM-as-Judge", "Persona Prompt", "Claude Code Pipeline"]
 categories = ["AI-Agent"]
+
+# Hugo series (per CLAUDE.md §3.4 + PaperMod taxonomy convention) — cluster with A2 claude-code-editorial-pipeline.
+# Series landing: content/posts/ai-agent/_index.md + ai-agent category page.
+series = ["AI Agent"]
 
 showToc = true
 TocOpen = true
@@ -27,7 +31,7 @@ lint_allow = ["cjk-body"]
 
 > **TL;DR**：mock-reader-feedback skill 是一个 Claude Code 子命令，**用 5 个预设 persona（P1-P5）跑虚拟读者试读**，输出 YAML 反馈报告到 `docs/feedback/<article>-<persona>.md`。本文拆解它：5 个 persona 如何构造、7 步工作流怎么跑、YAML schema 怎么严格遵守、以及 5 条已踩的反 pattern。
 >
-> **作者注**：本 skill 是我 2026-08 月对 3 篇文章（hugo-cloudflare-pages-pitfalls / claude-code-cli-setup-indie-blog / claude-code-editorial-pipeline）跑完 12 份反馈报告后沉淀的。所有引用的报告、脚本、persona 文件都在仓库里可查。
+> **作者注**：本 skill 是我 2026-08 月对 3 篇文章（hugo-cloudflare-pages-pitfalls / claude-code-cli-setup-indie-blog / [claude-code-editorial-pipeline]({{< ref "posts/ai-agent/claude-code-editorial-pipeline" >}})）跑完 12 份反馈报告后沉淀的。所有引用的报告、脚本、persona 文件都在仓库里可查。
 
 ---
 
