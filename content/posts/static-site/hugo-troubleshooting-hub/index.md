@@ -10,7 +10,7 @@ showToc = true
 TocOpen = true
 
 [cover]
-    image = "static-site/hugo-troubleshooting-hub/cover.jpg"
+    image = "images/static-site/hugo-troubleshooting-hub/cover.jpg"
     alt = "Hugo troubleshooting hub cover"
 
 # Draft exemption per CLAUDE.md §3.2 + docs/article-writing-workflow.md §1 (D6 新增 lint_allow 用法)

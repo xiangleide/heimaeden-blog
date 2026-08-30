@@ -2,18 +2,22 @@
 HeimaEden-specific head extensions.
 Injected at end of <head> by PaperMod's head.html (line 186).
 
-Currently used to provide a site-wide default OG image. PaperMod's opengraph.html
-emits per-page og:image only when cover.image is set or inline images are detected;
-otherwise no og:image is rendered at all, leaving social-share previews blank.
+Provides a site-wide OG image fallback ONLY when the page has no per-page
+cover.image. PaperMod's opengraph.html (line 38–43) already emits the
+per-page cover as og:image when `cover.image` is set; emitting the site
+fallback unconditionally here would race with that tag for "first valid
+wins" scrapers and override the per-page image.
 
-We always emit a fallback og:image as the LAST <meta property="og:image"> tag.
-Most social clients (Facebook/Twitter/LinkedIn/Slack) follow the spec convention
-of "first valid wins", so this acts purely as a fallback for pages without any
-per-page image — it never overrides an explicit per-page og:image.
+Scope of the fallback:
+- Pages without `cover.image` (category, tag, archive, about, etc.) ->
+  emit og-default.png so social previews never come up blank.
+- Pages WITH `cover.image` -> emit nothing here; PaperMod's tag wins.
 */}}
+{{- if not .Params.cover.image -}}
 <meta property="og:image" content="{{ "images/og-default.png" | absURL }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="HeimaEden — indie hacker tech blog">
 <meta name="twitter:image" content="{{ "images/og-default.png" | absURL }}">
 <meta name="twitter:image:alt" content="HeimaEden — indie hacker tech blog">
+{{- end -}}
