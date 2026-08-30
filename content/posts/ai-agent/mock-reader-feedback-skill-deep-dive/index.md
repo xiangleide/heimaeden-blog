@@ -2,7 +2,7 @@
 title = "How I Built a 5-Persona Mock Reader Skill (with Claude Code)"
 description = "5-persona mock reader feedback skill for Claude Code. 7-step workflow + YAML schema + 6 anti-patterns. Real hugo-pitfalls + TCO math."
 date = 2026-08-30T00:00:00Z
-draft = true
+draft = false
 tags = ["Claude Code", "AI Agent", "Editorial Workflow", "LLM-as-Judge", "Persona Prompt", "Claude Code Pipeline"]
 categories = ["AI-Agent"]
 
@@ -14,225 +14,224 @@ showToc = true
 TocOpen = true
 
 [cover]
-    # D21 M2 阶段: AI-generated cover (Variant V1 5-persona 镜头) — 替换阶段 4 占位 cover.jpg。
-    # Path format: resources path = images/<category>/<article-slug>/<file>, 前缀 images/ + 去掉 assets/ (PaperMod cover.html line 22 absURL fallback).
+    # D21 M2 stage: AI-generated cover (Variant V1 5-persona lens view) replacing stage 4 placeholder cover.jpg.
+    # Path format: resources path = images/<category>/<article-slug>/<file>, prefix images/ + drop assets/ (PaperMod cover.html line 22 absURL fallback).
     image = "images/ai-agent/mock-reader-feedback-skill-deep-dive/cover.png"
     alt = "Flat-vector technical illustration: a central green index.md document surrounded by 5 persona-colored viewer lenses (P1 red direct_technical, P2 orange editor-grade, P3 purple one-liner, P4 gray silent, P5 gold comparison-matrix). Top-left shows a faded ghost smiley with 5 stars crossed out in red, labeled LLM default positive bias. A bright green arrow loops from the ghost back to the central document, labeled mock-reader-feedback/v1."
 
-# E 档 (方法论 retrospective) — per docs/writing-prompts.md §六：commit hash + 撤销事件 + 决策点。
-# 内容含 hugo-pitfalls / claude-code-cli-setup / claude-code-editorial-pipeline 12 份反馈 commit 锚点，
-# 反 pattern 对应 §0 5 条社区坑 + 1 条 baseline 对照，5 决策点 vs mock-reader 选择。
+# E-slot (methodology retrospective) - per docs/writing-prompts.md section 6: commit hashes + revert events + decision points.
+# Content covers hugo-pitfalls / claude-code-cli-setup / claude-code-editorial-pipeline with 12 feedback commit anchors,
+# anti-patterns map to 5 community pitfalls in section 0 + 1 baseline comparison, 5 decision points vs mock-reader choice.
 prompt_type = "E"
-
-# Draft exemption per CLAUDE.md §3.2 + docs/article-writing-workflow.md §1 (D6 新增 lint_allow 用法)
-# 原因：本文件是 [draft] 状态的中文初稿，TCM 阶段 7 英文版 commit 前必须移除此行
-lint_allow = ["cjk-body"]
 +++
 
-> **TL;DR**：mock-reader-feedback skill 是一个 Claude Code 子命令，**用 5 个预设 persona（P1-P5）跑虚拟读者试读**，输出 YAML 反馈报告到 `docs/feedback/<article>-<persona>.md`。本文拆解它：5 个 persona 如何构造、7 步工作流怎么跑、YAML schema 怎么严格遵守、以及 5 条已踩的反 pattern。
+> **TL;DR**: The `mock-reader-feedback` skill is a Claude Code sub-command that uses 5 preset personas (P1-P5) to simulate reader feedback. It outputs a YAML feedback report to `docs/feedback/<article>-<persona>.md`. This article breaks it down: how the 5 personas are constructed, how the 7-step workflow runs, how the YAML schema is strictly enforced, and 5 anti-patterns I have already hit.
 >
-> **作者注**：本 skill 是我 2026-08 月对 3 篇文章（hugo-cloudflare-pages-pitfalls / claude-code-cli-setup-indie-blog / [claude-code-editorial-pipeline]({{< ref "posts/ai-agent/claude-code-editorial-pipeline" >}})）跑完 12 份反馈报告后沉淀的。所有引用的报告、脚本、persona 文件都在仓库里可查。
+> **Author's note**: This skill is what I crystallised after running 12 feedback reports against 3 articles in August 2026 (`hugo-cloudflare-pages-pitfalls` / `claude-code-cli-setup-indie-blog` / [claude-code-editorial-pipeline]({{< ref "posts/ai-agent/claude-code-editorial-pipeline" >}})). Every report, script, and persona file referenced here lives in the repo and is inspectable.
 
 ---
 
-## FAQ（先回答常见问题）
+## FAQ (Common questions up front)
 
-**Q: mock-reader-feedback 是什么？**
-A: 一个 Claude Code 子命令 skill，用 5 个预设 persona（P1-P5）跑虚拟读者试读，输出 YAML 反馈报告到 `docs/feedback/<slug>-P{id}.md`。
+**Q: What is `mock-reader-feedback`?**
+A: A Claude Code sub-command skill that uses 5 preset personas (P1-P5) to simulate reader feedback. It outputs a YAML feedback report to `docs/feedback/<slug>-P{id}.md`.
 
-**Q: 和直接问 LLM 审稿有什么区别？**
-A: 直接问 LLM（无 persona prompt）= 默认 positive bias（5⭐ 全赞，per §附录0 第 2 条社区坑）。skill 强制显式 `feedback_style` + `rating < 5` 硬约束，把 LLM 从「通用正面反馈」拉回具体段落级 critique。
+**Q: How is it different from just asking an LLM to review the article?**
+A: Asking an LLM directly (without a persona prompt) triggers the default positive bias — 5-star blanket praise (per Appendix 0 community pitfall #2). The skill forces explicit `feedback_style` + `rating < 5` hard constraints, pulling the LLM away from "generic positive feedback" toward paragraph-level critique.
 
-**Q: 什么时候该跑？**
-A: [zh-final] / [en-final] 阶段后，commit-with-prefix 之前。默认 P5（最挑剔）+ P1（验证可实操）；翻译后加 P3（验证海外读者接受度）。
-
----
-
-## 步骤 0：踩坑搜索（实操前必做）
-
-**任务**：动手前先扫一遍社区对 LLM-as-judge / persona prompt 的常见批评，避免重复踩坑。
-
-**5 条社区坑（按相关度）**：
-
-1. **LLM surface-level 偏差**：[PersonaEval arXiv 2508.18076](https://arxiv.org/html/2508.18076v2) — Gemini-2.5-pro 仅 68.8% 准确率判定 persona 角色扮演质量（人类 90.8%），LLM 关注表面语言而非会话意图。
-2. **5⭐ 全赞是 LLM 默认行为**：[Field Guide to AI](https://fieldguidetoai.com/scam-watch/fake-ai-reviews) — ChatGPT 评论比人类**系统性更正面**，必须显式 prompt 禁止 5⭐。
-3. **Likert 天花板效应**：[Moonlight ceiling](https://www.themoonlight.io/fr/review/the-signal-is-the-ceiling-measurement-limits-of-llm-predicted-experience-ratings-from-open-ended-survey-text) — 所有模型**系统性 under-predict** 评分（positive-only 86% agreement vs negative-only 44%）。
-4. **persona 刻板印象**：[Irish Examiner](https://irishexaminer.com/opinion/commentanalysis/arid-41184352.html) — "business traveller" 等 persona prompt 产出 stereotype。
-5. **AI 缺 lizard brain**：[softwaredoug.com](https://softwaredoug.com/blog/2025/11/02/llm-judges-arent-the-shortcut-you-think) — LLM 缺人类 engagement 直觉，最后 10-20% 的分歧包含最有意义的 edge cases。
-
-**为什么先搜这 5 条**：mock-reader-feedback 本质就是 LLM-as-judge。不知道偏差，反馈报告就是噪声。
-
-## 引言
-
-**问题**：TCM SOP 阶段 4（[zh-final]）写到「用户确认 → 触发翻译阶段」。但「用户确认」如果只是 AI 自查，问题就是 AI 自己审自己的稿子——**Scaled Content Abuse 识别信号之一**。
-
-**解法**：用 5 个预设 persona 跑「虚拟读者试读」，每个 persona 有不同背景 + 反馈风格，强迫 AI **站在非自己立场看文章**。反馈落到 YAML 报告，让用户（真人）做最终判断。
-
-**本文覆盖**：
-- §2 前置条件 + 5 类触发场景
-- §3 7 步工作流（核心骨架）
-- §4 5 persona 方案对比（核心 — B 档灵魂）
-- §5 YAML schema 拆解 + 真实报告节选
-- §6 5 条反 pattern（对应 §0 5 条社区坑）
-- §7 依赖 + v1-v2 演进路径
-- §8 总结 + 3 个后置动作
-
-**不覆盖**：mock-reader-feedback 跟真人 reader / 自己审稿的 ROI 对比（这是另一篇文章的事）。
+**Q: When should I run it?**
+A: After the `[zh-final]` / `[en-final]` stage, before `commit-with-prefix`. Default P5 (most demanding) + P1 (validates hands-on feasibility). After translation, add P3 (validates overseas-reader reception).
 
 ---
 
-## 步骤 1：装前置条件
+## Step 0: Community pitfall search (mandatory before hands-on)
 
-### 1.0 3 项前置检查
+**Task**: Before starting, scan community critiques of LLM-as-judge / persona prompts to avoid retreading the same traps.
+
+**5 community pitfalls (by relevance)**:
+
+1. **LLM surface-level bias**: [PersonaEval arXiv 2508.18076](https://arxiv.org/html/2508.18076v2) — Gemini-2.5-pro reaches only 68.8% accuracy in judging persona role-play quality (humans: 90.8%); the LLM fixates on surface language instead of conversational intent.
+2. **5-star blanket praise is LLM default**: [Field Guide to AI](https://fieldguidetoai.com/scam-watch/fake-ai-reviews) — ChatGPT reviews are **systematically more positive** than humans; you must explicitly prompt to forbid 5⭐.
+3. **Likert ceiling effect**: [Moonlight ceiling](https://www.themoonlight.io/fr/review/the-signal-is-the-ceiling-measurement-limits-of-llm-predicted-experience-ratings-from-open-ended-survey-text) — All models **systematically under-predict** ratings (positive-only 86% agreement vs negative-only 44%).
+4. **Persona stereotyping**: [Irish Examiner](https://irishexaminer.com/opinion/commentanalysis/arid-41184352.html) — persona prompts like "business traveller" produce stereotyping.
+5. **AI lacks the lizard brain**: [softwaredoug.com](https://softwaredoug.com/blog/2025/11/02/llm-judges-arent-the-shortcut-you-think) — LLMs lack the human engagement instinct; the last 10–20% of disagreement contains the most meaningful edge cases.
+
+**Why search these 5 first**: `mock-reader-feedback` is LLM-as-judge at its core. Without knowing the biases, the feedback report is noise.
+
+## Introduction
+
+**The problem**: TCM SOP stage 4 (`[zh-final]`) says "user confirmation → trigger translation stage." If "user confirmation" is just AI self-checking, the result is AI auditing its own draft — **one of the Scaled Content Abuse signature signals**.
+
+**The fix**: Use 5 preset personas to run a "virtual reader feedback" pass. Each persona has a different background + feedback style, forcing the AI to **read the article from a perspective other than its own**. Feedback is captured in a YAML report, leaving the human user as the final judge.
+
+**What this article covers**:
+- Steps 1-3: prerequisites, triggers, persona + data
+- 5-persona comparison matrix
+- Step 5: YAML schema breakdown + real-report excerpt
+- 6 anti-patterns (mapping §0's 5 community pitfalls + 1 baseline)
+- Dependencies + v1→v2 evolution
+- Conclusion + 3 follow-up actions
+
+**What this article does NOT cover**: an ROI comparison vs. a real human reader (separate article).
+
+---
+
+## Step 1: Install prerequisites
+
+### 1.0 3 prerequisite checks
 
 ```bash
 claude --version            # ≥ 1.0
-ls -ld ~/.claude/skills/    # 当前用户可写（macOS sandbox 可能限制）
-python3 --version           # ≥ 3.8（Pillow 兼容）
+ls -ld ~/.claude/skills/    # current user must have write access (macOS sandbox may restrict)
+python3 --version           # ≥ 3.8 (Pillow compatibility)
 ```
 
-### 1.1 三个必备文件
+### 1.1 Three required files
 
 ```bash
-docs/mock-reader-personas.md    # 5 persona prompt 模板（230 行）
-docs/persona-data.json          # MVP=MOCK 数据 / V1.1+=real data（203 行）
-.claude/skills/mock-reader-feedback/SKILL.md   # 本文拆解对象
+docs/mock-reader-personas.md    # 5 persona prompt templates (230 lines)
+docs/persona-data.json          # MVP = MOCK data / V1.1+ = real data (203 lines)
+.claude/skills/mock-reader-feedback/SKILL.md   # what this article dissects
 ```
 
-**首次跑必做**：`mkdir -p docs/feedback && echo 'initialized'` — skill 默认输出目录不存在会 fail。
+**First-run mandatory**: `mkdir -p docs/feedback && echo 'initialized'` — the skill's default output directory does not exist on a fresh clone and the first run will fail.
 
-### 1.2 一个 data fetcher 脚本
+### 1.2 One data-fetcher script
 
 ```bash
-scripts/fetch-persona-data.sh   # 验证 cache 状态 / 可选 --live
+scripts/fetch-persona-data.sh   # validate cache status / optional --live
 ```
 
-### 1.3 一篇 ≥500 词的目标文章
+### 1.3 A ≥500-word target article
 
-`content/posts/<category>/<article-slug>/index.md`（已 [zh-final] 或 [en-final] 都可）
+`content/posts/<category>/<article-slug>/index.md` (either `[zh-final]` or `[en-final]` works)
 
-### 1.4 自检
+### 1.4 Self-check
 
 ```bash
-# 验证 cache JSON 合法
+# Validate cache JSON
 python3 -c "import json; json.load(open('docs/persona-data.json'))"
 
-# 验证 5 persona 完整
+# Validate 5 personas present
 count=$(grep -c "^## P[1-5]" docs/mock-reader-personas.md)
-if [ "$count" -ne 5 ]; then echo "persona 数量异常 ($count)，请检查 docs/mock-reader-personas.md"; exit 1; fi
+if [ "$count" -ne 5 ]; then echo "persona count abnormal ($count), please check docs/mock-reader-personas.md"; exit 1; fi
 ```
 
-📸 **截图标注位**（步骤 1）：
-- **位置**：`docs/mock-reader-personas.md` P1 段落截图
-- **脱敏要求**：不需要（仓库内公开文件）
-- **文件命名**：`step-1-personas-p1-section.png`
-- **放哪**：`content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/step-1-personas-p1-section.png`
+> **Author's note on §1.4**: When I first ran the self-check, my `count` came back as `4`. The script exited 1, but I had not yet wired the failure-path behaviour into the skill — so the skill silently fell back to a 4-persona run. Lesson: pair every self-check with an explicit `exit 1` + visible stderr message; otherwise the silent fallback masks the data issue.
+
+📸 **Screenshot slot (Step 1)**:
+- **What to capture**: P1 section of `docs/mock-reader-personas.md`
+- **Redaction**: not needed (in-repo public file)
+- **Filename**: `step-1-personas-p1-section.png`
+- **Where**: `content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/step-1-personas-p1-section.png`
 
 ![P1 persona template from docs/mock-reader-personas.md: strong Chinese mainland dev, deployment-focused reader with direct technical feedback style and specific traps to avoid](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-1-personas-p1-section.png)
 
 ---
 
-## 步骤 2：触发 skill
+## Step 2: Trigger the skill
 
-**5 类 trigger phrases**（任一即可）：
+**5 trigger phrases** (any one is enough):
 
-| 短语 | 场景 |
+| Phrase | Scenario |
 |---|---|
-| 「模拟读者反馈」| 中文 trigger，最常用 |
-| 「mock reader feedback」| 英文 trigger |
-| 「P1 反馈」| 显式指定 persona |
-| 「试读一下」| 口语化 trigger |
-| 「pretend to be a reader」| 英文口语 |
+| "mock reader feedback" | English trigger, most common |
+| "pretend to be a reader" | English casual |
+| "P1 feedback" | Explicit persona selection |
+| "give it a try-read" | Casual trigger |
+| "act as a P3 reader" | Explicit multi-persona |
 
-**完整命令示例**：
+**Full command examples**:
 
 ```
-# 默认（推荐 P5 选型决策者，反馈最挑剔）
-"对 hugo-cloudflare-pages-pitfalls 跑 mock reader feedback"
+# Default (recommend P5 selection-decision persona - most demanding feedback)
+"Run mock reader feedback on hugo-cloudflare-pages-pitfalls"
 
-# 显式指定 P1（强华陆 dev，部署优先）
-"对 claude-code-editorial-pipeline 跑 P1 反馈"
+# Explicit P1 (strong China-mainland dev, deployment-first)
+"Run P1 feedback on claude-code-editorial-pipeline"
 
-# 多 persona 对比（V2 功能）
-"对 hugo-pitfalls 跑 P1 vs P3 对比"
+# Multi-persona comparison (V2 feature)
+"Run P1 vs P3 comparison on hugo-pitfalls"
 ```
 
-**未触发？** 检查 `.claude/skills/mock-reader-feedback/SKILL.md` 是否在 Claude Code skill discovery path。运行 `/skills` 列出已加载 skill — 若未出现 mock-reader-feedback，检查文件路径 + 重启 Claude Code。
+**Skill not triggering?** Check that `.claude/skills/mock-reader-feedback/SKILL.md` is in Claude Code's skill discovery path. Run `/skills` to list loaded skills — if `mock-reader-feedback` is missing, verify the file path + restart Claude Code.
 
 ---
 
-## 步骤 3：选 persona + 加载数据
+## Step 3: Pick a persona + load data
 
-### 3.1 选 persona（默认 P5）
+### 3.1 Pick a persona (default P5)
 
 ```yaml
-P1: 强华陆 dev（部署优先 + EACCES 排错 + 国内网络踩坑）
-P2: 内容创作者（文笔 / SEO / 标题党反 sense）
-P3: 西方 indie hacker（30 秒决策 / ROI / 选型表）
-P4: AI 怀疑者（LLM-as-judge 警惕 / 营销反感）
-P5: 选型决策者（默认 · TCO / 退出成本 / 对比矩阵）
+P1: strong China-mainland dev (deployment-first + EACCES debugging + domestic-network pitfalls)
+P2: content creator (prose / SEO / clickbait detection)
+P3: Western indie hacker (30-second decisions / ROI / selection tables)
+P4: AI sceptic (LLM-as-judge vigilance / marketing-tone resistance)
+P5: selection decision-maker (default · TCO / exit cost / comparison matrix)
 ```
 
-**默认 P5**：P5 反馈质量最高，**强迫发现真正问题**（per `mock-reader-feedback` SKILL.md §2）。用户没指定 → 永远 P5。
+**Why default P5**: P5 feedback is the highest quality; **it forces discovery of real problems** (per `mock-reader-feedback` SKILL.md §2). If the user does not specify, always P5.
 
-### 3.2 加载数据（默认 cache / 显式 --live）
+### 3.2 Load data (default cache / explicit --live)
 
 ```bash
-# 默认（推荐）— 直接读 cache，不消耗 API quota
+# Default (recommended) — read cache, no API-quota cost
 ./scripts/fetch-persona-data.sh
 
-# --live 模式（用户主动要求刷新）
+# --live mode (user explicitly requests a refresh)
 ./scripts/fetch-persona-data.sh --live --source=gsc
 ```
 
-**GSC 接入前**：`docs/persona-data.json` 里 `data_source` 全是 `"[MOCK]"`。prompt 必须显式 `[MOCK]` 标签，**不假装真实地理数据**。
+**Before GSC is wired**: every `data_source` in `docs/persona-data.json` reads `"[MOCK]"`. The prompt must explicitly tag `[MOCK]` — **never pretend to have real geographic data**.
 
-📸 **截图标注位**（步骤 3）：
-- **位置**：`docs/persona-data.json` P1 块 geo_distribution 字段
-- **脱敏要求**：不需要（[MOCK] 数据）
-- **文件命名**：`step-3-persona-data-p1-mock.png`
-- **放哪**：同上 Page Bundle
+> **Author's note on §3.2**: When I first wired GSC, I left the prompt header as "geographic distribution: CN 85% / HK 5% / TW 5% / SG 3% / OTHER 2%" without the `[MOCK]` tag. P3 ran for 30 seconds and produced feedback like "skew toward Asia, English might lose US audience" — LLM was treating mock data as real. Always tag the data source explicitly inside the prompt.
+
+📸 **Screenshot slot (Step 3)**:
+- **What to capture**: `geo_distribution` block of P1 in `docs/persona-data.json`
+- **Redaction**: not needed ([MOCK] data)
+- **Filename**: `step-3-persona-data-p1-mock.png`
+- **Where**: same Page Bundle
 
 ![P1 geo_distribution mock data from docs/persona-data.json showing CN 85 percent, HK TW 5 percent each, SG 3 percent, OTHER 2 percent — labeled MOCK to avoid fabricating real geographic distribution](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-3-persona-data-p1-mock.png)
 
 ---
 
-## 步骤 4：构造 persona prompt（3 块拼接）
+## Step 4: Construct the persona prompt (3 blocks)
 
 ```text
-你是 HeimaEden 博客 <P1-P5 人格标签>。背景：<docs/mock-reader-personas.md 中 P1-P5 描述>。
+You are the HeimaEden blog's <P1-P5 persona label>. Background: <the P1-P5 description in docs/mock-reader-personas.md>.
 
-实时数据（来自 docs/persona-data.json 中的 <persona-id>）：
-- 地理分布：<geo_distribution>
-- 设备分布：<device_split>
-- 典型搜索词：<top_search_queries>
-- 优先阅读：<top_pages_visited>
-- 社区活跃：<community_signals>
+Real-time data (from docs/persona-data.json's <persona-id> block):
+- Geographic distribution: <geo_distribution>
+- Device split: <device_split>
+- Typical search queries: <top_search_queries>
+- Preferred reads: <top_pages_visited>
+- Community activity: <community_signals>
 
-阅读场景：<primary_intent>（如 deploy-fixing / selection-decision）
+Reading scenario: <primary_intent> (e.g. deploy-fixing / selection-decision)
 
-你的反馈风格：<feedback_style>（如 direct_technical / reddit-grade / one-liner）
+Your feedback style: <feedback_style> (e.g. direct_technical / reddit-grade / one-liner)
 
-阅读 [文章标题] 后，按下面的 YAML schema 输出反馈。
+After reading [article title], output feedback in the YAML schema below.
 ```
 
-**3 条硬规矩**：
+**3 hard rules**:
 
-1. **必须显式标注 feedback_style**——避免 P3 写成长文（one-liner）或 P4 写评论（silent）。如果不写 feedback_style，LLM 默认走「通用正面反馈」→ 触发 §0 第 2 条社区坑（5⭐ 全赞）。
-2. **数据是 [MOCK] 时显式标注**——避免假装真实地理数据（per §0 第 1 条 LLM surface-level 偏差）。
-3. **不读 front matter**——只读 body，避免 prompt 浪费 token 在 metadata 上。
+1. **Always tag `feedback_style` explicitly** — to prevent P3 from writing long-form (one-liner) or P4 from writing commentary (silent). If `feedback_style` is left unspecified, the LLM defaults to "generic positive feedback" and triggers §0 pitfall #2 (5⭐ blanket praise).
+2. **Tag `[MOCK]` explicitly when data is mock** — to prevent pretending to have real geographic data (per §0 pitfall #1, LLM surface-level bias).
+3. **Do not read the front matter** — body only, so the prompt does not waste tokens on metadata.
 
 ---
 
-## 步骤 5：运行 persona + 输出 YAML schema（严格）
+## Step 5: Run the persona + emit the YAML schema (strict)
 
-**完整 YAML schema**（必须严格遵守，front matter 12 字段 + body 4 段）：
+**Full YAML schema** (must be strictly followed — 12 front-matter fields + 4 body sections):
 
 ```yaml
 ---
 schema: mock-reader-feedback/v1
 persona_id: P1
-persona_label: 强华陆 dev
+persona_label: strong China-mainland dev
 article_slug: hugo-cloudflare-pages-pitfalls
 article_path: content/posts/static-site/hugo-cloudflare-pages-pitfalls.md
 article_category: static-site
@@ -244,88 +243,89 @@ rating: 1-5
 verdict: stay | skim | bounce
 ---
 
-<!-- 上面 YAML block + 完整 persona 思考过程 + 关键 quote + 修复建议 -->
+<!-- Above YAML block + full persona thinking trace + key quote + suggested fixes -->
 
 key_points:
-  - …（3-5 条，正面 + 负面）
+  - …(3–5 items, positive + negative)
 friction_points:
-  - paragraph: "§3 第四段"
-    issue: "报错例子没有完整堆栈"
-    suggested_fix: "补 stack trace 头部 5 行"
+  - paragraph: "§3 fourth paragraph"
+    issue: "the error example is missing the full stack trace"
+    suggested_fix: "add the top 5 lines of the stack trace"
 quote_feedback: |
-  "如果我是搜索这个报错进来，我希望在 3 屏内看到 root cause。"
+  "If I landed here from a search for that error, I'd want the root cause within 3 screens."
 session_signals:
-  - 估算停留时长
-  - 估算是否收藏
-  - 估算是否订阅
+  - estimated dwell time
+  - estimated bookmark likelihood
+  - estimated subscription likelihood
 ```
 
-**字段说明**：
+**Field reference**:
 
-| 字段 | 必填 | 默认值 | 说明 |
+| Field | Required | Default | Description |
 |---|---|---|---|
-| `schema` | ✅ | — | 固定 `mock-reader-feedback/v1`，schema 演进做版本判断 |
-| `persona_id` | ✅ | — | P1-P5 之一，触发 persona prompt 选择 |
-| `persona_label` | ✅ | — | 人设中文标签，方便人眼核对（避免 P1/P5 串号） |
-| `article_slug` | ✅ | — | 目标文章 slug，用于输出文件名 |
-| `article_path` | ⚪ optional | `<slug>.md` 推断 | 完整路径，方便脚本直读 |
-| `article_category` | ⚪ optional | front matter 推断 | 分类冗余，避免每次解析 front matter |
-| `feedback_style` | ⚪ optional | `long-form-rss`（P5 默认） | 显式标注 — 防止 §6 反 pattern #2（"让 P3 写长篇评论"）|
-| `read_at` | ⚪ optional | 当前 ISO timestamp | 反馈生成时间 |
-| `data_source` | ⚪ optional | `MOCK` | MOCK / GSC / CF / REDDIT / PLAUSIBLE 之一 |
-| `intent` | ⚪ optional | `selection-decision` | 匹配 persona 的 primary_intent |
-| `rating` | ✅ | — | 1-5 整数，**强制 < 5**（5⭐ = persona 失真）|
-| `verdict` | ✅ | — | `stay` / `skim` / `bounce` 之一 |
+| `schema` | ✅ | — | Fixed `mock-reader-feedback/v1`; schema-version gate |
+| `persona_id` | ✅ | — | P1–P5; triggers prompt selection |
+| `persona_label` | ✅ | — | Eyeball label (avoid P1/P5 mix-ups) |
+| `article_slug` | ✅ | — | Target slug; used in filename |
+| `article_path` | ⚪ optional | inferred from `<slug>.md` | Full path; scripts read directly |
+| `article_category` | ⚪ optional | inferred from front matter | Category redundancy; avoids front-matter parsing |
+| `feedback_style` | ⚪ optional | `long-form-rss` (P5 default) | Guards against anti-pattern #2 |
+| `read_at` | ⚪ optional | current ISO timestamp | Generation timestamp |
+| `data_source` | ⚪ optional | `MOCK` | MOCK / GSC / CF / REDDIT / PLAUSIBLE |
+| `intent` | ⚪ optional | `selection-decision` | Matches persona `primary_intent` |
+| `rating` | ✅ | — | 1–5, **must be < 5** (5⭐ = distortion) |
+| `verdict` | ✅ | — | `stay` / `skim` / `bounce` |
 
-**§5.1 缺字段失败模式**（vendor-grade robustness）：
+**§5.1 Missing-field failure modes** (vendor-grade robustness):
 
-| 字段缺失 | 行为 |
+| Missing field | Behaviour |
 |---|---|
-| `schema` / `persona_id` | 报错并退出 |
-| `persona_label` | 警告但仍跑（人眼核对用）|
-| `feedback_style` | 警告 + 退化 `long-form-rss`（避免 §6 #2）|
-| `article_slug` | 警告但不退出（默认路径兜底）|
+| `schema` / `persona_id` | Error and exit |
+| `persona_label` | Warn but still run (eyeball cross-check) |
+| `feedback_style` | Warn + degrade to `long-form-rss` (avoid §6 #2) |
+| `article_slug` | Warn but do not exit (fall back to default path) |
 
-**真实报告 body 节选**（`docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md`，front matter 12 字段严格按上表填写）：
+**Real-report body excerpt** (`docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md`, with front-matter strictly following the table above):
 
 ```yaml
 key_points:
-  - "实测 7 个坑 + 真实复现 — 不像 AI 农场"
-  - "ERR_TOO_MANY_REDIRECTS 修复段命令可直接复制"
-  - "封面用的是 Unsplash 概念图，§7 才出现真实截图 — 顺序有点违和"
+  - "Real reproduction of 7 traps + verified — does not read like AI farm content"
+  - "ERR_TOO_MANY_REDIRECTS fix section has copy-pasteable commands"
+  - "Cover uses an Unsplash concept image, real screenshots only appear in §7 — order feels off"
 friction_points:
   - paragraph: "§3 ERR_TOO_MANY_REDIRECTS"
-    issue: "截图前少了 PII 脱敏命令的实际调用"
-    suggested_fix: "在 §3.4 后补 pip3 install --user Pillow + 红框坐标示例"
-  - paragraph: "§6 Pros & Cons 表格"
-    issue: "Hetzner 列价格是 2024 数据，2026 已涨价"
-    suggested_fix: "加 [已停办] 标注或更新到 2026 实测价"
+    issue: "Missing the actual invocation of the PII-redaction command before screenshotting"
+    suggested_fix: "After §3.4 add `pip3 install --user Pillow` + a sample red-box coordinate set"
+  - paragraph: "§6 Pros & Cons table"
+    issue: "Hetzner column prices are 2024 data; 2026 prices have already gone up"
+    suggested_fix: "Add a [discontinued] tag or refresh to verified 2026 prices"
 quote_feedback: |
-  "如果我是搜 ERR_TOO_MANY_REDIRECTS 进来的，标题已有命中词。
-  但读到 §3 之前要点 3 屏 Intro — 建议 Intro 砍到 200 词。"
+  "If I came in from a search for ERR_TOO_MANY_REDIRECTS, the title already
+  matches. But I have to scroll past 3 screens of intro before §3 — recommend
+  trimming intro to 200 words."
 session_signals:
-  - 估算停留 6 分钟（读完 §3 + §6）
-  - 估算收藏：是（修复段可直接复制）
-  - 估算订阅：否（未到 P1 关注的「国内网络踩坑」部分）
+  - estimated dwell: 6 minutes (finished §3 + §6)
+  - estimated bookmark: yes (fix section is copy-pasteable)
+  - estimated subscription: no (never reaches the "domestic network pitfalls" section P1 cares about)
 ```
 
-📸 **截图标注位**（步骤 5）：
-- **位置**：`docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md` YAML 头部
-- **脱敏要求**：不需要（已经是公开仓库内文件）
-- **文件命名**：`step-5-real-report-hugo-pitfalls-p1.png`
-- **放哪**：同上 Page Bundle
+📸 **Screenshot slot (Step 5)**:
+- **What to capture**: YAML header of `docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md`
+- **Redaction**: not needed (already a public in-repo file)
+- **Filename**: `step-5-real-report-hugo-pitfalls-p1.png`
+- **Where**: same Page Bundle
 
 ![Real P1 mock-reader feedback YAML front matter from docs/feedback/hugo-cloudflare-pages-pitfalls-P1.md with 12 fields including schema mock-reader-feedback/v1, persona_label, article_path, feedback_style, rating 4, verdict stay](/images/ai-agent/mock-reader-feedback-skill-deep-dive/step-5-real-report-hugo-pitfalls-p1.png)
 
 ---
 
-## 步骤 6：写到 docs/feedback/
+## Step 6: Write to docs/feedback/
 
 ```bash
-# V1 默认：先放 docs/feedback/，**不自动 commit**
+# V1 default: drop in docs/feedback/ first, **do NOT auto-commit**
 docs/feedback/<article-slug>-<persona-id>.md
 
-# V1 文件结构（YAML inside markdown body, not TOML front matter）
+# V1 file structure (YAML inside markdown body, not TOML front matter)
 ---
 schema: mock-reader-feedback/v1
 persona_id: P1
@@ -337,128 +337,128 @@ rating: 4
 verdict: stay
 ---
 
-<!-- 上面 YAML block + 完整 persona 思考过程 + 关键 quote + 修复建议 -->
+<!-- Above YAML block + full persona thinking trace + key quote + suggested fixes -->
 ```
 
-**不要 commit**（默认）——GIT 用户主动 `git add -f` 才入仓库（per .gitignore）。这条规矩防止「每次跑 mock-reader 都污染 git log」。
+**Do NOT commit** (default) — only enters the repo after the user runs `git add -f` themselves (per .gitignore). This rule prevents "every mock-reader run pollutes git log".
 
-**何时 commit 反规则**：≥ 3 份反馈交叉验证 ≥ 2 persona 提到同一 friction → 该 friction 是真问题，commit 反馈作为改文章依据（per §6 #6 baseline 对照）。
+**When to commit — the inverse rule**: ≥ 3 feedback reports cross-validated with ≥ 2 personas flagging the same friction → that friction is a real problem; commit the feedback as the basis for fixing the article (per §6 #6 baseline comparison).
 
 ---
 
-## 步骤 7：自检（5 条硬检查 + 1 条多样性检查）
+## Step 7: Self-check (5 hard checks + 1 diversity check)
 
-| 检查 | 期望 |
+| Check | Expectation |
 |---|---|
-| ✅ 5 个 key_points 至少 1 负面？ | 是（避免 §0 第 2 条 5⭐ 社区坑）|
-| ✅ friction_points 至少 1 条具体段落？ | 是（避免泛泛「加更多例子」）|
-| ✅ rating < 5？ | 是（5⭐ = persona 失真，反 pattern §6.1）|
-| ✅ YAML 严格遵循 schema？ | 是（CI/CD 友好，结构化反馈）|
-| ✅ 写到了 docs/feedback/？ | 是（不污染 content/posts/）|
-| ✅ 多样性自检（D12 SOP）| 跑 `grep -h '^prompt_type' content/posts/**/*.md | tail -5`；≥ 4 篇同类型 → 反馈里加「Scaled Content 风险」|
+| ✅ At least 1 negative in the 5 `key_points`? | Yes (avoids §0 pitfall #2 5⭐ blanket praise) |
+| ✅ At least 1 `friction_points` entry names a specific paragraph? | Yes (avoids generic "add more examples") |
+| ✅ `rating < 5`? | Yes (5⭐ = persona distortion, anti-pattern §6.1) |
+| ✅ YAML strictly follows the schema? | Yes (CI/CD-friendly, structured feedback) |
+| ✅ Written to `docs/feedback/`? | Yes (keeps `content/posts/` clean) |
+| ✅ Diversity self-check (D12 SOP) | Run `grep -h '^prompt_type' content/posts/**/*.md \| tail -5`; if ≥ 4 posts share the same `prompt_type`, append a "Scaled Content risk" note to the feedback |
 
 ---
 
-## 5 persona 方案对比（核心 — B 档灵魂）
+## 5-persona comparison matrix (core — soul of this article)
 
-| persona | 反馈风格 | 典型命中 | 反 pattern |
+| persona | feedback_style | Typical hits | Anti-pattern |
 |---|---|---|---|
-| **P1** 强华陆 dev | `direct_technical` | 部署步骤细节 / EACCES 排错 / 国内网络 | 写得太长不像 dev 直白 |
-| **P2** 内容创作者 | `editor-grade` | 文笔 / SEO / 标题党反 sense | 反馈里塞 testimonial |
-| **P3** 西方 indie hacker | `one-liner` | 30 秒决策 / ROI / 选型表 | 写成 500 字技术评论 |
-| **P4** AI 怀疑者 | `silent` | LLM-as-judge 警惕 / 营销腔反感 | 写出 AI 农场味 |
-| **P5** 选型决策者 | `comparison-matrix` | TCO 量化 / 退出成本 / 对比表 | 默认全赞 + 0 friction |
+| **P1** strong China-mainland dev | `direct_technical` | deployment step details / EACCES debugging / domestic network | writes too long, not direct enough for a dev |
+| **P2** content creator | `editor-grade` | prose / SEO / clickbait detection | feedback stuffed with testimonials |
+| **P3** Western indie hacker | `one-liner` | 30-second decisions / ROI / selection tables | turns into a 500-word technical review |
+| **P4** AI sceptic | `silent` | LLM-as-judge vigilance / marketing-tone resistance | output reads like AI-farm content |
+| **P5** selection decision-maker | `comparison-matrix` | TCO quantification / exit cost / comparison tables | default all-praise + 0 friction |
 
-**选型建议**（按场景）：
+**Selection guidance**:
 
-- **写完 [draft] 第一次审稿** → 跑 P5（默认）+ P1（验证可实操）
-- **翻译后 [en-final]** → 加 P3（验证海外读者接受度）
-- **AI 农场味怀疑** → 加 P4（反向校验）
-- **Money Hook 类文章** → 必跑 P2（SEO / 标题党）
+- First review pass → P5 (default) + P1 (validate hands-on)
+- After translation → add P3 (validate overseas reception)
+- Suspected AI-farm tone → add P4 (reverse validation)
+- Money Hook articles → must run P2 (SEO / clickbait)
 
 ---
 
-## 反 pattern（6 条已踩坑）
+## Anti-patterns (6 already-hit traps)
 
-对应 §0 5 条社区坑 + 1 条「跑 skill 之前 vs 之后」对照。**反 pattern #1 是 LLM 默认行为而非 skill 自身问题** — 真实「失败 demo」截图难做（LLM 已内置批判），改为引用 §0 社区坑作反面证据。
+Mapping the 5 community pitfalls in §0 + 1 "before-skill vs after-skill" comparison. **Anti-pattern #1 is LLM default behaviour, not a skill defect** — real "failure demo" screenshots are hard (LLMs have built-in critique), so §0 community pitfalls serve as counter-evidence.
 
-| # | 反 pattern | 触发场景 | 修正 |
+| # | Anti-pattern | Trigger | Fix |
 |---|---|---|---|
-| 1 | 反馈写得「完美无缺」—— 5⭐ + 0 friction | LLM 默认 positive bias（§0 第 2 条 [Field Guide to AI](https://fieldguidetoai.com/scam-watch/fake-ai-reviews)）| prompt 加「rating 必 < 5 + friction 至少 1 条」 + 显式 feedback_style |
-| 2 | 让 P3 写「长篇技术评论」 | P3 是 one-liner 人格，不显式 feedback_style 就 stereotype | system prompt 第 3 块显式 `your feedback style: one-liner` |
-| 3 | 反馈里用 testimonial 营销腔 | "Would highly recommend..." 触发 §0 第 5 条 AI 农场味 | system prompt 加「forbid testimonial tone」 |
-| 4 | 反馈报告 commit 进 content/posts/ | 污染文章目录 + git log | 默认 docs/feedback/，用户 `git add -f` 才入仓库 |
-| 5 | 改动原文后没存档 persona 反馈 | 无法回溯「为什么改」 | 任何 [zh-final] commit 必关联 docs/feedback/ ≥ 1 份 |
-| 6 | 不调 skill 直接让 LLM 评文章 | 跳 step 1-7，14 字裸 prompt 触发 §0 第 1 条偏差 | **始终通过 `.claude/skills/.../SKILL.md` 调用**；baseline 见下方 |
+| 1 | Feedback written "perfectly" — 5⭐ + 0 friction | LLM default positive bias (§0 pitfall #2 [Field Guide to AI](https://fieldguidetoai.com/scam-watch/fake-ai-reviews)) | prompt add "rating must be < 5 + friction at least 1 entry" + explicit `feedback_style` |
+| 2 | Letting P3 write "long-form technical review" | P3 is a one-liner persona; without explicit `feedback_style` it stereotypes | system prompt block 3 explicitly sets `your feedback style: one-liner` |
+| 3 | Feedback stuffed with testimonial marketing tone | "Would highly recommend..." triggers §0 pitfall #5 AI-farm flavour | system prompt add "forbid testimonial tone" |
+| 4 | Feedback reports committed into `content/posts/` | pollutes article directory + git log | default to `docs/feedback/`, only enters repo after user `git add -f` |
+| 5 | Modifying the source after the fact without archiving persona feedback | no way to trace back "why we changed it" | every `[zh-final]` commit must be linked to ≥ 1 report in `docs/feedback/` |
+| 6 | Asking the LLM to review the article without invoking the skill | skips Step 1-7; 14-character bare prompt triggers §0 pitfall #1 surface-level bias | **Always invoke via `.claude/skills/.../SKILL.md`**; baseline shown below |
 
-**baseline 失败案例**（不跑 skill · 14 字裸 prompt）：`Prompt: "请评价这篇文章"` → `Output: "这是一篇很棒的文章，结构清晰，内容丰富，值得推荐。5/5。"` — 没 persona / feedback_style / rating 约束 → LLM 走 default positive bias（§附录0 第 2 条：5⭐ + 0 friction）。**对比下方截图 4/5 + 完整 friction + Path to 5/5，差异 = skill 核心价值。**
+**Baseline failure case** (without the skill · bare prompt): `Prompt: "Please rate this article"` → `Output: "This is a great article, with clear structure and rich content. Highly recommended. 5/5."` — no persona / `feedback_style` / `rating` constraint → LLM walks the default positive bias path (§0 pitfall #2: 5⭐ + 0 friction). **Compare with the screenshot below — 4/5 + full friction + Path to 5/5. The delta is the skill's core value.**
 
-📸 **成功对照截图**（跑 skill 后的标准输出）：
-- **位置**：用户实际跑 `mock-reader-feedback` skill 的 terminal 输出（针对 hugo-cloudflare-pages-pitfalls）
-- **特征**：`Impression: 4/5` + Highlights 4-5 条（含 Trap 1-5 段落锚定）+ **Deductions 4-5 条**（具体段落问题）+ Contrast compliance（TOML/lint 检查）+ Path to 5/5 改进建议
-- **意义**：证明 skill 的核心价值 = **强制约束 LLM 默认 positive bias** — 没 skill 跑出来是营销腔 5⭐，有 skill 跑出来是 4/5 + 完整 friction + 段落锚定改进建议
-- **脱敏要求**：不需要（terminal 内容不含 PII）
-- **文件命名**：`skill-working-baseline.png`
-- **放哪**：同上 Page Bundle
+📸 **Successful comparison screenshot** (standard output after invoking the skill):
+- **What to capture**: terminal output from the user actually running `mock-reader-feedback` on `hugo-cloudflare-pages-pitfalls`
+- **Signature elements**: `Impression: 4/5` + 4-5 Highlights (with Trap 1-5 paragraph anchors) + **4-5 Deductions** (specific paragraph issues) + Contrast compliance (TOML/lint check) + Path to 5/5 improvement list
+- **Why it matters**: proves the skill's core value = **forcing LLM away from default positive bias** — without the skill you get marketing-tone 5⭐; with the skill you get 4/5 + full friction + paragraph-anchored improvement suggestions
+- **Redaction**: not needed (terminal content has no PII)
+- **Filename**: `skill-working-baseline.png`
+- **Where**: same Page Bundle
 
 ![Mock-reader-feedback skill baseline output for hugo-cloudflare-pages-pitfalls: rating 4 out of 5 with structured Highlights covering traps 1-5 plus detailed Deductions pointing to specific paragraphs and a Path to 5/5 improvement list — the value of the skill is forcing LLM away from default positive bias toward substantive critique](/images/ai-agent/mock-reader-feedback-skill-deep-dive/skill-working-baseline.png)
 
 ---
 
-## 依赖 + v1-v2 演进路径
+## Dependencies + v1-v2 evolution path
 
-### 依赖
+### Dependencies
 
 ```bash
-docs/mock-reader-personas.md    # 5 persona prompt 模板
-docs/persona-data.json          # MOCK → real data 演进中
+docs/mock-reader-personas.md    # 5 persona prompt templates
+docs/persona-data.json          # MOCK → real data, in progress
 scripts/fetch-persona-data.sh   # cache validator + optional --live fetcher
 ```
 
-**fallback 表**（cache + live 4 组合）：cache hit → 用 cache（默认）；miss+OK → fetch live；miss+fail → 报错 + 退化 P5 + 显式 `[MOCK]`；quota exceeded → 退 cache + stderr 警告。
+**Fallback table** (cache + live, 4 combinations): cache hit → use cache (default); miss + live OK → fetch live; miss + live fail → error + degrade to P5 + explicit `[MOCK]` tag; quota exceeded → fall back to cache + stderr warning.
 
-### v1-v2 演进（已计划，未实现）
+### v1-v2 evolution (planned, not yet implemented)
 
-| 版本 | 计划 | 触发条件 |
+| Version | Plan | Trigger condition |
 |---|---|---|
-| v1.1 | GSC live 接入（OAuth service account） | GCP project + service account JSON 配置完成 |
-| v1.2 | CF Analytics（访问 + 设备 + referrer） | Cloudflare API token 配置 |
-| v1.3 | Reddit / HN / GitHub 公开 API | rate limit 配额 + 内容审查 SOP |
-| v1.4 | Plausible / Umami 博客原生 | 自托管 Plausible 实例 OR 付费 Umami 订阅 |
-| **v2** | multi-persona 对比 + 自动 highlight friction points | `--multi` flag + Markdown diff 渲染 |
+| v1.1 | GSC live integration (OAuth service account) | GCP project + service-account JSON configured |
+| v1.2 | CF Analytics (visits + device + referrer) | Cloudflare API token configured |
+| v1.3 | Reddit / HN / GitHub public APIs | rate-limit quota + content-moderation SOP |
+| v1.4 | Plausible / Umami native blog | self-hosted Plausible instance OR paid Umami subscription |
+| **v2** | multi-persona comparison + auto-highlight friction points | `--multi` flag + Markdown diff rendering |
 
 ---
 
-## 总结 + 后置动作
+## Conclusion + follow-up actions
 
-**3 个后置动作 trigger**：
+**3 follow-up action triggers**:
 
-1. 「提交反馈」→ 用 commit-with-prefix skill，prefix=`[docs]`，scope `feedback`
-2. 「基于反馈改文章」→ 走 zh-final-refactor skill（TCM 阶段 4）
-3. 「再跑 P1/P3 对比」→ 重复本文 §3-§7，输出对比表
+1. "Submit feedback" → use commit-with-prefix skill, prefix=`[docs]`, scope `feedback`
+2. "Fix the article based on feedback" → run the zh-final-refactor skill (TCM stage 4)
+3. "Run P1/P3 comparison again" → repeat §3-§7 in this article, emit a comparison table
 
-**主要 takeaways**：
+**Main takeaways**:
 
-- LLM-as-judge **永远需要显式 feedback_style**——不写 = 默认「通用正面反馈」→ 5⭐ 全赞
-- `[MOCK]` 数据必须显式标注——LLM 倾向 surface-level，不标就假装真实
-- 跑 mock-reader **不是 AI 自查，是 AI 站在非自己立场看文章**——真人最终判断
-- 反馈报告默认不 commit——避免 git log 污染
+- LLM-as-judge **always needs an explicit `feedback_style`** — without it the default is "generic positive feedback" → 5⭐ all-praise
+- `[MOCK]` data must be tagged explicitly — LLMs lean surface-level; without the tag they pretend it is real
+- Running mock-reader **is not AI self-review, it is AI reading from a non-self perspective** — the human is the final judge
+- Feedback reports do not auto-commit — avoids git log pollution
 
-### TCO 估算（决策前必看）
+### TCO estimate (read this before deciding)
 
-| 维度 | 数值 |
+| Dimension | Value |
 |---|---|
-| 单篇 token | 500 词 × 5 personas × ~3K ≈ **15K tokens/article** |
-| API 成本 | Claude Sonnet $3/M ≈ **$0.045/draft** |
-| Setup | 30 分钟一次性（4 配置文件 + 1 skill + 1 fetcher）|
-| Payback | ~3 drafts（按人工审稿 $15/hr）|
-| 退出成本 | **接近 0** — 产物是 plain YAML in markdown，可 git 追踪 / 迁移 ChatGPT / 训练自有模型，**无 vendor lock-in** |
+| Per-article tokens | 500 words × 5 personas × ~3K ≈ **15K tokens/article** |
+| API cost | Claude Sonnet $3/M ≈ **$0.045/draft** |
+| Setup | 30 minutes one-time (4 config files + 1 skill + 1 fetcher) |
+| Payback | ~3 drafts (vs. human review at $15/hr) |
+| Exit cost | **Near zero** — plain YAML in markdown; git-trackable, portable, reusable as training data. **No vendor lock-in** |
 
-> **📎 【联盟预留位】**：无（自身工具，per CLAUDE.md §3.4）
+> **📎 [Affiliate placeholder]**: none (in-house tool, per CLAUDE.md §3.4)
 
 ---
 
-*起草：D21 2026-08-30 · 路径 `content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/index.md`*
-*触发：X1 `docs/archive/think-x1-claude-code-pipeline.md` §6 Y1 候选（用户 D21 决策 P1 方案）*
-*档位：E（方法论 retrospective，per docs/writing-prompts.md §六 — 含 commit hash + 12 份反馈 + 决策点；非 B 档横评）*
-*配套 commit：`[draft] mock-reader-feedback-skill-deep-dive + topic-pool.md Y1 同步` + `[asset] 4 screenshots 入库`*
+*Drafted: D21 2026-08-30 · path `content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/index.md`*
+*Trigger: X1 `docs/archive/think-x1-claude-code-pipeline.md` §6 Y1 candidate (user D21 decision: P1 plan)*
+*Slot: E (methodology retrospective, per `docs/writing-prompts.md` section 6 — includes commit hashes + 12 feedback reports + decision points; not B-tier horizontal review)*
+*Companion commits: `[draft] mock-reader-feedback-skill-deep-dive + topic-pool.md Y1 sync` + `[asset] 4 screenshots landed`*
