@@ -249,6 +249,61 @@
 
 **GEO 优先试点**：第一篇 GEO 写作模板（**B2 P1 WorldFirst 实战 · D12 · 2026-08-25 升推荐中**）按 `docs/geo-writing-module.md`（待新建）落地——结论前置 + FAQ Schema + 代码块语义完整。详见该模块 SOP。
 
+### 5.2.2 聚簇检查 (added 2026-08-30, D21 · CLAUDE.md §3.8 rule 7)
+
+`[zh-final]` commit 之前**必跑**。这是新文章和存量文章建立「聚簇关系」的最后窗口 — 一旦 `git push` 到 main，形式化集成窗口关闭。
+
+**1. 扫描 cluster 候选**：
+
+```bash
+# 同 category 现存文章
+find content/posts/<same-category> -name 'index.md' -not -path '*/_drafts/*'
+
+# 最近 30 天发布
+find content/posts -name 'index.md' -not -path '*/_drafts/*' \
+  -newermt "$(date -v-30d +%Y-%m-%d 2>/dev/null || date -d '30 days ago' +%Y-%m-%d)"
+
+# 共享关键词 / persona / workflow 信号
+grep -lE '<topic-keyword-1>|<topic-keyword-2>' content/posts/**/*.md
+```
+
+**2. 判定 cluster 成立**（任一即触发）：
+
+| 信号 | 例子 |
+|---|---|
+| 共享关键词 ≥ 3 个 | "Claude Code" + "AI Agent" + "editorial pipeline" |
+| 共享 persona | P1 / P3 / P5 反馈报告主轴 |
+| workflow 连续性 | skill 拆解 ↔ pipeline retrospective |
+| narrative anchor 已存在 | 旧文章正文已提新文章（如 A2 §2.4 提 Y1） |
+
+**3. 执行 3 项聚簇集成**（4 步全做才算完成）：
+
+| 步骤 | 动作 | 范围 |
+|---|---|---|
+| (a) | `{{< ref "posts/<cat>/<slug>" >}}` 双向 cross-reference | 仅在叙事真有关系的章节 |
+| (b) | front matter `series = ["<Series Name>"]` | BOTH articles |
+| (c) | front matter 加共用 tag | BOTH articles |
+| (d) | partner article 在同一 `[polish]` commit 同步 | **强制 — 单边 = 隐藏 bug** |
+
+**4. 验证**：
+
+```bash
+# 开发期（含 drafts）必须 0 errors
+rm -rf public resources && hugo --gc --buildDrafts
+
+# 生产模式（不含 drafts）：cluster partner 仍在 draft=true 时允许 2 个 REF_NOT_FOUND
+# 临时错误窗口：[zh-final] → en-final 转换期；partner → draft=false 时自动 resolve
+hugo --gc
+```
+
+**5. commit 边界**：
+
+- prefix：`[polish] <cluster-name>-mutual-links`
+- 范围：BOTH articles in same commit
+- 不自动 push（per CLAUDE.md §6）
+
+**触发历史**：D21 Y1 mock-reader-feedback-skill-deep-dive ↔ A2 claude-code-editorial-pipeline cluster integration. Pre-rule A2 §2.4 / §6 早有 Y1 narrative 提及（commit `7d2cdee` D10）但用 plain text 而非 `{{< ref >}}` shortcode — 渲染后 broken link。同时 Y1 + A2 front matter 都缺 `series` + 共用 tag — 集群信号存在但形式化集成缺失。
+
 ### 5.3 commit 边界
 
 - commit message 前缀：`[zh-final] <topic>`

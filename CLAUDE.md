@@ -252,11 +252,19 @@ Hard rules when writing English long-form posts (≥800 words). Violation = cont
 4. **Affiliate placeholders in 初稿, not translation**. 初稿阶段就标 `[联盟-占位 platform]` + 推荐用语模板（按 README §五-3 双向互惠）。不延迟到翻译阶段。
 5. **Translation is 字面对应, not 改写**. 第三阶段翻译：AI 不增删任何事实, 不改写用户原话, 仅做字面对应 + 地道英语表达 + SEO 结构。
 6. **Cross-reference facts must have explicit anchors** (added 2026-08-16, D5). AI 起草时, 凡涉及**跨文章 / 跨工具 / 跨阶段**的事实性 cross-reference (e.g. "AdSense 收款可直接复用 PayPal 通道"), 必须能在以下任一锚点直接验证: (a) 用户本会话口述; (b) `CLAUDE.md` / `README.md` / `docs/*.md` 已有记录. **无锚点 → 必须用占位语**（如 "详见 XXX 文章" / "[待确认：YYY]"）, **绝不写结论句**. Violation = 凭空添加 cross-reference 关系, 与 rule 5 同等严重 (内容农场反模式).
+7. **Cluster integration before [zh-final]** (added 2026-08-30, D21). Before [zh-final] commit, scan existing articles in same `categories` + last 30 days for cluster opportunity. If ≥2 articles share topic (keyword / persona / workflow 连续性):
+   - (a) Mutual `{{< ref "posts/<cat>/<slug>" >}}` cross-references in body — only where narrative relationship actually exists (no decoration-only refs)
+   - (b) `series = ["<Series Name>"]` front matter on **BOTH** articles
+   - (c) Shared tag on **BOTH** articles (e.g. `"Claude Code Pipeline"`)
+   - (d) **Bidirectional** — partner article updated in same `[polish]` commit; a one-sided cluster is a hidden bug
+
+   Verify: `hugo --gc --buildDrafts` 0 errors. Production `hugo --gc` with cluster partner still in `draft = true` is acceptable during [zh-final] → en-final transition; resolves when draft flips to false. Integration SOP: see `docs/article-writing-workflow.md §5.2.2`.
 
 Full 8-step SOP + 联盟预留格式 + 截图标注格式 + commit 边界：see `docs/article-writing-workflow.md`.
 
 > **D4 lesson**: B1 长文 #1 (`commit 4b8a8ea`) was reverted (`commit bc9a369`) because AI fabricated first-person debugging experience. This SOP exists to prevent recurrence.
 > **D5 lesson**: A3 扩写 (D5 第七次 commit 序列) 文末 AI 写了 "AdSense 收款可直接复用同一 PayPal 通道" — 这是无锚点 cross-reference 凭空结论, 实际收款走 WorldFirst (万里汇) 不是 PayPal. 用户当场指出后修正 + 加模糊化 6 处凭印象数字. 触发本条 rule 6 建立.
+> **D21 lesson**: Y1 ↔ A2 聚簇集成时发现 — A2 §2.4 / §6 早有 mock-reader-feedback skill narrative 提及（commit `7d2cdee` D10 已建立），但**正文用 plain text 而非 `{{< ref >}}` shortcode** — 渲染后是 broken link（HTML 看不到 `[claude-code-editorial-pipeline]` 这种 anchor）。同时 Y1 + A2 front matter 都缺 `series = [...]` + 共用 tag。集群信号存在但缺失形式化集成。触发本条 rule 7 建立。
 
 ### 3.9 会话默认语言 (added 2026-08-16, D5) — 铁律
 

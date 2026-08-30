@@ -38,6 +38,13 @@
     ```text
     流程已成功跑通。把我刚才遇到的所有报错和纠错经验，连同 assets/images/ 下的截图标签，全部重构揉进这篇 Markdown 的指定章节中，生成第二版高人味中文润色稿。
     ```
+*   **第 9.5 步**：【新增 · D21 · CLAUDE.md §3.8 rule 7】**聚簇检查**。在 `[zh-final]` commit 之前，扫描同 `categories` + 最近 30 天的现存文章，判定是否有 cluster 机会（共享主题 / persona / workflow 连续性）。若 ≥2 篇组成 cluster：
+    - (a) 双向 `{{< ref "posts/<cat>/<slug>" >}}` shortcode 互引（仅在叙事真有关系的章节）
+    - (b) BOTH articles front matter 加 `series = ["<Series Name>"]`
+    - (c) BOTH articles 加共用 tag
+    - (d) **强制双向**：partner 文章在同一 `[polish]` commit 内同步更新
+
+    验证：`hugo --gc --buildDrafts` 0 errors。生产 `hugo --gc` 在 cluster partner 仍 `draft = true` 时允许临时报错（[zh-final] → en-final 转换期），partner → `draft = false` 时自动 resolve。详见 `docs/article-writing-workflow.md §5.2.2`。
 *   **第 10 步**：Claude Code 自动在本地重写并更新该 `.md` 文件，将踩坑痛苦原地转化为独创高价值资产。
 
 ### 🌐 阶段五：纯正极客英文全量翻译与本地合规清洗（Agent 自动翻译）
