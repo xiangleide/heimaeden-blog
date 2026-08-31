@@ -411,6 +411,23 @@
         * Y2a 教程拆解「How to Set Up Your First Mock Reader Feedback Skill」
         * AdSense 资格计数：当前 6 篇英文长文，距 ≥15 门槛差 9 篇
 
+*   **2026-08-31 状态校准 / D23（Hub 完整落地 + cluster 集成 + 暴露 3 个根问题）**：
+    * 🎯 **核心进展**：D23 完成 Hugo + Cloudflare Pages cluster Phase 1.1-1.4 全链路 — Hub 中文定稿 → Hub cover 入库 → A1+S18 双向 cluster 集成。**5 commits**：`7762e7e` Hub [zh-final] / `9d40311` Hub cover prompt / `b064bcd` Hub cover 入库（839KB → 46KB, -94%）/ `b037426` cluster 集成 + series taxonomy fix / `9c1c6d7` D22 整理（pre-existing commit, 已合并入 D22 复盘）。**未 push**（等用户 ack）
+    * 🐛 **Bug #1: A1 cover 路径同型 bug** — `content/posts/static-site/hugo-cloudflare-pages-pitfalls.md` cover.image = `"static-site/.../cover.jpg"`，缺 `images/` 前缀；文件本体 `assets/images/static-site/hugo-cloudflare-pages-pitfalls/cover.jpg` (111KB) 存在，但 render-image hook warning → A1 cover 在线 404。**与 D22 修的 hub cover bug 是同一类型**（commit `b3a3a51`），D22 复盘时漏掉了 A1。已建任务 #41 [fix]
+    * 🐛 **Bug #2: CLAUDE.md §3.8 rule 7 末段事实错误** — 文档写「production `hugo --gc` with cluster partner still in `draft = true` is acceptable during transition」。**实测**：published 文章 `{{< ref >}}` 到 `draft = true` 页让生产 `hugo --gc` 直接 `REF_NOT_FOUND` 报错（不是 warning），会断 CF Pages 部署。本次被迫推迟 A1/S18 → Hub 两条 ref 到 #35。**D23 决策**：rule 7 末段必须修正（建议措辞：「refs to draft partners MUST be deferred until partner's draft flag flips; otherwise `hugo --gc` errors」）。下一个 [docs] commit 落地
+    * 🐛 **Bug #3: series taxonomy 此前完全惰性** — `hugo.toml [taxonomies]` 仅声明 category + tag，**缺 series**。意味着 D21 Y1↔A2 cluster 集成所加的 `series = ["AI Agent"]`（commit `7d2cdee` D10 已建立 / 7d2cdee 实际 D21）也是惰性的——`/series/ai-agent/` 页从未被生成。D23 #34 一并修：`series = 'series'` 加入 taxonomies → 立即生效，`/series/hugo-on-cloudflare-pages/` + `/series/ai-agent/` 两个 term 页现可访问。**D23 决策**：以后新加 series 字段必须同时声明 taxonomy，不能想当然；建议把这条加进 CLAUDE.md §3.8 rule 7
+    * 🎨 **D23 设计取舍**：cluster series 名 `"Hugo + Cloudflare Pages"` → `"Hugo on Cloudflare Pages"`（避开路径里 `+` 被解码成空格问题）。term 页从未构建过，零成本改名
+    * 📋 **Hub prompt_type 决策悬而未决**：`docs/writing-prompts.md §一` 强制 5 种 A-E。Hub 是 navigation index 类，5 种都不合身（A 要求「原始 log + 修复命令」，Hub 故意把修复委托给 Spoke）。当前 `prompt_type` 缺省，lint 1 个 WARN。**3 选 1 待决策**：(a) 加第 6 类 "N. 索引 / navigation hub"；(b) Hub 不放 prompt_type + lint 接受例外；(c) Hub 不放 + lint 改 ERROR（强制 1选1）
+    * 🔓 **下一步解锁**：
+        * 本次 5 commits push（`9c1c6d7` + `7762e7e` + `9d40311` + `b064bcd` + `b037426`）
+        * [fix] #41：A1 cover 路径同型 bug 修复（独立 [fix] commit）
+        * [docs] 下一个：CLAUDE.md §3.8 rule 7 末段事实修正 + 新增「series taxonomy 同步声明」提醒
+        * Hub prompt_type 决策（3 选 1）
+        * #35 Hub [en-final] 翻译 + 翻 draft=false + 加 Hub→Spokes 双向 ref
+        * #36 README §6 + topic-pool 同步（Phase 1.6）
+        * #37/#38/#39 Phase 2 Spokes 三个新候选（image / redirect / OOM）— 顺序待 user 排
+        * #40 Phase 3 cluster 加固 + GSC 索引监控 + AdSense 资格计数（当前 6 篇英文长文，距 ≥15 门槛差 9 篇）
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
