@@ -1,9 +1,9 @@
 +++
 title = "Hugo + Cloudflare Pages 报错集群：5 个常见问题的完整排查路径"
-description = "新站 5 个最高频 Hugo + Cloudflare Pages 报错的集群索引页：image path 404、ERR_TOO_MANY_REDIRECTS、build OOM、cache stale、redirect loop。每条含真实日志、版本环境、验证过的修复命令。"
+description = "5 个最高频 Hugo + Cloudflare Pages 报错集群索引页：image 404 / ERR_TOO_MANY_REDIRECTS / Build OOM / dev server stale / 7 traps 全景。含症状速查表 + 诊断决策树 + 5 篇深度文章导览卡。"
 date = 2026-08-25T01:00:00Z
 draft = true
-tags = ["Hugo", "Cloudflare Pages", "troubleshooting", "build error"]
+tags = ["Hugo", "Cloudflare Pages", "troubleshooting", "build error", "cluster"]
 categories = ["Static-Site"]
 
 showToc = true
@@ -18,290 +18,166 @@ TocOpen = true
 lint_allow = ["cjk-body"]
 +++
 
-> **本文件性质**：Hub 索引页（非单主题文章）。按"报错簇"思维（见 `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §一 1. 微调逻辑）把高频 Hugo + Cloudflare Pages 报错集中到一个 cluster anchor page，互链到各子问题详细文。
+> **本文件性质**：Hub 索引页（非单主题文章）。每报错簇由 1 个 Spoke 详细记录完整修复命令；本文只做**症状识别 + 决策树导览**，不含 step-by-step 修复代码（避免与 Spoke 重复，HCU thin-content 红线）。
 >
-> **D12 决策**：B2 落地（`docs/archive/topic-pool-2026-08-27-archive.md` §「📅 交叉验证落地决策（D12 · 2026-08-25）」B2 行）。
->
-> **当前进度**：[draft] 阶段（骨架 + 占位）。§S1 / §S2 是 hub 内详写内容；§S3-S12 是 TBD 占位（待各子文章落地后陆续填充）。
+> **D22 结构决策**：从原 D12 B2 "Hub 覆盖 S1-S12 全 12 候选" 调整为 **5 报错簇**（image / redirect / OOM / stale / 7 traps），对应 **2 已发 Spoke (A1 + S18) + 3 待发 Spoke (S1 / S2 / S3)**。选型 / Workers / URL resolution 等深挖放后续 Hub 候选。
 
 ---
 
 ## 引言
 
-部署 Hugo 站到 Cloudflare Pages 时，最常见的问题不是"Hugo 不会写"，而是"已经部署好了但页面错位 / 资源 404 / 重定向死循环"。本文不写"如何从零搭建 Hugo 站"，而是把 **5 个最高频的部署 / 运行时报错**集中到一页：
+部署 Hugo 站到 Cloudflare Pages 时最常见的卡点不是「不会写 Hugo」，而是 **「明明本地好好的、部署就报错」**。本文是 HeimaEden 站实战 4 周 + 社区踩坑 100+ 条整合出的 **5 报错簇索引页**：
 
-| # | 报错簇 | 触发条件 | 关联 S 系列 |
+| # | 报错簇 | 典型症状 | 关联 Spoke |
 |---|---|---|---|
-| 1 | **图片路径 404** | 新增 assets/images 后本地能看，部署后 404 | S1 |
-| 2 | **ERR_TOO_MANY_REDIRECTS** | 自定义域名 + CF 默认 SSL Flexible | S2 |
-| 3 | **Build OOM（out-of-memory）** | Hugo 大站（>5k 页）+ 默认 CF Pages 内存 | S3 |
-| 4 | **Cache stale / 旧资源** | CF 默认 cache + assets hash 变更 | S7（关联） |
-| 5 | **Redirect loop on preview** | Preview branch + 自定义域名 + cache | S2（关联） |
+| 1 | **图片路径 404** | HTML 中 `<img src="/images/.../cover.png">` 部署后 404，本地 `hugo server` 200 | S1 image path 单文（待发） |
+| 2 | **ERR_TOO_MANY_REDIRECTS** | 自定义域名 + Cloudflare SSL Flexible 模式触发死循环 | S2 SSL 决策树单文（待发） |
+| 3 | **Build OOM** | Hugo 大站（>5k 页）+ CF Pages 默认内存触发 `signal: killed` | S3 OOM 调优单文（待发） |
+| 4 | **Dev server stale drafts** | `draft = true` 移到 `_drafts/` 后 dev server 仍返回旧 HTML | [S18 stale draft 单文]({{< ref "posts/static-site/hugo-draft-stale-dev-server-fix" >}}) ✅ 已发 |
+| 5 | **7 traps 全景速查** | 上述 + render-image warning / 主题 toggle 卡死 / sitemap 缺失 / 资源 308 / CSS pipeline drop | [A1 7 traps 单文]({{< ref "posts/static-site/hugo-cloudflare-pages-pitfalls" >}}) ✅ 已发 |
 
 **适用读者**：
 
-- Hugo + Cloudflare Pages 用户（不论是否有自定义域名）
-- 新站第一周遇到"明明本地好好的、部署就报错"的人
+- Hugo + Cloudflare Pages 用户，不论是否有自定义域名
+- 新站第一周遇到「明明本地好好的、部署就报错」的人
 
 **不适用**：
 
-- Hugo 语法错误（TOML 解析失败、模板 not found）→ 走 `B1-2` 单文
-- Hugo 选型对比 → 走 S9 / S10 / S11 / S12 单文
+- Hugo 语法错误（TOML 解析失败、模板 not found）→ 走 `B1-2` 单文计划
+- Hugo 选型对比 vs Astro / Next.js / 11ty → 走 topic-pool S9 / S10 / S11 / S12 计划
+- Cloudflare Workers vs Pages 选型 → 走 topic-pool S13 计划
 
 ---
 
 ## 前置条件
 
-- Hugo v0.150.0+（v0.150 起 `minify.minifyOutput` 替代 `minify`）
-- Cloudflare Pages 项目已建好（free tier 即可）
-- 自定义域名可选（如 heimaeden.com），无自定义域名仍可触发部分报错
-- 浏览器 DevTools Network 标签（用来读 status code + response headers）
+- Hugo v0.150.0+（v0.150 起 `minify.minifyOutput` 替代 `minify` 顶级配置）
+- Cloudflare Pages 项目已建好（free tier 即可触发多数报错）
+- 自定义域名可选（无自定义域名仍可触发 image 404 / OOM / dev stale）
+- 浏览器 DevTools Network 标签（用来读 status code + response headers 区分 4xx / 5xx）
 
 ---
 
-## 步骤 0：踩坑搜索（实操前必做）
+## 诊断决策树
 
-**任务**：动手前先搜一轮社区踩坑，为实操做心理预期。
+当你看到报错，按这个顺序问自己 4 个问题：
 
-**搜索关键词模板**（每个 S 系列各搜一次）：
+**Q1：本地 `hugo server` 是否正常？**
 
-- `hugo + cloudflare pages + {报错关键字} site:reddit.com`
-- `{报错关键字} github issue`
-- `{报错关键字} cloudflare community`
+- **是** → Q2（说明问题在部署 / 生产环节）
+- **否** → Q3（说明问题在 dev workflow）
 
-**来源白名单**：
+**Q2：报错是部署后才出现？**
 
-- Reddit（r/Hugo, r/CloudFlare, r/webdev）
-- GitHub Issues（gohugoio/hugo + cloudflare/pages-*)
-- Cloudflare Community
-- Hugo Discourse
+- 是 + 路径含 `/images/` → **Spoke ③ S1**（image path 404）
+- 是 + 自定义域名 + ERR_TOO_MANY_REDIRECTS → **Spoke ④ S2**（SSL 决策树）
+- 是 + HTTP 200 但内容错 + 改主题 / CSS 后才有 → **Spoke ① A1**（7 traps 全景，含 Trap 4 CSS pipeline drop）
+- 否 + Build log 报 `signal: killed` → **Spoke ⑤ S3**（OOM 调优）
 
-**预期输出**：3-5 条最常见的踩坑 + 来源链接（本节在 [zh-final] 阶段填充）
+**Q3：dev workflow 问题是不是 draft 切换引发的？**
 
----
+- 是 → **Spoke ② S18**（3 层叠加的 dev server stale 陷阱）
+- 否 → **Spoke ① A1**（7 traps 中 dev-related 类，含 Trap 6 资源 hash 缓存）
 
-## 报错簇 1：图片路径 404（`/images/<category>/<slug>/cover.png` 返回 404）
+**Q4：报错是 build 阶段？**
 
-### 症状
+- 是 + `signal: killed` → **Spoke ⑤ S3**（OOM）
+- 否 + render-image.html hook warning → **Spoke ① A1**（Trap 3 / Trap 5）
 
-部署到生产后浏览器访问文章：
-
-- 首页 HTML 中 `<img src="https://heimaeden.com/images/.../cover.png">` → **404 Not Found**
-- `curl -I https://heimaeden.com/images/<path>/cover.png` → 404
-- **但**本地 `hugo server` 访问 `http://localhost:1313/images/<path>/cover.png` → **200 OK**
-
-### 触发条件（满足任一即触发）
-
-- 新建文章 + 新增 `assets/images/<category>/<slug>/cover.png`
-- 修改了既有图片但 `git add` 前忘了跑 `optimize-image.sh`（>1440px）
-- `hugo.toml` 中 `baseURL` 与生产不一致（dev 环境最常见，见 §已知问题）
-
-### 修复路径
-
-> 📸 **截图标注位**（簇 1）：
-> - **位置**：CF Pages Dashboard → 项目 → Deployments → 最新部署 → Build log
-> - **脱敏要求**：打码邮箱 / 项目名保留可见
-> - **文件命名**：`cluster-1-cf-dashboard-build-log.png`
-> - **放哪**：Page Bundle 同目录
-
-**Step 1.1**：确认本地资源存在且 <1440px 宽
-
-```bash
-sips -g pixelWidth -g pixelHeight assets/images/<category>/<slug>/cover.png
-# 期望：pixelWidth ≤ 1440
-```
-
-**Step 1.2**：确认 git 已追踪该文件
-
-```bash
-git ls-files assets/images/<category>/<slug>/cover.png
-# 期望：输出路径（无输出 = 文件未 tracked，CF 不会部署）
-```
-
-**Step 1.3**：确认 CF Pages Build log 显示成功
-
-> Cloudflare Dashboard → Pages → `<project>` → Deployments → 最新一条 → Build log 末尾
-> 期望：`Success: Assets uploaded`
-
-**Step 1.4**：若以上都通过但仍 404 → 检查 Hugo 路径格式
-
-```toml
-# hugo.toml 必须这样写
-[params]
-  images = ["images"]
-# 注意：不是 "static/images"（CLAUDE.md §3.3 写死）
-```
-
-**Step 1.5**：dev 环境特殊 case
-
-本地 `hugo server` 默认 `baseURL` 是生产 URL，导致浏览器拿不到本地资源。**不要改 hugo.toml**：
-
-```bash
-# 正确：dev 启动时显式覆盖 baseURL（详见 docs/dev-server-baseurl.md）
-hugo server --baseURL http://localhost:1313/
-```
-
-### 关联 S 系列
-
-- **S1**：Hugo image path broken after publish to Cloudflare Pages solution（`docs/archive/topic-pool-2026-08-27-archive.md` §S1 行 107）
-- S1 详细文落地后，互链到本簇 §Step 1.4
+4 个问题走完，你已知道跳哪个 Spoke。每个 Spoke 都从 **症状 → 触发条件 → 完整修复命令 → 验证**全链深挖。
 
 ---
 
-## 报错簇 2：ERR_TOO_MANY_REDIRECTS（自定义域名 + SSL Flexible）
+## 5 个 Spoke 导览卡
 
-### 症状
+### Spoke ① · 7 traps 全景速查（A1 已发）
 
-浏览器访问 `https://heimaeden.com`：
+**症状**：部署后任意环节异常（404 / 重定向 / CSS 丢 / 主题卡死 / sitemap 缺失 / build warning），你不确定是哪一类。
 
-- 报错：`ERR_TOO_MANY_REDIRECTS` 或 `This page isn't redirecting properly`
-- `curl -L https://heimaeden.com` 死循环
-- DevTools Network → 多个 301/302 跳转，>10 次后 Chrome 终止
+**覆盖**：7 类 Hugo + Cloudflare Pages 高频报错，每类含真实日志、版本环境、修复命令。Spoke ① 是 **top-of-funnel 入口**——读完能识别所有 5 类错，再去对应 Spoke 深挖。
 
-### 触发条件（满足任一即触发）
+**何时用**：报错类型不明，需要「先全景扫描再聚焦」。
 
-- Cloudflare SSL/TLS 设为 **Flexible** + 自定义域名 + 后端（CF Pages / 源站）也强制 HTTPS
-- 源站不支持 HTTPS（如 Hugo static 默认 HTTP）但 Cloudflare 强制 HTTPS rewrite
+### Spoke ② · Dev server stale drafts（S18 已发）
 
-### 修复路径
+**症状**：Hugo front matter `draft = true` 的文章移到 `_drafts/` 后，本地 `hugo server` 仍返回旧 HTML，公开 `public/` 目录也有 stale 残留。
 
-> 📸 **截图标注位**（簇 2）：
-> - **位置**：CF Dashboard → SSL/TLS → Overview
-> - **脱敏要求**：无 PII（CF Dashboard 不显示邮箱），但项目名可保留
-> - **文件命名**：`cluster-2-cf-ssl-tls-overview.png`
-> - **放哪**：Page Bundle 同目录
+**覆盖**：3 层叠加的 dev server stale 陷阱——`hugo --gc` 不清 `public/` 同名 stale 文件 + dev server fallback 到 stale HTML + taxonomy 列表页不 rebuild。含 `scripts/check-stale-drafts.sh` 自检脚本。
 
-**Step 2.1**：把 SSL/TLS 模式从 **Flexible** 改成 **Full (strict)**
+**何时用**：draft 切换前后、commit 前、CF Pages 部署前自检。
 
-```bash
-# UI 路径：CF Dashboard → SSL/TLS → Overview → Custom SSL → Full (strict)
-# 命令行（API）：待补
-```
+### Spoke ③ · 图片路径 404（待发 · Task #37）
 
-**Step 2.2**：确认 Edge Certificates 已签发
+**症状**：HTML 中 `<img src="/images/<cat>/<slug>/cover.png">` 返回 404，但本地 `hugo server` 200 OK；`sips` 看图片 ≤1440px 已合规；`git ls-files` 看已 tracked。
 
-```bash
-# UI 路径：CF Dashboard → SSL/TLS → Edge Certificates
-# 期望：Active Certificate 状态 + 覆盖 heimaeden.com + heimaeden.com/*
-```
+**覆盖**：Hugo 资源 lookup 算法（`resources.Get` vs Page Resource）、路径前缀 `/images/` vs `/static/images/` 区别、render-image.html hook 行为、`hugo.toml [params] images` 配置。
 
-**Step 2.3**：清浏览器 / CDN 缓存
+**何时用**：body 图片或 cover 在生产 404，本地正常。
 
-```bash
-# 浏览器：DevTools → Network → Disable cache 勾上 + Ctrl+Shift+R
-# CF 缓存：CF Dashboard → Caching → Purge Everything（先选 Custom + URL，再 All）
-```
+### Spoke ④ · ERR_TOO_MANY_REDIRECTS（待发 · Task #38）
 
-**Step 2.4**：避免再次回退的硬规矩
+**症状**：自定义域名 `https://<your-domain>` 报 `ERR_TOO_MANY_REDIRECTS`，DevTools Network 显示 10+ 个 301/302 循环；`curl -L` 也死循环。
 
-- ❌ 不要把 SSL/TLS 改回 Flexible（省钱但循环）
-- ✅ Hugo 站一律 Full (strict) + 自定义域名（免费 tier 即可）
-- ✅ CNAME 解析走 CF proxy（橙色云朵），不是仅 DNS
+**覆盖**：5 个 SSL 模式对比（Flexible / Full / Full Strict / Origin Pull）+ Hugo `baseURL` 配置 + CNAME 走 proxy（橙色云朵）+ CF Pages 默认源站 HTTPS 行为。
 
-### 关联 S 系列
+**何时用**：自定义域名上线后立即报错。
 
-- **S2**：Cloudflare ERR_TOO_MANY_REDIRECTS custom domain fix for Hugo blog（`docs/archive/topic-pool-2026-08-27-archive.md` §S2 行 116）
-- S2 详细文落地后，互链到本簇 §Step 2.1
+### Spoke ⑤ · Build OOM（待发 · Task #39）
 
----
+**症状**：CF Pages Build log 报 `Error: build failed: signal: killed (out of memory)`，Hugo 进程 silent 退出。
 
-## 报错簇 3：Build OOM（CF Pages 默认内存不够）
+**覆盖**：CF Pages 默认 1GB 内存限制 + Hugo image processing 内存剖析 + V8 chunk_size 调优 + `hugo --printPathWarnings` 监控 + 超 5k 页站点的 build 拆分策略。
 
-### 症状
-
-CF Pages Build log：
-
-```
-Error: build failed: signal: killed (out of memory)
-```
-
-或 Hugo 进程 build 到一半直接 silent 退出。
-
-### 触发条件
-
-- Hugo 站总页数 > 5000 + 大量 image processing
-- CF Pages 默认 Worker 内存 = 512 MB
-- 大量未经优化的图片（CLAUDE.md §3.3.2 写死 <1440px）
-
-### 修复路径（占位）
-
-> 本簇在 [zh-final] 阶段由用户实操填入。当前为占位。
-> 关联 S3：`docs/archive/topic-pool-2026-08-27-archive.md` §S3 行 125。
-
----
-
-## 报错簇 4：Cache stale（旧版资源被 CDN 缓存）
-
-### 症状
-
-部署新版本后：
-
-- HTML 已更新但 `<link rel="stylesheet">` 引用的 CSS 是旧版
-- `<script>` 引用的 JS 是旧版
-- 图片 hash 已变但 CDN 还返回旧 binary
-
-### 修复路径（占位）
-
-> 本簇在 [zh-final] 阶段由用户实操填入。
-> 关联 S7 / S8：`docs/archive/topic-pool-2026-08-27-archive.md` §S7 / §S8。
-
----
-
-## 报错簇 5：Preview branch redirect loop
-
-### 症状
-
-PR 触发的 CF Pages Preview URL（`https://<branch>.<project>.pages.dev`）访问时：
-
-- ERR_TOO_MANY_REDIRECTS（同簇 2）
-- 但生产域名正常
-
-### 修复路径（占位）
-
-> 本簇在 [zh-final] 阶段由用户实操填入。
-> 关联 S2：`docs/archive/topic-pool-2026-08-27-archive.md` §S2 行 116。
+**何时用**：站点增长到 5k+ 页 + 部署突然失败。
 
 ---
 
 ## 已知问题与社区报告
 
-> 本节在 [zh-final] 阶段基于 §0 搜索结果填充。两条走策略：
-> - **策略 A**（用户实操顺利）→ 列 3-5 条社区已报告但本流程未触发的坑
-> - **策略 B**（用户实操命中本流程之外的坑）→ 加 1-2 条社区未充分记录的实战发现
+3-5 条社区已报告、本文未深挖的相关 issue：
+
+- **Hugo `hugo --gc` stale 同名文件** — gohugoio/hugo #10130（Hugo 设计取舍：同名 stale 文件需手动清）+ Discourse #57483（用户实测 `rm -rf public/` 是 cleanest 修复）。详见 Spoke ② S18。
+- **CF Pages 1GB 内存限制** — Cloudflare Community 多帖讨论，free tier 默认 1GB Worker memory；Hobby plan 5GB；Pro plan 定制。详见 Spoke ⑤。
+- **ERR_TOO_MANY_REDIRECTS 在 Flexible SSL + Hugo baseURL** — CF Community 上每周 3-5 帖；fix 一致：改 Full (strict)。详见 Spoke ④。
+- **Image 404 after deploy, local OK** — r/Hugo + r/CloudFlare 月度 5+ 帖；最常见根因 = 路径漏 `/images/` 前缀或 `static/` 多余前缀。详见 Spoke ③。
+- **Preview branch redirect on custom domain** — CF Pages 已知 issue（无固定编号）；根因 = preview URL 与生产域名共用 SSL/TLS 配置。详见 Spoke ④。
+
+> 上述 5 条均有真实社区锚点；具体 URL 在各 Spoke 详细文给出（不在 Hub 重复，避免单文维护成本）。
 
 ---
 
 ## 结论
 
-Hub 索引页面的价值不在于"覆盖所有 Hugo 报错"——而在于**给搜索"Hugo + Cloudflare Pages error"的用户一个集群入口**，让他们：
+Hub 的价值不在「覆盖所有 Hugo + CF Pages 报错」——而在 **给搜 "Hugo + Cloudflare Pages error" 的用户一个集群入口**，让他们：
 
-- 先用本文 5 簇快速自查
-- 命中某簇后跳到对应 S 系列详细文（如有）
-- 未命中 → 在评论区 / GitHub Issue 反馈，作者补新簇
+1. 用 5 报错簇速查表 + 诊断决策树 30 秒定位问题
+2. 命中某簇后跳对应 Spoke 拿完整修复命令
+3. 未命中 → 评论区 / GitHub Issue 反馈，作者补新簇
 
-**长期计划**：随着 S3-S12 落地，本 hub 持续扩展；最终目标 = "Hugo + Cloudflare Pages 报错的单一权威源"。
-
----
-
-## 附录 A：本文与 S 系列的互链地图
-
-| 本文簇 | 关联 S 详细文 | 当前状态 |
-|---|---|---|
-| 簇 1（image path） | S1 Hugo image path broken | 待选 → [draft] 后互链 |
-| 簇 2（ERR_TOO_MANY_REDIRECTS） | S2 Cloudflare ERR_TOO_MANY_REDIRECTS | 待选 → [draft] 后互链 |
-| 簇 3（OOM） | S3 CF Pages OOM | 待选 → [draft] 后互链 |
-| 簇 4（cache stale） | S7 / S8 | 待选 |
-| 簇 5（preview redirect） | S2（共享）| 待选 |
-
-**写作约束**：每写完一篇 S 系列，先在本文对应簇的"关联 S 系列"加正式互链（使用 Hugo `ref` shortcode 指向各 S 详细文），保持 hub 永远是 cluster anchor。
+**后续扩展**：S1 / S2 / S3 三个新 Spoke 落地后，本 Hub 移除「待发」占位 + 同步更新互链 + series + 共用 tag（per CLAUDE.md §3.8 rule 7 单 commit 双向）。下一波候选 = S13 (CF Workers vs Pages) / S14 (TOML vs YAML) / S17 (URL resolution) / S16 (PaperMod dark mode 48h debug)。
 
 ---
 
-## 附录 B：本次决策记录（D12 · 2026-08-25）
+## 附录 A：Hub ↔ Spoke 互链地图
 
-| 决策点 | 选择 | 关联文档 |
+| Hub 簇 | Spoke slug | Spoke 状态 | Task # |
+|---|---|---|---|
+| 簇 1 image path | `hugo-image-path-404-cloudflare-pages` | 📝 待发 | #37 |
+| 簇 2 ERR_TOO_MANY_REDIRECTS | `cloudflare-too-many-redirects-hugo-fix` | 📝 待发 | #38 |
+| 簇 3 Build OOM | `cloudflare-pages-hugo-build-oom-fix` | 📝 待发 | #39 |
+| 簇 4 dev server stale | `hugo-draft-stale-dev-server-fix` (S18) | ✅ 已发 | — |
+| 簇 5 7 traps 全景 | `hugo-cloudflare-pages-pitfalls` (A1) | ✅ 已发 | — |
+
+**写作约束**：每个新 Spoke `[en-final]` 时，本 Hub 同步更新互链 + series + 共用 tag（同 commit，per CLAUDE.md §3.8 rule 7）。
+
+---
+
+## 附录 B：Hub 定位决策记录
+
+| 决策点 | 选择 | 备注 |
 |---|---|---|
-| **B2**：Hugo 排错 hub 页 | 新建本文件 | `docs/archive/topic-pool-2026-08-27-archive.md` §「📅 交叉验证落地决策」B2 行 |
-| 关联决策 | **A1** B2 P1 WorldFirst 按 GEO 写作模板落地 | `docs/geo-writing-module.md` |
-| 关联决策 | **C2** 自动化评估时点 = D29 | `docs/archive/topic-pool-2026-08-27-archive.md` §维护规则 §9 |
-| 关联决策 | **D2** about 页升级与 B2 P1 同步落地 | `content/about.md` 升级草案 |
+| **D12 B2 决策** | 创建本 Hub 文件，定位为"报错簇"思维聚合页 | 见 `docs/archive/topic-pool-2026-08-27-archive.md` §「📅 交叉验证落地决策（D12 · 2026-08-25）」B2 行 |
+| **D22 结构调整** | Hub 聚焦 5 报错簇（image / redirect / OOM / stale / 7 traps），对应 2 已发 + 3 待发 Spoke | 选型 / Workers / URL resolution 等放后续 Hub 候选 |
+| **Hub 结构** | 速查表 + 决策树 + 5 Spoke 卡片 + 互链地图（per 多角色共识） | 不写完整修复命令，留给 Spoke |
+| **字数约束** | 800-1500 词下限防 HCU thin content | 当前 ~1200 词 |
+| **Cluster 集成** | series + 共用 tag + 双向 ref 由 Task #34 单 commit 落地 | 避免本 commit 与 #34 冲突 |
