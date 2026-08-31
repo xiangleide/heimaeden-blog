@@ -382,6 +382,35 @@
         * 仓库公开化 O1 / O2 / O3 仍待用户手动执行
         * 24-48h 后 GSC 复查 5 个新 commits 抓取
 
+*   **2026-08-30 状态校准 / D21（Y1 mock-reader-feedback skill 全周期 + cluster 集成铁律化）**：
+    * 🎯 **核心进展**：Y1 (`mock-reader-feedback-skill-deep-dive`) 全周期 5 commits — `[draft]` 创建（`f99aef4`）→ 真实截图入库（`5d26c6f`）→ `[zh-final]` 整合（`7630779`）→ cover 入库（`61c3566`）→ `[en-final]` 翻译（`f0ed844`）；终稿 2496 词 / E 档 2500 ceiling 合规
+    * 🔬 **mock-reader-feedback skill 实操**：跨 3 篇文章（Y1 + S18 + A2）共跑 12 份 P1/P3/P5 反馈报告（`docs/feedback/`），发现 Y1 至少 4 类摩擦点（TCO 缺失 / 前置检查缺失 / 字段必填不明 / fallback 缺失）
+    * 🌐 **cluster 集成铁律化**（`fdadf69`）：CLAUDE.md §3.8 rule 7 新增 cluster integration 硬约束 — 4 组件（A: `{{< ref >}}` 互引 / B: `series` / C: 共用 tag / D: 强制双向 single commit）。触发历史教训：A2（D10 `7d2cdee`）早有 mock-reader skill narrative 但 plain text 而非 shortcode → 渲染后是 broken link
+    * 🔗 **A2↔Y1 cluster 实战**（`291a253`）：A2 + Y1 互 `{{< ref >}}` 8 处（各 4 处）+ `series = ["Claude Code Pipeline"]` + 共用 tag `"Claude Code Pipeline"`；A2 draft=true 期间本地 prod build 显示 REF_NOT_FOUND，draft flip false 后 cluster ref 全 resolve
+    * 📐 **字数约束硬碰撞**：Y1 en-final 首版 2583 词超 E 档 2500 ceiling 83 词，经 4 轮 trim（反 pattern 引子 / conclusion takeaways / TCO exit cost / selection guidance / Step 0 收口 / Introduction / Step 5 字段表 / Intro "What this article covers"）→ 2496 合规
+    * 🟢 **D21 进度**：Y1 文章生产周期（TCM 阶段 2-7）完整闭环；skill SOP `mock-reader-feedback` + `verify-cross-refs` 落地
+    * 🔓 **下一步解锁**：
+        * D22 push Y1 + cluster integration
+        * 24-48h 后 GSC 复查 Y1 索引
+        * 候选下一篇文章（Y2a 教程拆解 / A1 / S13）
+
+*   **2026-08-31 状态校准 / D22（push 12 commits + og:image 系统级修复）**：
+    * 🎯 **核心进展**：D22 完成两件事 — (1) Y1 + extend_head fix + 全部 12 commits push origin/main（`079b6f5..b3a3a51`）；(2) 暴露并修复**全站 og:image 顺序 bug**（commit `b3a3a51`）
+    * 🐛 **Bug 触发**：dev server 验证 Y1 + A2 + hub 三篇 cover 时发现 — `extend_head.html` fallback 在 line 68 emit（早于 PaperMod per-page cover 的 line 88），所有 8 个页面有 2 个 og:image 标签。Facebook / Twitter / LinkedIn / Slack 等 scraper 按「first valid wins」约定取第一个 → 所有 per-page cover **被忽略**，线上实际展示 og-default.png 而非真实 cover
+    * 🔧 **修复内容**（`b3a3a51`）：
+        * `layouts/partials/extend_head.html` fallback 用 `{{- if not .Params.cover.image -}}` 条件化 → 仅无 cover.image 的页面 emit fallback
+        * `content/posts/ai-agent/claude-code-editorial-pipeline/index.md` cover.image 路径 `ai-agent/...` → `images/ai-agent/...`（缺 `images/` 前缀 → absURL 渲染为 `https://heimaeden.com/ai-agent/...` 而非 `/images/...` → 404）
+        * `content/posts/static-site/hugo-troubleshooting-hub/index.md` cover 同修（draft=true 不影响线上，但下次 flip false 时立即生效）
+        * production build 验证：每页恰好 1 个 og:image，cover 页面 emit 真实 cover，无 cover 页面 emit og-default.png
+    * 📜 **规则补强**：extend_head.html fallback 注释从「last position（让 per-page 图片胜出）」改为「conditional fallback（无 cover 时兜底）」，避免下次同类改动复发
+    * 📋 **docs/pending/ 整理**：2 份 D18/D19 working scratchpad（`S18-zh-final-todo.md` 已 tracked + `S18-push-checklist.md` 未 tracked）已归档到 `docs/archive/S18-*-closed-2026-08-28.md`，`docs/pending/` 现空
+    * 🟢 **线上状态**：用户已确认 heimaeden.com 全部文章 + cover + og:image 三件套生效；CF Pages 自动部署完成
+    * 🔓 **下一步解锁**：
+        * 24-48h 后 GSC 复查 Y1 + cluster A2↔Y1 索引（passive 监控）
+        * hub 文章 #26 内容决策
+        * Y2a 教程拆解「How to Set Up Your First Mock Reader Feedback Skill」
+        * AdSense 资格计数：当前 6 篇英文长文，距 ≥15 门槛差 9 篇
+
 ---
 
 ## 🧭 七、 项目启动复盘与下阶段作战图（Retrospective & Forward Battle Map）
