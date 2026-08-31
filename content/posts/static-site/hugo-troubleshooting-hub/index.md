@@ -10,8 +10,8 @@ showToc = true
 TocOpen = true
 
 [cover]
-    image = "images/static-site/hugo-troubleshooting-hub/cover.jpg"
-    alt = "Hugo troubleshooting hub cover"
+    image = "images/static-site/hugo-troubleshooting-hub/hub-hugo-troubleshooting-cover-v1.png"
+    alt = "Flat-vector hub-and-spoke topology on dark slate background: a central green hexagonal HUB node connected via thin geometric lines to five satellite nodes arranged in a pentagonal pattern, each representing one of the five Hugo + Cloudflare Pages error clusters covered by this troubleshooting hub."
 
 # Draft exemption per CLAUDE.md §3.2 + docs/article-writing-workflow.md §1 (D6 新增 lint_allow 用法)
 # 原因：本文件是 [draft] 状态的中文初稿，TCM 阶段 7 英文版 commit 前必须移除此行
