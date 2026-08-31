@@ -8,9 +8,13 @@ theme = 'PaperMod'
 minify = false                  
 
 # 开启标签和分类功能
+# series（D22 新增）：CLAUDE.md §3.8 rule 7 (b) 要求 cluster 成员声明 series 前置字段。
+# 未在此声明 taxonomy 时，front matter 里的 series = [...] 是完全惰性的——不生成 term 页、
+# PaperMod 也不展示。D21 A2↔Y1 集群即因缺此行而 rule 7 (b) 一直未真正生效。
 [taxonomies]
     category = 'categories'
     tag = 'tags'
+    series = 'series'
 
 # 强行开启全站生成 JSON 索引文件，激活 PaperMod 的纯前端极速搜索功能
 [outputs]

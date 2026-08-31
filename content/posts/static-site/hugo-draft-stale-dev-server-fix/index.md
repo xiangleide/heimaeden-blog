@@ -3,9 +3,12 @@ title = "Why My Hugo Draft Still Shows Up After I Moved It to _drafts/"
 description = "Hugo dev server fallback serves stale public/ HTML after moving posts to _drafts/. 3-layer root cause + complete cleanup commands."
 date = 2026-08-27T00:00:00Z
 draft = false
-tags = ["Hugo", "Static Site", "Troubleshooting", "Dev Server"]
+tags = ["Hugo", "Static Site", "Troubleshooting", "Dev Server", "Hugo troubleshooting"]
 categories = ["Static-Site"]
 prompt_type = "A"
+
+# Cluster integration: Hub `hugo-troubleshooting-hub` (this article = Spoke ② dev-server stale) + A1 (hugo-cloudflare-pages-pitfalls) — bidirectional per CLAUDE.md §3.8 rule 7 (single commit).
+series = ["Hugo on Cloudflare Pages"]
 
 showToc = true
 TocOpen = true
@@ -247,6 +250,8 @@ A: Run `rm -rf public/images/<category>/<slug>/` to clean the image directory al
 ⚠️ **Critical warning**: `hugo --gc` not cleaning `public/` is Hugo **by design**, not a bug. If you're planning a future commit that flips a published article back to draft, do the `rm -rf public/{posts,tags,categories,index.json}` triplet first. Do not trust the dev server's "0 warnings at startup" — it will not notice the stale fallback.
 
 **Author's note (D19)**: After the D10 incident I wrote the `scripts/check-stale-drafts.sh` shell snippet (see the §Verification section, in-article snippet, pending real file in `scripts/`) — run it before and after any draft-status switch, and only push when it reports 0 stale.
+
+**Cluster context**: the `draft = true` flip that leads here is itself the workaround for a blank production homepage — that trap, plus six other deployment-stage failures, are in [Hugo + Cloudflare Pages deployment: 7 hidden traps]({{< ref "posts/static-site/hugo-cloudflare-pages-pitfalls" >}}).
 
 ---
 

@@ -3,8 +3,11 @@ title = "Hugo + Cloudflare Pages 报错集群：5 个常见问题的完整排查
 description = "5 个最高频 Hugo + Cloudflare Pages 报错集群索引页：image 404 / ERR_TOO_MANY_REDIRECTS / Build OOM / dev server stale / 7 traps 全景。含症状速查表 + 诊断决策树 + 5 篇深度文章导览卡。"
 date = 2026-08-25T01:00:00Z
 draft = true
-tags = ["Hugo", "Cloudflare Pages", "troubleshooting", "build error", "cluster"]
+tags = ["Hugo", "Cloudflare Pages", "troubleshooting", "build error", "cluster", "Hugo troubleshooting"]
 categories = ["Static-Site"]
+
+# Cluster integration with A1 (hugo-cloudflare-pages-pitfalls) + S18 (hugo-draft-stale-dev-server-fix) — bidirectional per CLAUDE.md §3.8 rule 7 (single commit).
+series = ["Hugo on Cloudflare Pages"]
 
 showToc = true
 TocOpen = true

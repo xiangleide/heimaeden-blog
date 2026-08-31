@@ -3,8 +3,11 @@ title = "Hugo + Cloudflare Pages Deployment: 7 Hidden Traps and How I Fixed Them
 description = "A raw, first-person troubleshooting note documenting real-world static site routing deadlocks, Cloudflare Pages traps, and CSS rendering bugs."
 date = 2026-08-13T07:45:00Z
 draft = false
-tags = ["Hugo", "Cloudflare Pages", "Troubleshooting", "DevOps"]
+tags = ["Hugo", "Cloudflare Pages", "Troubleshooting", "DevOps", "Hugo troubleshooting"]
 categories = ["Static-Site"]
+
+# Cluster integration: Hub `hugo-troubleshooting-hub` (this article = Spoke ① 7-traps overview) + S18 (hugo-draft-stale-dev-server-fix) — bidirectional per CLAUDE.md §3.8 rule 7 (single commit).
+series = ["Hugo on Cloudflare Pages"]
 
 [cover]
     image = "static-site/hugo-cloudflare-pages-pitfalls/cover.jpg"
@@ -100,6 +103,8 @@ There are two hidden timers that cause this:
    [params]
        mainSections = ["posts"]
    ```
+
+**Related**: flipping `draft = true` carries its own follow-on trap — the local dev server keeps serving the stale `public/` HTML even after the flip. Full three-layer breakdown in [why a Hugo draft still shows up after moving it to `_drafts/`]({{< ref "posts/static-site/hugo-draft-stale-dev-server-fix" >}}).
 
 ---
 
