@@ -10,7 +10,10 @@ categories = ["Static-Site"]
 series = ["Hugo on Cloudflare Pages"]
 
 [cover]
-    image = "static-site/hugo-cloudflare-pages-pitfalls/cover.jpg"
+    # D24 [fix] #41: same-type bug as the hub cover fix in D22 b3a3a51. Missing
+    # `images/` prefix caused render-image.html hook warning and live cover 404.
+    # Fix: rewrite to resources path (relative to assets/) to match PaperMod cover.html line 22 absURL fallback.
+    image = "images/static-site/hugo-cloudflare-pages-pitfalls/cover.jpg"
     alt = "A blueprint illustration of a glowing deployment pipeline with three nodes and seven red lightning-shaped fault markers along the line, evoking hidden pitfalls in static site deployment."
 
 showToc = true
