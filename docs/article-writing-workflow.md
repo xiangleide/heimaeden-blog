@@ -238,22 +238,22 @@
 | 维度 | 硬规矩 | 原因 |
 |---|---|---|
 | **发布间隔** | ±1 天随机（不能"日更如钟表"） | 真人写作有波动，机器节奏触发审计 |
-| **篇幅区间（分档硬约束，D16 决策）** | A 纯排错 ≤ **1200** / B 方案对比 ≤ **1800** / C 踩坑叙事 ≤ **2200** / D 原理深挖 ≤ **2500** / E 方法论 retrospective ≤ **2500** | 单篇结构指纹避免高度相似；分档规避"全 800 词短文"或"全 3000+ 长文"两极化 |
+| **篇幅区间（D24-B soft 建议）** | A 纯排错 ≤ **1200** / B 方案对比 ≤ **1800** / C 踩坑叙事 ≤ **2200** / D 原理深挖 ≤ **2500** / E 方法论 retrospective ≤ **2500**；**全档通用 ceiling ≤ 3500 词** | 单篇结构指纹避免高度相似；分档规避"全 800 词短文"或"全 3000+ 长文"两极化。D24-B 由"硬上限"降级为"soft 建议"，advisory 不阻 commit |
 | **结构变体** | 至少 3~4 种轮换（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型） | 避免 Error-to-Post 流水线天然产出的"报错→原因→修复"统一结构 |
 
-> **D24 退役 D16 备注**：原 D16 备注基于 wc -w 估 X1 = 4064 词。精确测量 = 2225 词已在 E≤2500 合规范围。**所有现存 published 文章（7 篇）+ Hub 均在分档硬约束内，无例外**：
+> **D24-B 字数控制软化**：原 D16 5-type 硬上限 + X1 例外备注一并退役（基于"硬约束"前提，已不适用）。D24-B 起：soft 建议按 prompt_type（不阻 commit），全档通用 ceiling 3500 词（超 3500 必须 trim 或拆分）。**所有现存 published 文章（7 篇）+ Hub 均在新框架内**：
 >
-> | 文章 | 档位 | 字数 | 状态 |
+> | 文章 | 档位 | 字数 | 状态（D24-B） |
 > |---|---|---|---|
-> | A1 hugo-cloudflare-pages-pitfalls | A | 1037 | ✅ ≤1200 |
-> | S18 hugo-draft-stale-dev-server-fix | A | 1415 | ⚠️ +215（待修） |
-> | A2 static-blog-setup-guide | B | 1351 | ✅ ≤1800 |
-> | A3 beginners-practical-guide | C | 1901 | ✅ ≤2200 |
-> | X1 claude-code-editorial-pipeline | E | 2225 | ✅ ≤2500 |
-> | Y1 mock-reader-feedback | E | 2507 | ⚠️ +7（待修） |
-> | Hub hugo-troubleshooting-hub | 待决策 | — | prompt_type 决策悬而未决 |
+> | A1 hugo-cloudflare-pages-pitfalls | A | 1037 | ✅ 远低于 A soft + 全档 ceiling |
+> | S18 hugo-draft-stale-dev-server-fix | A | 1415 | ✅ 超出 A soft（+215）但远低于 ceiling，advisory |
+> | A2 static-blog-setup-guide | B | 1351 | ✅ |
+> | A3 beginners-practical-guide | C | 1901 | ✅ |
+> | X1 claude-code-editorial-pipeline | E | 2225 | ✅ |
+> | Y1 mock-reader-feedback | E | 2507 | ✅ 超出 E soft（+7）但远低于 ceiling，advisory |
+> | Hub hugo-troubleshooting-hub | 待决策 | — | prompt_type 决策悬而未决（不受字数影响） |
 >
-> 后续约束：所有新文严格按分档硬约束。X1 inbound link 重审时点改为"X1 字数有变 / 内容重大更新时"。
+> 后续约束：所有新文按 D24-B soft + ceiling 双层；advisory 不阻 commit。X1 inbound link 重审时点改为"X1 字数有变 / 内容重大更新时"。
 
 **GEO 优先试点**：第一篇 GEO 写作模板（**B2 P1 WorldFirst 实战 · D12 · 2026-08-25 升推荐中**）按 `docs/geo-writing-module.md`（待新建）落地——结论前置 + FAQ Schema + 代码块语义完整。详见该模块 SOP。
 

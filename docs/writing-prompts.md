@@ -12,7 +12,7 @@
 
 ## 一、5 种 Prompt 类型速查
 
-| 类型 | **字数硬上限（D16 决策）** | 适用文章 | HeimaEden 样本 | 关键反 AI-farm 指纹 |
+| 类型 | **字数 soft 建议（D24-B 调整）** | 适用文章 | HeimaEden 样本 | 关键反 AI-farm 指纹 |
 |---|---|---|---|---|
 | **A. 纯排障型** | ≤ **1200** 词 | 报错代码 + 配置调试 | S1-S9 / B1-2 | 原始 log 块 + 真实版本号 + 修复命令 |
 | **B. 方案对比型** | ≤ **1800** 词 | 选型 / VPS / SaaS 横评 | S10 (Hugo vs Astro) / S11 (CF vs Vercel) | 实测数据表 + 真实月成本 + 1 票否决点 |
@@ -20,7 +20,9 @@
 | **D. 原理深挖型** | ≤ **2500** 词 | 概念解释 / 架构原理 | 待写（Scaled Content 检测原理） | 类比 + 边界条件 + "推到极端会怎样" |
 | **E. 方法论 retrospective** | ≤ **2500** 词 | "How I built X" workflow | X1 (claude-code pipeline) | commit hash + 撤销事件 + 决策点 |
 
-> **D24 退役 D16 备注**：原 D16 "X1 例外" 备注基于 wc -w 粗估 4064 词。精确测量（去除 front matter / HTML 注释 / shortcode / code blocks）= 2225 词，已在 E≤2500 合规范围。所有现存 7 篇 published + Hub 均在分档硬约束内（A: A1 / S18 / B: A2 / C: A3 / E: X1 / Y1 / 待决策: Hub）。
+> **全档通用 ceiling（D24-B 新增）**：≤ **3500** 词。任何 prompt_type 文章超过 3500 词 = 必须 trim 或拆分为多篇。超过本档 soft 建议但 ≤ 3500 = AI 自检**报告但不阻 commit**（用户决定是否 trim）。
+>
+> **D24-B 字数控制软化**：D24-B 决策把 D16 的 5-type 硬上限降级为 soft 建议（advisory，AI 自检报告不阻 commit），新增全档通用 ceiling 3500 词。**D24 起的 D16 例外备注同步退役**（基于"硬约束"前提，已不适用）。反 Scaled Content 主防线仍是 §七 结构多样性 + 指纹段 + 真实 log + 作者立场，字数只是辅助编辑纪律。
 
 **判定时机**：`new-draft-zh` 阶段 3（章节骨架生成前）先回答 — 这篇文章主要服务哪种读者需求？对应 1 种 prompt（不要混搭超过 2 种）。
 
@@ -28,7 +30,7 @@
 
 ## 二、Prompt A — 纯排障型
 
-**字数硬上限（D16 决策）**：≤ **1200** 词。甜区 1100-1200（含原始 log 块 + 修复命令）。**超档警告**：[draft] commit 时由 AI 自检。
+**字数 soft 建议（D24-B）**：≤ **1200** 词（advisory）。甜区 1100-1200（含原始 log 块 + 修复命令）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
 
 **角色**：资深技术作家，专为开发者写 SEO + GEO 友好的英文排错长文。
 
@@ -66,7 +68,7 @@
 
 ## 三、Prompt B — 方案对比型
 
-**字数硬上限（D16 决策）**：≤ **1800** 词。甜区 1500-1800（含 6 列对比表 + 3-5 候选 per-section）。**超档警告**：[draft] commit 时由 AI 自检。
+**字数 soft 建议（D24-B）**：≤ **1800** 词（advisory）。甜区 1500-1800（含 6 列对比表 + 3-5 候选 per-section）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
 
 **角色**：独立开发者顾问，给"已经用了一个月"的中级开发者写选型横评。
 
@@ -105,7 +107,7 @@
 
 ## 四、Prompt C — 踩坑叙事型
 
-**字数硬上限（D16 决策）**：≤ **2200** 词。甜区 1800-2200（容得下 ≥3 段 Day-N 时间线 + The Break 段）。**超档警告**：[draft] commit 时由 AI 自检。
+**字数 soft 建议（D24-B）**：≤ **2200** 词（advisory）。甜区 1800-2200（容得下 ≥3 段 Day-N 时间线 + The Break 段）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
 
 **角色**：写过 50+ 排错文的工程师，把"调试马拉松"写成有节奏感的故事。
 
@@ -146,7 +148,7 @@
 
 ## 五、Prompt D — 原理深挖型
 
-**字数硬上限（D16 决策）**：≤ **2500** 词。甜区 2000-2500（容得下 ≥3 边界条件 + 1 worked example）。**超档警告**：[draft] commit 时由 AI 自检。
+**字数 soft 建议（D24-B）**：≤ **2500** 词（advisory）。甜区 2000-2500（容得下 ≥3 边界条件 + 1 worked example）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
 
 **角色**：能把 RFC 写成咖啡桌旁白话的高级工程师。
 
@@ -187,9 +189,9 @@
 
 ## 六、Prompt E — 方法论 retrospective
 
-**字数硬上限（D16 决策）**：≤ **2500** 词。甜区 2000-2500（容得下 ≥5 轮迭代段 + The Revert 段 + Decision Points 表）。**超档警告**：[draft] commit 时由 AI 自检。
+**字数 soft 建议（D24-B）**：≤ **2500** 词（advisory）。甜区 2000-2500（容得下 ≥5 轮迭代段 + The Revert 段 + Decision Points 表）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
 
-> **历史参照（D24 退役）**：X1（`claude-code-editorial-pipeline`）原 D16 wc -w 估 4064 词超 E 档。精确测量 2225 词已在 E≤2500 合规，D24 例外备注已退役。新文继续严守 ≤2500 上限。
+> **历史参照（D24-B）**：X1（`claude-code-editorial-pipeline`）原 D16 wc -w 估 4064 词超 E 档。精确测量 2225 词在 E soft ≤2500 合规范围，D24 例外备注退役。新文按 D24-B soft + 3500 ceiling 双层约束运行。
 
 **角色**：在公开日记里写 build-in-public 的工程师，X1 类文章专用。
 
@@ -237,6 +239,7 @@
 - ✅ **每篇必含真实 log / 真实数据** — 不编造"模拟场景"
 - ✅ **每篇必含作者本人选择 / 立场** — 不躲在"取决于"后面
 - ✅ **每篇 first commit 时记录 prompt 类型** — front matter 加 `prompt_type: A-E`（方便后续 mock-reader 检验结构多样性）
+- ✅ **字数控制（D24-B）**：soft 建议按 prompt_type（A≤1200 / B≤1800 / C≤2200 / D≤2500 / E≤2500），全档通用 ceiling **3500 词**。超本档 soft 但 ≤ 3500 = AI 自检报告，不阻 commit；超 3500 = 必须 trim 或拆分为多篇。**反 Scaled Content 主防线是结构多样性 + 指纹段 + 真实 log，字数只是辅助编辑纪律。**
 - ❌ **禁止 SEO-spam 模板套话** — `ultimate guide` / `you won't believe` / `X tips to master Y`（CLAUDE.md §3.1）
 - ❌ **禁止跨文章结构高度相似** — 至少 3-4 种结构轮换，违反即触发 Scaled Content 审计
 
@@ -249,3 +252,7 @@
 - `docs/geo-writing-module.md`（GEO 5 段骨架 + 指纹段定义）
 - `CLAUDE.md` §3.1（tone）+ §3.8（AI 不写 first-person + cross-reference 锚点）
 - `docs/blog-writing-prompt.md`（**已并入 Prompt A · 下线归档**）
+
+---
+
+**D24-B 决策记录**：软化字数上限（hard cap → soft advisory）+ 新增全档通用 ceiling 3500 词。触发因素：Y1 +7 词 / S18 +215 词超档争议揭示 D16 硬上限与"结构多样性"主防线**优先级倒置**。详见本会话上下文。

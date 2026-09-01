@@ -5,8 +5,8 @@ date = 2026-08-22T01:30:00Z
 draft = false
 tags = ["Claude Code", "editorial pipeline", "indie blogger", "content automation", "workflow", "Claude Code Pipeline"]
 categories = ["AI-Agent"]
-# D24 backfill: prompt_type per writing-prompts.md §一 + D16 word hard cap. 2225 words body — fits E≤2500 (methodology retrospective: 11-day editorial pipeline iteration + revert event + decision points).
-# Note: D16 decision logged X1 at 4064 words (wc -w estimate including front matter); precise body measurement 2225 words now sits comfortably within E≤2500. D16 "exception" note can be retired.
+# D24-B backfill: prompt_type per writing-prompts.md §一 + D24-B word soft advisory (3500 ceiling). 2225 words body — within E soft ≤2500 + 3500 ceiling (methodology retrospective: 11-day editorial pipeline iteration + revert event + decision points).
+# Note: D16 decision logged X1 at 4064 words (wc -w estimate including front matter); precise body measurement 2225 words now sits comfortably within E soft ≤2500. D24-B retired the D16 "exception" note (no longer applicable under soft-advisory policy).
 prompt_type = "E"
 
 # Hugo series (per CLAUDE.md §3.4 + PaperMod taxonomy convention) — cluster with Y1 mock-reader-feedback-skill-deep-dive.

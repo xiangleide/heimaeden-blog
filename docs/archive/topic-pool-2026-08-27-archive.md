@@ -9,7 +9,7 @@
 > - **Remote-Payment**：大陆个人开发者境外收款
 > - **Side-Project**：MVP / SaaS / Indie 工具
 >
-> **📐 D16 字数分档硬约束（2026-08-27，D24 更新）**：每条选题"预计字数"必须 ≤ `writing-prompts.md` 一、速查表分档上限（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）。**存量文章不变**，所有新选题严格执行。**D24 退役**：X1 `claude-code-editorial-pipeline` 精确测量 2225 词已在 E≤2500 合规范围，原"唯一例外"备注同步退役。
+> **📐 D24-B 字数控制（2026-08-27 D16 → 2026-09-01 D24-B）**：每条选题"预计字数"按 `docs/writing-prompts.md` 一、速查表 soft 建议（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500），**全档通用 ceiling ≤ 3500 词**。**soft 不阻 commit**（AI 自检报告），超 3500 必须 trim 或拆分。**存量文章不变**（5 篇 published + 1 Hub 都在新框架内），所有新选题按 D24-B 双层约束执行。**D24-B 退役**：D16 "硬约束"前提已不适用，X1 例外备注同步退役。
 
 ---
 
@@ -84,7 +84,7 @@
 ### S18. Hugo draft still showing after move to _drafts/: a 3-layer fallback trap
 - **来源**：D17 决策 + D10 事故复盘（README §6 D17）+ commit `581555b`（D10 不完整修复）+ 后续 D17 强版 grep 复盘发现 5 处 stale
 - **目标关键词**：hugo draft stale fallback, hugo dev server public index, hugo --gc not cleaning, hugo draft still showing, hugo taxonomy stale
-- **实际字数**：约 1,000 词（en-final body 实际 wc-w 2147 含 front matter + lint_allow + 锚点 TOC，A 档硬上限 ≤ 1200 ✓）
+- **实际字数**：约 1,000 词（en-final body 实际 wc-w 2147 含 front matter + lint_allow + 锚点 TOC，A soft ≤ 1200 advisory + 3500 ceiling ✓）
 - **分类**：Static-Site（排错类 · prompt_type A）
 - **联盟预留**：否（排错类不插联盟，per `article-writing-workflow.md` §1.3）
 - **AI 推荐理由**：D10 事故（2026-08-21）暴露 Hugo 设计陷阱的 3 层叠加（`hugo --gc` 不清 public/ + dev server fallback + taxonomy 不 rebuild）；GitHub Issues / Hugo Discourse 搜不到完整答案；用户亲历 + commit hash + 当前 stale tags 残留（公开复盘）构成独家 EEAT；填补 S1-S3 之外的「dev workflow 排错」细分空白
@@ -212,7 +212,7 @@
 #### S10. Hugo vs Astro vs Next.js for team blog 2026: feature parity and cold-start TCO
 - **来源**：2026-08-20 mock-reader-feedback P5 反馈催生（docs/feedback/hugo-cloudflare-pages-pitfalls-P5.md）
 - **关键词**：hugo vs astro vs nextjs, static site generator 2026, cold start tco team blog, astro vs nextjs for blog
-- **预计字数**：1,400-1,800（**B 档硬上限 1800**，per `writing-prompts.md` Prompt B · D16 已下调）
+- **预计字数**：1,400-1,800（**B 档 soft ≤ 1800 + 3500 ceiling**，per `docs/writing-prompts.md` Prompt B · D24-B）
 - **分类**：Static-Site（选型类）
 - **联盟预留**：是（Hetzner / DO / CF Pages / Vercel — 多 hosting 联盟，按平台属性分）
 - **AI 推荐理由**：**Money Hook 候选**；P5 选型决策者读完 A1 反馈："缺 2026 选型对比" + 排名 `best static site generator 2026` 是 P5 top search query；3 个 generator 全对比可填空白区
@@ -309,7 +309,7 @@
 ##### J3. OutOfMemoryError troubleshooting: heap dump + Eclipse MAT for Spring Boot
 - **来源讨论**：Eclipse MAT 官方教程 + 经典 OOM 排错案例（HeapHero / fastthread.io 生态）
 - **目标关键词**：outofmemoryerror spring boot, heap dump eclipse mat, java memory leak troubleshooting, OOM killer analysis
-- **预计字数**：1,000-1,200（**A 档硬上限 1200**，per `writing-prompts.md` Prompt A · D16 已下调）
+- **预计字数**：1,000-1,200（**A 档 soft ≤ 1200 + 3500 ceiling**，per `docs/writing-prompts.md` Prompt A · D24-B）
 - **分类**：Static-Site / Java-Advanced（排错类）
 - **联盟预留**：否
 - **AI 推荐理由**：经典 OOM 排错，英文长尾"hands-on heap dump MAT"角度稀缺；用户亲历 EEAT 强；与 J1/J2 形成 Java-Advanced 首发三件套
@@ -379,7 +379,7 @@
 #### Y1. mock-reader-feedback skill deep dive: 5-persona editorial QA for Claude Code
 - **来源**：本次会话 D21 决策 + `docs/archive/think-x1-claude-code-pipeline.md` §6 Y1 候选（用户 D21 决策 P1 方案：Y1 mock-reader 拆解 / Y2 pre-commit gates OR redact-image）
 - **关键词**：mock reader feedback, claude code skill, AI editorial QA, LLM as judge persona, content review automation, yaml feedback schema
-- **预计字数**：1,400-1,800（**B 档硬上限 1800**，per `writing-prompts.md` Prompt B · D16）
+- **预计字数**：1,400-1,800（**B 档 soft ≤ 1800 + 3500 ceiling**，per `docs/writing-prompts.md` Prompt B · D24-B）
 - **分类**：AI-Agent（部署类）
 - **联盟预留**：否（自身工具）
 - **AI 推荐理由**：225 行 `.claude/skills/mock-reader-feedback/SKILL.md` 全拆解 + 7 步工作流 + 5 persona 横向对比（表格）+ YAML schema 严格遵守 + 5 条反 pattern（对应 §0 5 条社区坑：PersonaEval / 5⭐全赞 / Likert ceiling / 风格刻板 / lizard brain）；用户 12 份真实反馈报告（`docs/feedback/` × 3 篇文章 × P1/P3/P5）+ `fetch-persona-data.sh` 实操构成独家 EEAT；与 X1 形成「流水线总览（D24 精确 2,225 词）+ 单 skill 拆解（D21 en-final 2,507 词，E 档上限 2500 上方 7 词待 trim）」互补
@@ -538,7 +538,7 @@
 4. **撤销/废弃**：在「已完成」保留 entry 但状态改为 ⚠️ 已废弃 + commit hash（参考 A 系列占位）
 5. **pool size 上限**：保持 ≤40 条（多了选择疲劳）；归档到 `docs/topic-pool-archive-YYYY.md`
 6. **熔断线**（新增 · D12 交叉验证落地）：上月 GSC 收录率 < 40% **或** 质检不合格 → 当月停发新文，转做旧文优化（内容更新本身也是排名信号，且比新增安全）。来源：`docs/archive/运营方案与交叉验证文档-2026-08-27.md` §四 修正后里程碑
-7. **节奏随机性**（新增 · D12 交叉验证落地）：避免"每天雷打不动 1 篇 + 每篇结构一致"被 Scaled Content 识别信号命中。允许 ±1 天波动，篇幅在 800~2500 词之间拉开差异；至少准备 3~4 种结构变体（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型）轮换
+7. **节奏随机性**（新增 · D12 交叉验证落地 · **D24-B 更新上限**）：避免"每天雷打不动 1 篇 + 每篇结构一致"被 Scaled Content 识别信号命中。允许 ±1 天波动，篇幅在 800~**3500** 词之间拉开差异（D24-B 新增全档 ceiling 3500）；至少准备 3~4 种结构变体（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型）轮换
 8. **"宁可不发"硬规矩**（新增 · D12 交叉验证落地）：没有真实 log + 验证过的修复命令，宁可不发不凑数。10 分钟/篇只够成文，不够保证每条报错真实复现过；断更一天的代价远小于一批薄内容被整体降权的代价
 9. **自动化评估时点**（新增 · D12 交叉验证落地 · **C2 决策**）：**D29（第 4 周末）** 评估 n8n / GitHub Actions / Cloudflare Worker 的具体自动化方案，**不在 D0-D14 评估**（避免过早工程化拖垮发文节奏）。评估口径：能否把 6 小时压到 2 小时（X1 实测基线）
 
@@ -560,6 +560,7 @@
 | **H1**：S18 全流程收官 + hub draft 修复（**D19 新增 · 2026-08-28**）| S18 走完 TCM 6 阶段（[draft] → 截图 → cover → zh-final → **en-final push `ac5ddce`**）+ hub `c18bbcc` 误设 `draft=false` 修复回 `draft=true`（`3b79cfa`）+ cover prompt `de5a62d` 入档 `docs/cover-prompts/`| `topic-pool.md` S18 移到「已完成」+ 「最近 3 篇」更新为 S18 / editorial-pipeline / beginners-practical-guide + 「交叉验证落地决策」加 H1 行 + README §6 D19 状态校准 | ✅ **已完成**（S18 publish + hub draft flag 修复）|
 | **I1**：image file-size 治理（**D20 新增 · 2026-08-29**）| 新增 `scripts/check-image-size.sh` + CLAUDE.md §3.3.5/§3.3.6 + skill Gate E + workflow §4.1；3 historical cover 压缩（editorial-pipeline 898→84KB / pitfalls 215→109KB / setup-guide 204→141KB）| 上述文档 + `topic-pool.md` S18 entry 加 cover 压缩标注 + README §6 D20 状态校准 | ✅ **已完成**（5 commits：96a48f2 / 4ef5ecd / dce0dd4 / 079b6f5 / 15b982c）|
 | **J1**：Y1 mock-reader-feedback skill 拆解（**D21 新增 · 2026-08-30**）| 新增 `content/posts/ai-agent/mock-reader-feedback-skill-deep-dive/index.md`（B 档 ≤ 1800 词）+ topic-pool Y1 入库 | topic-pool.md Y1 entry + 「交叉验证落地决策」加 J1 行 | ✅ **[draft] 已 commit** |
+| **K1**：D24-B 字数控制软化（**2026-09-01**）| D16 5-type 硬上限 → soft 建议（advisory 不阻 commit）+ 全档通用 ceiling ≤ 3500 词；反 Scaled Content 主防线明确为结构多样性 + 指纹段 + 真实 log | `docs/writing-prompts.md` §一/§二-§六/§七/§八 + `docs/article-writing-workflow.md` §5.2.1 + `README.md` §6 D16 段 + `topic-pool-archive.md` 顶部 D16 注释 + 5 篇 published 文章 front matter 注释 + 4 选题预计字数标注 | ✅ **已完成**（本会话）|
 
 **关联文档**：
 - 完整交叉验证报告：`docs/archive/运营方案与交叉验证文档-2026-08-27.md`

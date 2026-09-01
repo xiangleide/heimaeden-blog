@@ -260,39 +260,41 @@
 
 *   **2026-08-27 状态校准 / D16（文章篇幅分档硬约束落地）**：
     * 🎯 **核心决策**：用户要求「调整文章长度，最近几篇文章考虑缩短篇幅」，经 3 轮 AskUserQuestion 收敛为「存量文章不变，仅约束即将完成的几篇文章」+「按 prompt_type 分档」+「editorial-pipeline 留作例外」。
-    * 📐 **分档硬约束（D16 即时生效）**：
+    * 📐 **分档硬约束（D16 即时生效 · D24-B 软化）**：
 
-        | Prompt 类型 | 字数硬上限 | 甜区 |
+        | Prompt 类型 | 字数 soft 建议（D24-B） | 甜区 |
         |---|---|---|
-        | **A** 纯排错 | ≤ **1200** 词 | 1100-1200 |
-        | **B** 方案对比 | ≤ **1800** 词 | 1500-1800 |
-        | **C** 踩坑叙事 | ≤ **2200** 词 | 1800-2200 |
-        | **D** 原理深挖 | ≤ **2500** 词 | 2000-2500 |
-        | **E** 方法论 retrospective | ≤ **2500** 词 | 2000-2500 |
+        | **A** 纯排错 | ≤ **1200** 词（advisory） | 1100-1200 |
+        | **B** 方案对比 | ≤ **1800** 词（advisory） | 1500-1800 |
+        | **C** 踩坑叙事 | ≤ **2200** 词（advisory） | 1800-2200 |
+        | **D** 原理深挖 | ≤ **2500** 词（advisory） | 2000-2500 |
+        | **E** 方法论 retrospective | ≤ **2500** 词（advisory） | 2000-2500 |
 
-    * ⚠️ **历史例外（D16 → D24 退役）**：D16 决策时 X1 `claude-code-editorial-pipeline` 按 wc -w 估 4064 词列为唯一例外保留（"留作 D12 落地资产，不重写不压缩"）。**D24 精确测量（去除 front matter / HTML 注释 / shortcode / code blocks）= 2225 词**，已在 E≤2500 合规范围。**D24 例外备注退役**，保留 `prompt_type = "E"` 不变。详见 `ed04be1` commit message + `docs/writing-prompts.md §一` D24 备注 + `docs/article-writing-workflow.md §5.2.1` D24 备注。
+        **全档通用 ceiling（D24-B 新增）**：≤ **3500** 词。超本档 soft 但 ≤ 3500 = advisory 不阻 commit；超 3500 = 必须 trim 或拆分。
+
+    * ⚠️ **历史例外（D16 → D24-B 退役）**：D16 决策时 X1 `claude-code-editorial-pipeline` 按 wc -w 估 4064 词列为唯一例外保留（"留作 D12 落地资产，不重写不压缩"）。**D24 精确测量（去除 front matter / HTML 注释 / shortcode / code blocks）= 2225 词**，在 E soft ≤2500 合规范围。**D24-B 例外备注退役**（基于"硬约束"前提，已不适用）。保留 `prompt_type = "E"` 不变。详见 `docs/writing-prompts.md §一` D24-B 备注 + `docs/article-writing-workflow.md §5.2.1` D24-B 备注。
     * 📂 **同步落地的 4 个文件**：
-        * `docs/article-writing-workflow.md` §5.2.1：表格行"篇幅区间"改为分档硬约束 + 新增「D16 例外备注」段
-        * `docs/writing-prompts.md` 一、速查表新增「字数硬上限」列 + 五种 Prompt（A-E）各加字数硬上限声明段
-        * `docs/archive/topic-pool-2026-08-27-archive.md` 顶部加 D16 注释段 + §交叉验证落地决策 加 F1 行 + **S10 字数 1,500-2,000 → 1,400-1,800**（B 档收口）+ **J3 字数 1,200-1,500 → 1,000-1,200**（A 档收口）
+        * `docs/article-writing-workflow.md` §5.2.1：表格行"篇幅区间"改为分档约束（D24-B soft）+ 新增「D24-B 软化」备注段
+        * `docs/writing-prompts.md` 一、速查表新增「字数 soft 建议」列（D24-B）+ 全档 ceiling 3500 词 + 五种 Prompt（A-E）各加 soft + ceiling 双层声明段
+        * `docs/archive/topic-pool-2026-08-27-archive.md` 顶部 D16 注释段同步改 D24-B + §交叉验证落地决策 + **S10 字数 1,500-2,000 → 1,400-1,800**（B 档收口）+ **J3 字数 1,200-1,500 → 1,000-1,200**（A 档收口）
         * `README.md` §6 本条状态校准
-    * 🔍 **诊断数据**（决策前字数盘点）：
-        * `editorial-pipeline` 4064 词（C+D 档内 +63-85%）
-        * `beginners-practical-guide` 2145 词（B 档内 +14%）
-        * `hugo-cloudflare-pages-pitfalls` 1830 词（A 档内 OK）
-        * `static-blog-setup-guide` 1671 词（B 档内 OK）
-        * `claude-code-cli-setup-indie-blog` 1655 词（[draft] 暂存 OK）
-        * `hugo-troubleshooting-hub` 1200 词（[draft] 骨架 OK）
-    * 🔒 **未来约束**：
-        * 即将完成的文章（Hub §簇 3-5 填充 + S13 / S14 / S16 / S17 + P1 + J1 / J3 + A1-A3 等推荐选题）严格按分档硬约束
-        * `[draft]` commit 时由 AI 自检字数，超档立即警告并要求重写
-        * topic-pool.md 任何新入选选题必须带 prompt_type + 字数 ≤ 上限标注
-    * 📋 **历史脉络**：原 §5.2.1 篇幅约束为"800~2500 词之间拉开差异"，区间过宽导致唯一超长文章（editorial-pipeline 4064 词）逃脱 SOP 检测。D16 决策将单档收窄为分档硬上限，使 SOP 可机械化校验。
+    * 🔍 **诊断数据**（D16 决策前字数盘点 · D24-B 后已历史化）：
+        * `editorial-pipeline` 4064 词（wc -w 粗估含 front matter / shortcode；D24 精确 2225 词）
+        * `beginners-practical-guide` 2145 词（wc -w；D24 精确 1901 词）
+        * `hugo-cloudflare-pages-pitfalls` 1830 词（wc -w；D24 精确 1037 词）
+        * `static-blog-setup-guide` 1671 词（wc -w；D24 精确 1351 词）
+        * `claude-code-cli-setup-indie-blog` 1655 词（[draft] 暂存）
+        * `hugo-troubleshooting-hub` 1200 词（[draft] 骨架）
+    * 🔒 **D24-B 未来约束**：
+        * 即将完成的文章（Hub §簇 3-5 填充 + S13 / S14 / S16 / S17 + P1 + J1 / J3 + A1-A3 等推荐选题）按 D24-B soft 建议
+        * `[draft]` commit 时由 AI 自检字数，超本档 soft 时**报告 advisory**，超 3500 ceiling 时**警告并要求 trim/拆分**
+        * topic-pool.md 任何新入选选题带 prompt_type + 字数 ≤ soft 标注（advisory）
+    * 📋 **历史脉络**：原 §5.2.1 篇幅约束为"800~2500 词之间拉开差异"，区间过宽导致唯一超长文章（editorial-pipeline 4064 词）逃脱 SOP 检测。D16 决策将单档收窄为分档硬上限，D24-B 进一步软化为 advisory + 全档 ceiling 3500 词。**反 Scaled Content 主防线始终是结构多样性 + 指纹段，字数是辅助编辑纪律。**
     * 🔓 **下一步解锁**：
-        * S13 启 draft —— 首篇按分档硬约束（B 档 ≤ 1800，已规划 1400 词 OK）
-        * Hub §簇 3 / 4 / 5 占位填充 —— A 档 ≤ 1200，每个簇不超过 1100 词
-        * P1 WorldFirst —— GEO 试点 + 字数按 E 档 ≤ 2500
-        * J3 OOM MAT —— 排错 A 档 ≤ 1200（已下调）
+        * S13 启 draft —— 按 B 档 soft ≤ 1800，已规划 1400 词 OK
+        * Hub §簇 3 / 4 / 5 占位填充 —— 按 A 档 soft ≤ 1200 advisory
+        * P1 WorldFirst —— GEO 试点 + 字数按 E 档 soft ≤ 2500
+        * J3 OOM MAT —— 排错 A 档 soft ≤ 1200 advisory
 
 *   **2026-08-27 状态校准 / D17（D10 修复完整性复盘 + 强版 grep SOP 升级 + S18 启 draft）**：
     * 🎯 **核心复盘**：D10 commit `581555b` 修复**不完整**——清理时漏了 4 个 tag 子目录（`public/tags/{tutorial, ai-coding-agent, claude-code, indie-blogger}/`）+ `public/index.json`；验证命令 `grep -r "claude-code-cli\|Set Up Claude Code" public/` 因缺失 `grep -v editorial-pipeline` 排除而误报「全站 0 匹配」。**D17 复盘触发**：基于 D10 事故写 S18 排错长文时为还原现场扫描 `public/`，发现 5 处仍在 stale 状态。
