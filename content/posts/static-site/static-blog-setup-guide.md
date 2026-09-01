@@ -14,7 +14,10 @@ comments = true
 disableShare = false
 
 [cover]
-    image = "static-site/static-blog-setup-guide/cover.jpg"
+    # D24 [fix]: same-type bug as A1 cover fix e54c7f0 + Hub fix b3a3a51. Missing
+    # `images/` prefix caused render-image.html hook warning and live cover 404.
+    # Fix: rewrite to resources path (relative to assets/) to match PaperMod cover.html line 22 absURL fallback.
+    image = "images/static-site/static-blog-setup-guide/cover.jpg"
     alt = "Developer at a dual-monitor workstation writing code in dark theme, representing the hands-on static blog setup process."
 +++
 

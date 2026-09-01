@@ -14,7 +14,10 @@ comments = true        # enable comments section
 disableShare = false   # enable social share buttons
 
 [cover]
-    image = "remote-payment/beginners-practical-guide/cover.jpg"
+    # D24 [fix]: same-type bug as A1 cover fix e54c7f0 + Hub fix b3a3a51. Missing
+    # `images/` prefix caused render-image.html hook warning and live cover 404.
+    # Fix: rewrite to resources path (relative to assets/) to match PaperMod cover.html line 22 absURL fallback.
+    image = "images/remote-payment/beginners-practical-guide/cover.jpg"
     alt = "Hand holding a credit card while typing on a laptop keyboard, depicting an online cross-border payment scenario."
 +++
 
