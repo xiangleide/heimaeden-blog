@@ -9,7 +9,7 @@
 > - **Remote-Payment**：大陆个人开发者境外收款
 > - **Side-Project**：MVP / SaaS / Indie 工具
 >
-> **📐 D16 字数分档硬约束（2026-08-27）**：每条选题"预计字数"必须 ≤ `writing-prompts.md` 一、速查表分档上限（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）。**存量文章不变**，所有新选题严格执行。唯一例外：`ai-agent/claude-code-editorial-pipeline`（4064 词），详见 `article-writing-workflow.md` §5.2.1。
+> **📐 D16 字数分档硬约束（2026-08-27，D24 更新）**：每条选题"预计字数"必须 ≤ `writing-prompts.md` 一、速查表分档上限（A ≤1200 / B ≤1800 / C ≤2200 / D+E ≤2500）。**存量文章不变**，所有新选题严格执行。**D24 退役**：X1 `claude-code-editorial-pipeline` 精确测量 2225 词已在 E≤2500 合规范围，原"唯一例外"备注同步退役。
 
 ---
 
@@ -93,7 +93,7 @@
 ### A2. How I Cut My Solo Tech Blog Pipeline from 6 Hours to 2 Hours Per Post in 11 Days
 - **来源讨论**：2026-08-15 TCM 流水线实战 + 2026-08-22 [draft] 入库 + 后续扩写 zh-final + en-final
 - **目标关键词**：claude code workflow, editorial pipeline, content automation, solo blog workflow, ai agent content
-- **实际字数**：4,064 词（**唯一例外** — 超过 D 档上限 2500 +63% / C 档上限 2200 +85%，X1 主文章保留 inbound link + 品牌+互链价值。详见 `article-writing-workflow.md` §5.2.1 D16 例外备注）
+- **实际字数**：2,225 词（D24 精确测量：去除 front matter / HTML 注释 / shortcode / code blocks。原 wc -w 估 4,064 含上述内容。E≤2500 合规，D24 起移除唯一例外标注）
 - **分类**：AI-Agent（部署类）
 - **联盟预留**：否（品牌+互链型，非 Money Hook）
 - **AI 推荐理由**：项目内 TCM SOP 完整外化版，对外是稀缺资产；TCM 重度用户独家一手实操壁垒
@@ -382,7 +382,7 @@
 - **预计字数**：1,400-1,800（**B 档硬上限 1800**，per `writing-prompts.md` Prompt B · D16）
 - **分类**：AI-Agent（部署类）
 - **联盟预留**：否（自身工具）
-- **AI 推荐理由**：225 行 `.claude/skills/mock-reader-feedback/SKILL.md` 全拆解 + 7 步工作流 + 5 persona 横向对比（表格）+ YAML schema 严格遵守 + 5 条反 pattern（对应 §0 5 条社区坑：PersonaEval / 5⭐全赞 / Likert ceiling / 风格刻板 / lizard brain）；用户 12 份真实反馈报告（`docs/feedback/` × 3 篇文章 × P1/P3/P5）+ `fetch-persona-data.sh` 实操构成独家 EEAT；与 X1 形成「流水线总览（4064 词）+ 单 skill 拆解（1800 词）」互补
+- **AI 推荐理由**：225 行 `.claude/skills/mock-reader-feedback/SKILL.md` 全拆解 + 7 步工作流 + 5 persona 横向对比（表格）+ YAML schema 严格遵守 + 5 条反 pattern（对应 §0 5 条社区坑：PersonaEval / 5⭐全赞 / Likert ceiling / 风格刻板 / lizard brain）；用户 12 份真实反馈报告（`docs/feedback/` × 3 篇文章 × P1/P3/P5）+ `fetch-persona-data.sh` 实操构成独家 EEAT；与 X1 形成「流水线总览（D24 精确 2,225 词）+ 单 skill 拆解（D21 en-final 2,507 词，E 档上限 2500 上方 7 词待 trim）」互补
 - **prompt_type**：B 方案对比（D12 SOP）
 - **状态**：🎯 **推荐中（D21 入库 · [draft] 已启）**
 

@@ -241,11 +241,19 @@
 | **篇幅区间（分档硬约束，D16 决策）** | A 纯排错 ≤ **1200** / B 方案对比 ≤ **1800** / C 踩坑叙事 ≤ **2200** / D 原理深挖 ≤ **2500** / E 方法论 retrospective ≤ **2500** | 单篇结构指纹避免高度相似；分档规避"全 800 词短文"或"全 3000+ 长文"两极化 |
 | **结构变体** | 至少 3~4 种轮换（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型） | 避免 Error-to-Post 流水线天然产出的"报错→原因→修复"统一结构 |
 
-> **D16 例外备注（2026-08-27）**：当前唯一例外为 `content/posts/ai-agent/claude-code-editorial-pipeline/index.md`（4064 词，commit `4225a6e` 已发布）。
-> - **超档程度**：超 C 档上限 2200 +85%，超 D 档上限 2500 +63%
-> - **保留理由**：该文为 X1 主文章，承担「品牌+互链型」资产作用；重写/压缩会损失 inbound link 价值与已建立的外链权重
-> - **后续约束**：所有新文（含 S13/S14/S16/S17 + Hub §簇 3-5 填充 + P1/J1-J3/A1-A3 等推荐选题）严格按分档硬约束
-> - **下次重审时点**：该文累计 inbound link 收益触顶时（建议 ≥ 30 个外部引用后评估压缩）
+> **D24 退役 D16 备注**：原 D16 备注基于 wc -w 估 X1 = 4064 词。精确测量 = 2225 词已在 E≤2500 合规范围。**所有现存 published 文章（7 篇）+ Hub 均在分档硬约束内，无例外**：
+>
+> | 文章 | 档位 | 字数 | 状态 |
+> |---|---|---|---|
+> | A1 hugo-cloudflare-pages-pitfalls | A | 1037 | ✅ ≤1200 |
+> | S18 hugo-draft-stale-dev-server-fix | A | 1415 | ⚠️ +215（待修） |
+> | A2 static-blog-setup-guide | B | 1351 | ✅ ≤1800 |
+> | A3 beginners-practical-guide | C | 1901 | ✅ ≤2200 |
+> | X1 claude-code-editorial-pipeline | E | 2225 | ✅ ≤2500 |
+> | Y1 mock-reader-feedback | E | 2507 | ⚠️ +7（待修） |
+> | Hub hugo-troubleshooting-hub | 待决策 | — | prompt_type 决策悬而未决 |
+>
+> 后续约束：所有新文严格按分档硬约束。X1 inbound link 重审时点改为"X1 字数有变 / 内容重大更新时"。
 
 **GEO 优先试点**：第一篇 GEO 写作模板（**B2 P1 WorldFirst 实战 · D12 · 2026-08-25 升推荐中**）按 `docs/geo-writing-module.md`（待新建）落地——结论前置 + FAQ Schema + 代码块语义完整。详见该模块 SOP。
 

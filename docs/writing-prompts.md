@@ -20,7 +20,7 @@
 | **D. 原理深挖型** | ≤ **2500** 词 | 概念解释 / 架构原理 | 待写（Scaled Content 检测原理） | 类比 + 边界条件 + "推到极端会怎样" |
 | **E. 方法论 retrospective** | ≤ **2500** 词 | "How I built X" workflow | X1 (claude-code pipeline) | commit hash + 撤销事件 + 决策点 |
 
-> **D16 例外**：当前唯一超档文章为 `content/posts/ai-agent/claude-code-editorial-pipeline/index.md`（4064 词，已发布 commit `4225a6e`），保留不动。详见 `article-writing-workflow.md` §5.2.1 例外备注。
+> **D24 退役 D16 备注**：原 D16 "X1 例外" 备注基于 wc -w 粗估 4064 词。精确测量（去除 front matter / HTML 注释 / shortcode / code blocks）= 2225 词，已在 E≤2500 合规范围。所有现存 7 篇 published + Hub 均在分档硬约束内（A: A1 / S18 / B: A2 / C: A3 / E: X1 / Y1 / 待决策: Hub）。
 
 **判定时机**：`new-draft-zh` 阶段 3（章节骨架生成前）先回答 — 这篇文章主要服务哪种读者需求？对应 1 种 prompt（不要混搭超过 2 种）。
 
@@ -189,7 +189,7 @@
 
 **字数硬上限（D16 决策）**：≤ **2500** 词。甜区 2000-2500（容得下 ≥5 轮迭代段 + The Revert 段 + Decision Points 表）。**超档警告**：[draft] commit 时由 AI 自检。
 
-> **历史参照**：X1（`claude-code-editorial-pipeline`）实际 4064 词超 E 档上限 63%，为 D16 例外保留，详见 `article-writing-workflow.md` §5.2.1。新文不再例外。
+> **历史参照（D24 退役）**：X1（`claude-code-editorial-pipeline`）原 D16 wc -w 估 4064 词超 E 档。精确测量 2225 词已在 E≤2500 合规，D24 例外备注已退役。新文继续严守 ≤2500 上限。
 
 **角色**：在公开日记里写 build-in-public 的工程师，X1 类文章专用。
 

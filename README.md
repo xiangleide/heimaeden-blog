@@ -270,7 +270,7 @@
         | **D** 原理深挖 | ≤ **2500** 词 | 2000-2500 |
         | **E** 方法论 retrospective | ≤ **2500** 词 | 2000-2500 |
 
-    * ⚠️ **唯一例外**：`content/posts/ai-agent/claude-code-editorial-pipeline/index.md`（4064 词，commit `4225a6e` 已发布）—— 留作 D12 落地资产，不重写不压缩。下次重审时点 = 该文累计 inbound link ≥ 30 个外部引用后评估。
+    * ⚠️ **历史例外（D16 → D24 退役）**：D16 决策时 X1 `claude-code-editorial-pipeline` 按 wc -w 估 4064 词列为唯一例外保留（"留作 D12 落地资产，不重写不压缩"）。**D24 精确测量（去除 front matter / HTML 注释 / shortcode / code blocks）= 2225 词**，已在 E≤2500 合规范围。**D24 例外备注退役**，保留 `prompt_type = "E"` 不变。详见 `ed04be1` commit message + `docs/writing-prompts.md §一` D24 备注 + `docs/article-writing-workflow.md §5.2.1` D24 备注。
     * 📂 **同步落地的 4 个文件**：
         * `docs/article-writing-workflow.md` §5.2.1：表格行"篇幅区间"改为分档硬约束 + 新增「D16 例外备注」段
         * `docs/writing-prompts.md` 一、速查表新增「字数硬上限」列 + 五种 Prompt（A-E）各加字数硬上限声明段
