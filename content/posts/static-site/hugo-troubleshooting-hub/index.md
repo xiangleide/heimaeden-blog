@@ -18,6 +18,11 @@ TocOpen = true
 
 # D24 Phase 1.5: English final version translated from zh-final commit 7762e7e.
 # Per CLAUDE.md §3.8 rule 5: 1:1 paragraph mapping, no fact addition/removal, preserves Chinese colloquial tone.
+
+# D24: prompt_type = "F" per writing-prompts.md §一 + §七（F 聚簇索引型 · D24 新增）。
+# Hub structure (5-cluster quick-ref + decision tree + N Spoke cards + cross-link appendix) does not fit A-E;
+# F type was created to honestly represent Hub-and-Spoke V1 topology index pages.
+prompt_type = "F"
 +++
 
 > **Nature of this file**: A Hub index page (not a single-topic article). Each error cluster has one dedicated Spoke article with the full fix commands; this Hub only does **symptom identification + decision-tree triage** and does not include step-by-step fix code (to avoid duplicating Spokes and tripping HCU's thin-content red line).

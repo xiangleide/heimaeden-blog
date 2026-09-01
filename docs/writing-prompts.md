@@ -10,7 +10,7 @@
 
 ---
 
-## 一、5 种 Prompt 类型速查
+## 一、6 种 Prompt 类型速查（D24 新增 F）
 
 | 类型 | **字数 soft 建议（D24-B 调整）** | 适用文章 | HeimaEden 样本 | 关键反 AI-farm 指纹 |
 |---|---|---|---|---|
@@ -19,6 +19,7 @@
 | **C. 踩坑叙事型** | ≤ **2200** 词 | 调试马拉松 / war story | 撤销事件类（D4 4b8a8ea 教训） | 时间锚 + 多次失败 + 关键顿悟 |
 | **D. 原理深挖型** | ≤ **2500** 词 | 概念解释 / 架构原理 | 待写（Scaled Content 检测原理） | 类比 + 边界条件 + "推到极端会怎样" |
 | **E. 方法论 retrospective** | ≤ **2500** 词 | "How I built X" workflow | X1 (claude-code pipeline) | commit hash + 撤销事件 + 决策点 |
+| **F. 聚簇索引型** | ≤ **2500** 词 | Hub-and-Spoke index / 类别落地页 / FAQ index | Hub (`hugo-troubleshooting-hub`) | 显式声明「非单主题」+ decision tree + N Spoke 真实 cross-link + series + shared tag |
 
 > **全档通用 ceiling（D24-B 新增）**：≤ **3500** 词。任何 prompt_type 文章超过 3500 词 = 必须 trim 或拆分为多篇。超过本档 soft 建议但 ≤ 3500 = AI 自检**报告但不阻 commit**（用户决定是否 trim）。
 >
@@ -229,23 +230,66 @@
 - ✅ 必须含实测耗时对比（X hours → Y hours per task）
 - ✅ 必须含至少 1 条 self-criticism（不是 humble brag）
 
+## 七、Prompt F — 聚簇索引型（D24 新增）
+
+**字数 soft 建议（D24-B）**：≤ **2500** 词（advisory）。甜区 1500-2500（容得下 N cluster 速查表 + decision tree + N Spoke 卡片 + 决策日志附录）。**全档 ceiling 3500**：超本档建议时 AI 自检报告不阻 commit；超 3500 必须 trim 或拆分。
+
+**角色**：在 build-in-public 日记里设计聚簇拓扑的工程师，专为 Hub-and-Spoke V1 拓扑的 Hub 页 / 类别落地页 / FAQ 索引。
+
+**任务**：把"一组相关问题 / 选型 / 场景"组织成 **1 个聚簇入口 + N 个 Spoke 外链** 的英文 index 长文，**不复制 Spoke 的具体内容**（防止 HCU thin content 触发）。
+
+**输入字段**：
+
+```
+1. 聚簇主题（一句话）: ...
+2. N 个 cluster / 候选入口（建议 3-7 个）: ...
+3. 每个 cluster 对应的 Spoke slug + status（published / pending）: ...
+4. 决策树维度（建议 2-4 个 yes/no 问题）: ...
+5. Prerequisites（如有跨 cluster 共有依赖）: ...
+6. 已知 issues / 社区锚点（Hub 提及但不复制细节）: ...
+```
+
+**输出结构**（严格按顺序）：
+
+1. **Title**：`{topic} Error Cluster: N Common Issues and How to Triage Them`（避免 "X 101" / "X Tutorial"）
+2. **Front matter**：显式声明 `prompt_type = "F"` + series（如适用）+ Hub ↔ Spoke 共享 tag
+3. **Self-positioning callout**（首段后立即出现）：「Hub index page (not a single-topic article). Each cluster has a dedicated Spoke with full fix commands; this Hub only does **symptom identification + decision-tree triage**.」
+4. **Quick-reference table**：N 行（cluster # / typical symptom / Spoke link）— 不含 fix commands
+5. **Prerequisites**：简短（Hub 不重复 Spoke prerequisites）
+6. **Diagnostic decision tree**：2-4 个 yes/no 问题 + branching to specific Spoke（不做 step-by-step fix）
+7. **N Spoke navigation cards**：每个 Spoke 1 段（symptom / covers / when to use）
+8. **Known issues + community anchors**：5 条左右（提及但不复制链接细节，留给 Spoke）
+9. **Conclusion**：3-step triage flow（locate cluster → jump to Spoke → 没匹配就反馈）
+10. **Appendix A**：Hub ↔ Spoke cross-link map 表格（status: published / pending）
+11. **Appendix B**：Positioning decision log（设计决策，不是 dev log — 无 commit hash）
+
+**反 AI-farm 硬规矩**：
+
+- ❌ 禁止复制 Spoke 的 fix commands（导致 thin content / 内容重复触发 HCU）
+- ❌ 禁止 single-topic article 结构（与 F 定义不符）
+- ❌ 禁止硬性"step-by-step fix"段（Hub 应止步于 decision tree）
+- ✅ 必须有 N Spoke 真实 cross-link（`{{< ref >}}` shortcode，非 plain text）
+- ✅ 必须显式声明「Hub index page, not single-topic article」（首段 callout）
+- ✅ 必须有 diagnostic decision tree 或等效 triage 工具
+- ✅ 必须 series + shared tag + bidirectional refs（CLAUDE.md §3.8 rule 7 全套）
+
 ---
 
-## 七、反 AI-farm 共性原则（5 种 prompt 通用）
+## 八、反 AI-farm 共性原则（6 种 prompt 通用）
 
 不论选哪种 prompt，以下红线适用于所有 HeimaEden 文章：
 
 - ✅ **每篇必含 ≥ 1 段"指纹段"** — 真实 first-person 场景，含具体时间 / 版本号 / commit hash（CLAUDE.md §3.8 rule 1 + `docs/geo-writing-module.md` §四）
-- ✅ **每篇必含真实 log / 真实数据** — 不编造"模拟场景"
+- ✅ **每篇必含真实 log / 真实数据** — 不编造"模拟场景"（F 例外：Hub 不复制 Spoke 内容，但需社区锚点 / 真实 Spoke link）
 - ✅ **每篇必含作者本人选择 / 立场** — 不躲在"取决于"后面
-- ✅ **每篇 first commit 时记录 prompt 类型** — front matter 加 `prompt_type: A-E`（方便后续 mock-reader 检验结构多样性）
-- ✅ **字数控制（D24-B）**：soft 建议按 prompt_type（A≤1200 / B≤1800 / C≤2200 / D≤2500 / E≤2500），全档通用 ceiling **3500 词**。超本档 soft 但 ≤ 3500 = AI 自检报告，不阻 commit；超 3500 = 必须 trim 或拆分为多篇。**反 Scaled Content 主防线是结构多样性 + 指纹段 + 真实 log，字数只是辅助编辑纪律。**
+- ✅ **每篇 first commit 时记录 prompt 类型** — front matter 加 `prompt_type: A-F`（方便后续 mock-reader 检验结构多样性）
+- ✅ **字数控制（D24-B）**：soft 建议按 prompt_type（A≤1200 / B≤1800 / C≤2200 / D≤2500 / E≤2500 / **F≤2500**），全档通用 ceiling **3500 词**。超本档 soft 但 ≤ 3500 = AI 自检报告，不阻 commit；超 3500 = 必须 trim 或拆分为多篇。**反 Scaled Content 主防线是结构多样性 + 指纹段 + 真实 log，字数只是辅助编辑纪律。**
 - ❌ **禁止 SEO-spam 模板套话** — `ultimate guide` / `you won't believe` / `X tips to master Y`（CLAUDE.md §3.1）
 - ❌ **禁止跨文章结构高度相似** — 至少 3-4 种结构轮换，违反即触发 Scaled Content 审计
 
 ---
 
-## 八、参考
+## 九、参考
 
 - `docs/archive/运营方案与交叉验证文档-2026-08-27.md` §二 风险 1（Scaled Content 识别信号）
 - `docs/article-writing-workflow.md` §5.2（推荐结构）+ §5.1（措辞分类）

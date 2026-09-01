@@ -238,10 +238,10 @@
 | 维度 | 硬规矩 | 原因 |
 |---|---|---|
 | **发布间隔** | ±1 天随机（不能"日更如钟表"） | 真人写作有波动，机器节奏触发审计 |
-| **篇幅区间（D24-B soft 建议）** | A 纯排错 ≤ **1200** / B 方案对比 ≤ **1800** / C 踩坑叙事 ≤ **2200** / D 原理深挖 ≤ **2500** / E 方法论 retrospective ≤ **2500**；**全档通用 ceiling ≤ 3500 词** | 单篇结构指纹避免高度相似；分档规避"全 800 词短文"或"全 3000+ 长文"两极化。D24-B 由"硬上限"降级为"soft 建议"，advisory 不阻 commit |
+| **篇幅区间（D24-B soft 建议）** | A 纯排错 ≤ **1200** / B 方案对比 ≤ **1800** / C 踩坑叙事 ≤ **2200** / D 原理深挖 ≤ **2500** / E 方法论 retrospective ≤ **2500** / **F 聚簇索引型 ≤ 2500**；**全档通用 ceiling ≤ 3500 词** | 单篇结构指纹避免高度相似；分档规避"全 800 词短文"或"全 3000+ 长文"两极化。D24-B 由"硬上限"降级为"soft 建议"，advisory 不阻 commit |
 | **结构变体** | 至少 3~4 种轮换（纯排障型 / 方案对比型 / 踩坑叙事型 / 原理深挖型） | 避免 Error-to-Post 流水线天然产出的"报错→原因→修复"统一结构 |
 
-> **D24-B 字数控制软化**：原 D16 5-type 硬上限 + X1 例外备注一并退役（基于"硬约束"前提，已不适用）。D24-B 起：soft 建议按 prompt_type（不阻 commit），全档通用 ceiling 3500 词（超 3500 必须 trim 或拆分）。**所有现存 published 文章（7 篇）+ Hub 均在新框架内**：
+> **D24-B 字数控制软化 + D24 Hub F 归属（2026-09-01）**：原 D16 5-type 硬上限 + X1 例外备注一并退役（基于"硬约束"前提，已不适用）。D24-B 起：soft 建议按 prompt_type（不阻 commit），全档通用 ceiling 3500 词（超 3500 必须 trim 或拆分）。**D24 新增 F 聚簇索引型**（Hub-and-Spoke V1 拓扑的 Hub / 类别落地页 / FAQ index），Hub 归属 F（不再悬而未决）。**所有现存 published 文章（6 篇）+ Hub 均在新框架内**：
 >
 > | 文章 | 档位 | 字数 | 状态（D24-B） |
 > |---|---|---|---|
@@ -251,7 +251,7 @@
 > | A3 beginners-practical-guide | C | 1901 | ✅ |
 > | X1 claude-code-editorial-pipeline | E | 2225 | ✅ |
 > | Y1 mock-reader-feedback | E | 2507 | ✅ 超出 E soft（+7）但远低于 ceiling，advisory |
-> | Hub hugo-troubleshooting-hub | 待决策 | — | prompt_type 决策悬而未决（不受字数影响） |
+> | Hub hugo-troubleshooting-hub | **F**（D24 决策） | ~1500 body | ✅ F soft ≤2500 + 3500 ceiling |
 >
 > 后续约束：所有新文按 D24-B soft + ceiling 双层；advisory 不阻 commit。X1 inbound link 重审时点改为"X1 字数有变 / 内容重大更新时"。
 
