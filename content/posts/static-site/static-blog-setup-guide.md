@@ -5,6 +5,8 @@ date = 2026-08-10T15:00:00Z
 draft = false
 tags = ["Hugo", "Cloudflare Pages", "Static Site"]
 categories = ["Static-Site"]
+# D24 backfill: prompt_type per writing-prompts.md §一 + D16 word hard cap. 1351 words body — fits B≤1800 (step-by-step deployment tutorial w/ toolchain comparison; not a strict horizontal review but closest fit among 5 prompt types).
+prompt_type = "B"
 
 # 👇 PaperMod display toggles
 ShowToc = true

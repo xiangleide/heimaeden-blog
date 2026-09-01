@@ -5,6 +5,8 @@ date = 2026-08-13T07:45:00Z
 draft = false
 tags = ["Hugo", "Cloudflare Pages", "Troubleshooting", "DevOps", "Hugo troubleshooting"]
 categories = ["Static-Site"]
+# D24 backfill: prompt_type per writing-prompts.md §一 + D16 word hard cap. 1037 words body — fits A≤1200 (pure troubleshooting, 7 traps + raw error logs + fix commands).
+prompt_type = "A"
 
 # Cluster integration: Hub `hugo-troubleshooting-hub` (this article = Spoke ① 7-traps overview) + S18 (hugo-draft-stale-dev-server-fix) — bidirectional per CLAUDE.md §3.8 rule 7 (single commit).
 series = ["Hugo on Cloudflare Pages"]

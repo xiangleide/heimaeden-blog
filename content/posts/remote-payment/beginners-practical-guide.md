@@ -5,6 +5,8 @@ date = 2026-08-10T14:30:00Z
 draft = false
 tags = ["Domain", "PayPal", "Spaceship"]
 categories = ["Remote-Payment"]
+# D24 backfill: prompt_type per writing-prompts.md §一 + D16 word hard cap. 1901 words body — fits C≤2200 (war-story narrative: hands-on domain purchase + cross-border payment + 3 fails + key insight).
+prompt_type = "C"
 
 # 👇 PaperMod display toggles
 ShowToc = true         # auto-generate TOC in right sidebar / top — great for how-to articles
